@@ -5,8 +5,8 @@
 
 <!-- badges: start -->
 
-[![Travis build
-status](https://travis-ci.org/otsegun/fdalite.svg?branch=master)](https://travis-ci.org/otsegun/fdalite)
+[![Build
+Status](https://travis-ci.com/otsegun/fdalite.svg?token=is9BrWwNvqBGoneFkbEL&branch=master)](https://travis-ci.com/otsegun/fdalite)
 [![Codecov test
 coverage](https://codecov.io/gh/otsegun/fdalite/branch/master/graph/badge.svg)](https://codecov.io/gh/otsegun/fdalite?branch=master)
 <!-- badges: end -->
