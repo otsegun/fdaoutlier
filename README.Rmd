@@ -24,7 +24,7 @@ fdalite is a collection of outlier detection and visualization function for func
 
 
 
-``` r{, echo = F, eval = F}
+``` r{ echo = F, eval = F}
 #You can install the released version of fdalite from [CRAN](https://CRAN.R-project.org) with:
 install.packages("fdalite")
 ```
