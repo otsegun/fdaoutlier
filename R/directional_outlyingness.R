@@ -1,4 +1,16 @@
+#' Compute the directional outlyingness
+#'
+#'
+#' Compute the the directional outlyingness of a univariate or multivariate functional data.
+#'
+#' @param data A matrix for univariate functional data or a 3d array for multivariate functional data.
+#'
+#' @param dirout_matrix If TRUE, returns the directional outlyingness matrix.
+#' @param data_depth The method for computing the depth- mahalanobis, RP, SD, or Half-space depth.
+#' @param return_distance If TRUE, returns the the distance values of the matrix whose rows are the mean and variation of directional outlyiness.
+#'
 #' @importFrom stats mad mahalanobis median var
+
 dir_out <- function(data, dirout_matrix = FALSE,
                     data_depth = c("MhD", "RP", "SD", "HS"),
                     return_distance = F){
