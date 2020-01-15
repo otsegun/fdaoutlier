@@ -1,7 +1,8 @@
-#library used: Mass:cov_rob
+#' @importFrom stats mad mahalanobis median var
 dir_out <- function(data, dirout_matrix = FALSE,
                     data_depth = c("MhD", "RP", "SD", "HS"),
                     return_distance = F){
+  # library used: Mass::cov_rob
   data_dim  <-  dim(data)
   data_depth <- match.arg(data_depth)
   if(!is.array(data))
@@ -40,9 +41,9 @@ dir_out <- function(data, dirout_matrix = FALSE,
         outlyingness <- (1/fda.usc::mdepth.RP(data[,j,],proj=200)$dep) - 1
       } else if (data_depth == "MhD"){
         outlyingness  <- (1/fda.usc::mdepth.MhD(data[,j,])$dep) - 1
-      } else if (depth.dir == "SD") {
+      } else if (data_depth == "SD") {
         outlyingness  <- (1/fda.usc::mdepth.SD(data[,j,])$dep) - 1
-      } else if (depth.dir == "HS") {
+      } else if (data_depth == "HS") {
         outlyingness  <- (1/fda.usc::mdepth.HS(data[,j,])$dep) - 1
       }
       median_vec  <-  data[order(outlyingness)[1],j,]

@@ -1,14 +1,26 @@
 Package: fdalite
-Title: What the Package Does (One Line, Title Case)
+Title: Fast Outlier Detection and Visualization Tools for Functional Data.
 Version: 0.0.0.9000
 Authors@R: 
-    person(given = "First",
-           family = "Last",
+    c(person(given = "Oluwasegun",
+           family = "Ojo",
            role = c("aut", "cre"),
-           email = "first.last@example.com",
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
-License: What license it uses
+           email = "oluwasegun.ojo@imdea.com"),
+      person(given = "Carlo",
+           family = "Sguera",
+           role = c("aut"),
+           email = "carlo.sguera@uc3m.es"),
+      person(given = "Rosa Elvira",
+           family = "Lillo",
+           role = c("aut"),
+           email = "lillo@est-econ.uc3m.es"),
+      person(given = "Antonio",
+           family = "Fern\'andez Anta",
+           role = c("aut", "fnd"),
+           email = "antonio.fernandez@imdea.org"))
+Description: This is a collection of functions and tools for outlier detection in functional data analysis.
+    It also contains a number of visualization functions for functional data. 
+License: GPL-3
 Encoding: UTF-8
 LazyData: true
 Suggests: 
