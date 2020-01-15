@@ -7,6 +7,8 @@
 
 [![Travis build
 status](https://travis-ci.org/otsegun/fdalite.svg?branch=master)](https://travis-ci.org/otsegun/fdalite)
+[![Codecov test
+coverage](https://codecov.io/gh/otsegun/fdalite/branch/master/graph/badge.svg)](https://codecov.io/gh/otsegun/fdalite?branch=master)
 <!-- badges: end -->
 
 fdalite is a collection of outlier detection and visualization function
