@@ -1,9 +1,15 @@
 #library used: Mass:cov_rob,
 dir_out <- function(data, dirout_matrix = FALSE,
                     data_depth = c("MhD", "RP", "SD", "HS"),
-                    return_distance = F, mcd_quantile, mcd_seed){
+                    return_distance = F){
   data_dim  <-  dim(data)
   data_depth <- match.arg(data_depth)
+  if(!is.array(data))
+    stop("data must be a 2-dimensional or 3-dimensional array")
+
+  if (any(is.na(data)) || any(is.infinite(data)))
+    stop("missing or infinite values are not allowed")
+
   if (length(data_dim) == 2){
     #############################################################3
     #median_vec <- apply(dt, 2, median)
@@ -19,17 +25,13 @@ dir_out <- function(data, dirout_matrix = FALSE,
 
     if(return_distance){
       ms_matrix <- cbind(mean_dir_out, var_dir_out)
-      if(missing(mcd_quantile) & missing(mcd_seed)){
+      if(missing(mcd_quantile)){
         mcd_obj  <- MASS::cov.rob(ms_matrix, method = "mcd", nsamp = "best")
-      }else if(missing(mcd_quantile) & !missing( mcd_seed)) {
-        mcd_obj  <- MASS::cov.rob(ms_matrix, method = "mcd", nsamp = "best", seed = mcd_seed)
-      } else if(!missing(mcd_quantile) & missing(mcd_seed)){
+      }else {
         mcd_obj  <- MASS::cov.rob(ms_matrix, method = "mcd", nsamp = "best", quantile.used = mcd_quantile)
-      } else{
-        mcd_obj  <- MASS::cov.rob(ms_matrix, method = "mcd", nsamp = "best", seed = mcd_seed, quantile.used = mcd_quantile)
       }
       robust_cov <- mcd_obj$cov
-      robust_mean <- mcd_obj$center
+      robust_mean <- unname(mcd_obj$center)
       distance <- mahalanobis(ms_matrix, robust_mean, robust_cov)
     }
   } else if (length(data_dim) == 3) {
@@ -72,17 +74,13 @@ dir_out <- function(data, dirout_matrix = FALSE,
 
     if (return_distance){
       ms_matrix <- cbind(mean_dir_out, var_dir_out)
-      if(missing(mcd_quantile) & missing(mcd_seed)){
+      if(missing(mcd_quantile)){
         mcd_obj  <- MASS::cov.rob(ms_matrix, method = "mcd", nsamp = "best")
-      }else if(missing(mcd_quantile) & !missing( mcd_seed)) {
-        mcd_obj  <- MASS::cov.rob(ms_matrix, method = "mcd", nsamp = "best", seed = mcd_seed)
-      } else if(!missing(mcd_quantile) & missing(mcd_seed)){
+      }else {
         mcd_obj  <- MASS::cov.rob(ms_matrix, method = "mcd", nsamp = "best", quantile.used = mcd_quantile)
-      } else{
-        mcd_obj  <- MASS::cov.rob(ms_matrix, method = "mcd", nsamp = "best", seed = mcd_seed, quantile.used = mcd_quantile)
       }
       robust_cov <- mcd_obj$cov
-      robust_mean <- mcd_obj$center
+      robust_mean <- unname(mcd_obj$center)
       distance <- mahalanobis(ms_matrix, robust_mean, robust_cov)
     }
   }
