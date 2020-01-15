@@ -14,12 +14,8 @@ for functional data. fdalit is still at an early experimental stage.
 
 ## Installation
 
-`r{ echo = F, eval = F} #You can install the released version of fdalite
-from [CRAN](https://CRAN.R-project.org) with:
-install.packages("fdalite")`
-
-Since fdalit is still at an experimental stage, you can only install the
-development version from [GitHub](https://github.com/) with:
+Since fdalite is still at an experimental stage, you can only install
+the development version from [GitHub](https://github.com/) with:
 
 ``` r
 # install.packages("devtools")
