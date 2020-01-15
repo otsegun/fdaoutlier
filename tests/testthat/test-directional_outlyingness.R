@@ -20,21 +20,40 @@ test_that("dir_out produces correct results", {
   # that a list a returned
   expect_is(multiv_result,  "list")
   expect_is(univ_result, "list")
+
+  ## univariate correctness
+  # distance
+  tmp_distance_univ <- tempfile()
+  expect_known_value(univ_result$distance, tmp_distance_univ, print = T)
+  # directional outlyingness matrix
+  tmp_dirout_univ <- tempfile()
+  expect_known_value(univ_result$dirout_matrix, tmp_dirout_univ, print = T)
+  # mean outlyingness
+  tmp_mean_out_univ <- tempfile()
+  expect_known_value(univ_result$mean_outlyingness, tmp_mean_out_univ, print = T)
+  # var outlyingness
+  tmp_var_out_univ <- tempfile()
+  expect_known_value(univ_result$var_outlyingness, tmp_var_out_univ, print = T)
+  # centre
+  tmp_centre_univ <- tempfile()
+  expect_known_value(univ_result$center, tmp_centre_univ, print = T)
+
+  ## nultivariate correcness
   # that distance is correct
   tmp_distance <- tempfile()
-  expect_known_value(t1$distance, tmp_distance, print = T)
+  expect_known_value(multiv_result$distance, tmp_distance, print = T)
   # directional outlyingness matrix
   tmp_dirout <- tempfile()
-  expect_known_value(t1$dirout_matrix, tmp_dirout, print =T)
+  expect_known_value(multiv_result$dirout_matrix, tmp_dirout, print =T)
   # mean outlyingness
   tmp_mean_out <- tempfile()
-  expect_known_value(t1$mean_outlyingness, tmp_mean_out, print = T)
+  expect_known_value(multiv_result$mean_outlyingness, tmp_mean_out, print = T)
   # var outlyingness
   tmp_var_out <- tempfile()
-  expect_known_value(t1$var_outlyingness, tmp_var_out, print = T)
+  expect_known_value(multiv_result$var_outlyingness, tmp_var_out, print = T)
   # centre
   tmp_centre <- tempfile()
-  expect_known_value(t1$center, tmp_centre, print = T)
+  expect_known_value(multiv_result$center, tmp_centre, print = T)
 })
 
 
