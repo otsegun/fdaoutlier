@@ -1,4 +1,4 @@
-#library used: Mass:cov_rob,
+#library used: Mass:cov_rob
 dir_out <- function(data, dirout_matrix = FALSE,
                     data_depth = c("MhD", "RP", "SD", "HS"),
                     return_distance = F){
@@ -25,11 +25,7 @@ dir_out <- function(data, dirout_matrix = FALSE,
 
     if(return_distance){
       ms_matrix <- cbind(mean_dir_out, var_dir_out)
-      if(missing(mcd_quantile)){
-        mcd_obj  <- MASS::cov.rob(ms_matrix, method = "mcd", nsamp = "best")
-      }else {
-        mcd_obj  <- MASS::cov.rob(ms_matrix, method = "mcd", nsamp = "best", quantile.used = mcd_quantile)
-      }
+      mcd_obj  <- MASS::cov.rob(ms_matrix, method = "mcd", nsamp = "best")
       robust_cov <- mcd_obj$cov
       robust_mean <- unname(mcd_obj$center)
       distance <- mahalanobis(ms_matrix, robust_mean, robust_cov)
@@ -74,11 +70,7 @@ dir_out <- function(data, dirout_matrix = FALSE,
 
     if (return_distance){
       ms_matrix <- cbind(mean_dir_out, var_dir_out)
-      if(missing(mcd_quantile)){
-        mcd_obj  <- MASS::cov.rob(ms_matrix, method = "mcd", nsamp = "best")
-      }else {
-        mcd_obj  <- MASS::cov.rob(ms_matrix, method = "mcd", nsamp = "best", quantile.used = mcd_quantile)
-      }
+      mcd_obj  <- MASS::cov.rob(ms_matrix, method = "mcd", nsamp = "best")
       robust_cov <- mcd_obj$cov
       robust_mean <- unname(mcd_obj$center)
       distance <- mahalanobis(ms_matrix, robust_mean, robust_cov)
