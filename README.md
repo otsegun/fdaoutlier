@@ -8,6 +8,8 @@
 [![Build
 Status](https://travis-ci.com/otsegun/fdalite.svg?token=is9BrWwNvqBGoneFkbEL&branch=master)](https://travis-ci.com/otsegun/fdalite)
 [![codecov](https://codecov.io/gh/otsegun/fdalite/branch/master/graph/badge.svg?token=brvFq2IKgV)](https://codecov.io/gh/otsegun/fdalite)
+[![Lifecycle:
+experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 <!-- badges: end -->
 
 fdalite is a collection of outlier detection and visualization function
