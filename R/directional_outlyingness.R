@@ -12,8 +12,8 @@
 #' @importFrom stats mad mahalanobis median var
 
 dir_out <- function(data, dirout_matrix = FALSE,
-                    data_depth = c("MhD", "RP", "SD", "HS"),
-                    return_distance = F){
+                    data_depth = c("RP", "MhD", "SD", "HS"),
+                    return_distance = T){
   # library used: Mass::cov_rob
   data_dim  <-  dim(data)
   data_depth <- match.arg(data_depth)
@@ -96,11 +96,13 @@ dir_out <- function(data, dirout_matrix = FALSE,
     if (dirout_matrix){
       return(list(distance = distance, dirout_matrix = dir_out_matrix,
                   mean_outlyingness = mean_dir_out, var_outlyingness = var_dir_out,
-                  center = robust_mean))
+                  center = robust_mean, ms_matrix = ms_matrix,
+                  mcd_obj = mcd_obj))
     } else{
-      return(list(distance, mean_outlyingness = mean_dir_out,
+      return(list(distance = distance, mean_outlyingness = mean_dir_out,
                   var_outlyingness = var_dir_out,
-                  center = robust_mean))
+                  center = robust_mean, ms_matrix = ms_matrix,
+                  mcd_obj = mcd_obj))
     }
   }
   else{
