@@ -1,20 +1,35 @@
-#' Compute the directional outlyingness
+#' Directional outlyingness for univariate or multivariate functional data.
 #'
 #'
-#' Compute the the directional outlyingness of a univariate or multivariate functional data.
+#' Compute the directional outlyingness of a univariate or multivariate
+#' functional data based on Dai and Genton (2018).
 #'
-#' @param data A matrix for univariate functional data or a 3d array for multivariate functional data.
+#' @param data A matrix for univariate functional data (of size n observations
+#'   by p domain points) or a 3-dimensional array for multivariate functional
+#'   data (of size n observations by p domain points by d dimension).
 #'
-#' @param dirout_matrix If TRUE, returns the directional outlyingness matrix.
-#' @param data_depth The method for computing the depth- mahalanobis, RP, SD, or Half-space depth.
-#' @param return_distance If TRUE, returns the the distance values of the matrix whose rows are the mean and variation of directional outlyiness.
+#' @param data_depth The method for computing the depth. Can be one of "mahalanobis", "random_projections",
+#'  "simplicial", or "half_space" depth. Default is "random_projections".
+#'
+#' @param return_distance A logical scalar. If TRUE, returns the matrix whose rows are the mean and variation of directional
+#'  outlyiness, the mahalanobis distance of the observations of this matrix, and the robust estimate of the
+#'  mean and covariance of this matrix (computed using the minimum covariance determinant method).
+#'
+#' @param dirout_matrix A logical scalar. If TRUE, returns the directional outlyingness matrix.
+#'
+#' @return Returns a list containing:
+#'  \itemize{
+#'   \item{\code{mean_outlyingness}}{a matrix of the mean of directional outlyingness.}
+#'   \item{\code{var_outlyingness}}{a vector of variation of directional outlyingness.}
+#'   \item{\code{var_outlyingness}}{if \code{return_distance} = T, a vector of }
+#' }  the , , distance values
+#'
 #'
 #' @importFrom stats mad mahalanobis median var
 
-dir_out <- function(data, dirout_matrix = FALSE,
-                    data_depth = c("RP", "MhD", "SD", "HS"),
-                    return_distance = T){
-  # library used: Mass::cov_rob
+dir_out <- function(data, data_depth = c( "random_projections", "mahalanobis", "simplicial", "half_space"),
+                    return_distance = T, dirout_matrix = FALSE){
+  # library used: Mass::cov_rob, fda.usc::mdepth.RP, fda.usc::mdepth.MhD, fda.usc::mdepth.SD, fda.usc::mdepth.HS
   data_dim  <-  dim(data)
   data_depth <- match.arg(data_depth)
   if(!is.array(data))
@@ -47,15 +62,15 @@ dir_out <- function(data, dirout_matrix = FALSE,
     n <- data_dim[1]
     p <- data_dim[2]
     d <- data_dim[3]
-    dir_out_matrix  <- array(0, dim = c(n, p, d))
-    for(j in 1:p){
-      if (data_depth == "RP"){
+    dir_out_matrix  <- array(0, dim = c(n, p, d))  # to cpp
+    for(j in 1:p){ ## if before loop
+      if (data_depth == "random_projections"){
         outlyingness <- (1/fda.usc::mdepth.RP(data[,j,],proj=200)$dep) - 1
-      } else if (data_depth == "MhD"){
+      } else if (data_depth == "mahalanobis"){
         outlyingness  <- (1/fda.usc::mdepth.MhD(data[,j,])$dep) - 1
-      } else if (data_depth == "SD") {
+      } else if (data_depth == "simplicial") {
         outlyingness  <- (1/fda.usc::mdepth.SD(data[,j,])$dep) - 1
-      } else if (data_depth == "HS") {
+      } else if (data_depth == "half_space") {
         outlyingness  <- (1/fda.usc::mdepth.HS(data[,j,])$dep) - 1
       }
       median_vec  <-  data[order(outlyingness)[1],j,]
@@ -94,22 +109,18 @@ dir_out <- function(data, dirout_matrix = FALSE,
   }
   if (return_distance){
     if (dirout_matrix){
-      return(list(distance = distance, dirout_matrix = dir_out_matrix,
-                  mean_outlyingness = mean_dir_out, var_outlyingness = var_dir_out,
-                  center = robust_mean, ms_matrix = ms_matrix,
-                  mcd_obj = mcd_obj))
+      return(list(mean_outlyingness = mean_dir_out, var_outlyingness = var_dir_out, distance = distance,
+                  ms_matrix = ms_matrix, mcd_obj = mcd_obj, dirout_matrix = dir_out_matrix))
     } else{
-      return(list(distance = distance, mean_outlyingness = mean_dir_out,
-                  var_outlyingness = var_dir_out,
-                  center = robust_mean, ms_matrix = ms_matrix,
-                  mcd_obj = mcd_obj))
+      return(list(mean_outlyingness = mean_dir_out, var_outlyingness = var_dir_out, distance = distance,
+                  ms_matrix = ms_matrix, mcd_obj = mcd_obj))
     }
   }
   else{
     if(dirout_matrix){
-      return(list(dirout_matrix = dir_out_matrix,
-                  mean_outlyingness = mean_dir_out,
-                  var_outlyingness = var_dir_out))
+      return(list(mean_outlyingness = mean_dir_out,
+                  var_outlyingness = var_dir_out,
+                  dirout_matrix = dir_out_matrix))
     }
     else{
       return(list(mean_outlyingness = mean_dir_out,
