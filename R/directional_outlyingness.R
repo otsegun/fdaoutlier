@@ -11,32 +11,66 @@
 #' @param data_depth The method for computing the depth. Can be one of "mahalanobis", "random_projections",
 #'  "simplicial", or "half_space" depth. Default is "random_projections".
 #'
-#' @param return_distance A logical scalar. If TRUE, returns the matrix whose rows are the mean and variation of directional
+#' @param return_distance A logical scalar. If TRUE, returns the matrix whose columns are the mean and variation of directional
 #'  outlyiness, the mahalanobis distance of the observations of this matrix, and the robust estimate of the
 #'  mean and covariance of this matrix (computed using the minimum covariance determinant method).
 #'
-#' @param dirout_matrix A logical scalar. If TRUE, returns the directional outlyingness matrix.
+#' @param dirout_matrix A logical scalar. If TRUE, returns the directional outlyingness matrix (or array for multivariate data).
+#'  Computed from the chosen \code{depth_depth}
+#'
+#' @details
+#'
+#' This function computes the directional outlyingness of a univariate or multivariate functional data.
+#' The directional outlyingness, as defined by Dai and Genton (2018) is
+#' \deqn{O(Y, F_Y) = (1/d(Y, F_Y) - 1).v}
+#' where \eqn{d} is a depth notion, and \eqn{v} is the unit vector pointing from the median of \eqn{F_Y} to \eqn{Y}.
+#'
 #'
 #' @return Returns a list containing:
-#'  \itemize{
-#'   \item{\code{mean_outlyingness}}{a matrix of the mean of directional outlyingness.}
-#'   \item{\code{var_outlyingness}}{a vector of variation of directional outlyingness.}
-#'   \item{\code{var_outlyingness}}{if \code{return_distance} = T, a vector of }
-#' }  the , , distance values
+#'   \item{mean_outlyingness}{ an n x d matrix of the mean of directional outlyingness.}
+#'   \item{var_outlyingness}{ a vector of length n containing the variation of directional outlyingness.}
+#'   \item{ms_matrix}{ if \code{return_distance} = T, an n x (d+1) matrix whose columns are the mean and variation of directional outlyiness.}
+#'   \item{distance}{ if \code{return_distance} = T, a vector of distance computed from the \code{ms_matrix} using the robust estimate
+#'   of the mean and covariance.}
+#'   \item{mcd_obj}{ if \code{return_distance} = T, a list containing the robust (minimum covariance determinant) estimate of the
+#'    mean and covariance of the \code{ms_matrix}.}
+#'   \item{mcd_obj}{ if \code{return_distance} = T, a list containing the robust (minimum covariance determinant) estimate of the
+#'    mean and covariance of the \code{ms_matrix}.}
+#'   \item{dirout_matrix}{ if \code{dirout_matrix} = T, an n x p (x d) matrix (or array) containing the directional outlyingness
+#'   values for the univariate (or multivariate) functional \code{data}. Computed using the chosen \code{data_dapth}.}
+#' @author
+#' Version created by Oluwasegun Taiwo Ojo based on the original code written by Wenlin Dai and Marc G. Genton.
 #'
+#' @references
+#' Dai, W., and Genton, M. G. (2018). Multivariate functional data visualization and outlier detection. \emph{Journal of Computational and Graphical Statistics}, 27(4), 923-934.
 #'
+#' Dai, W., and Genton, M. G. (2019). Directional outlyingness for multivariate functional data. \emph{Computational Statistics & Data Analysis}, 131, 50-65.
+#'
+#' @seealso
+#'
+#' @examples
+#'
+#' @export
 #' @importFrom stats mad mahalanobis median var
 
-dir_out <- function(data, data_depth = c( "random_projections", "mahalanobis", "simplicial", "half_space"),
+dir_out <- function(data, data_depth = c( "random_projections", "mahalanobis",
+                                          "simplicial", "half_space"),
                     return_distance = T, dirout_matrix = FALSE){
   # library used: Mass::cov_rob, fda.usc::mdepth.RP, fda.usc::mdepth.MhD, fda.usc::mdepth.SD, fda.usc::mdepth.HS
   data_dim  <-  dim(data)
   data_depth <- match.arg(data_depth)
+  if(is.data.frame(data)){
+    data <- as.matrix(data)
+  }
   if(!is.array(data))
-    stop("data must be a 2-dimensional or 3-dimensional array")
+    stop("Data must be a dataframe, a matrix or 3-dimensional array.")
 
   if (any(is.na(data)) || any(is.infinite(data)))
-    stop("missing or infinite values are not allowed")
+    stop("Missing or infinite values are not allowed.")
+
+  if(data_dim[1] < 3){
+    stop("n must be greater than 3.")
+  }
 
   if (length(data_dim) == 2){
     #############################################################3
@@ -52,11 +86,11 @@ dir_out <- function(data, data_depth = c( "random_projections", "mahalanobis", "
     var_dir_out <- apply(dir_out_matrix, 1, var, na.rm = T)
 
     if(return_distance){
-      ms_matrix <- cbind(mean_dir_out, var_dir_out)
+      ms_matrix <- (cbind(mean_dir_out, var_dir_out))
       mcd_obj  <- MASS::cov.rob(ms_matrix, method = "mcd", nsamp = "best")
       robust_cov <- mcd_obj$cov
-      robust_mean <- unname(mcd_obj$center)
-      distance <- mahalanobis(ms_matrix, robust_mean, robust_cov)
+      robust_mean <- (mcd_obj$center)
+      distance <- unname(mahalanobis(ms_matrix, robust_mean, robust_cov))
     }
   } else if (length(data_dim) == 3) {
     n <- data_dim[1]
@@ -97,34 +131,34 @@ dir_out <- function(data, data_depth = c( "random_projections", "mahalanobis", "
     ########################################################################################
 
     if (return_distance){
-      ms_matrix <- cbind(mean_dir_out, var_dir_out)
+      ms_matrix <- (cbind(mean_dir_out, var_dir_out))
       mcd_obj  <- MASS::cov.rob(ms_matrix, method = "mcd", nsamp = "best")
       robust_cov <- mcd_obj$cov
-      robust_mean <- unname(mcd_obj$center)
+      robust_mean <- (mcd_obj$center)
       distance <- mahalanobis(ms_matrix, robust_mean, robust_cov)
     }
   }
   else{
-    stop("a 2-dimensional or 3-dimensional array is required")
+    stop("A 2-dimensional or 3-dimensional array is required.")
   }
   if (return_distance){
     if (dirout_matrix){
-      return(list(mean_outlyingness = mean_dir_out, var_outlyingness = var_dir_out, distance = distance,
-                  ms_matrix = ms_matrix, mcd_obj = mcd_obj, dirout_matrix = dir_out_matrix))
+      return(list(mean_outlyingness = unname(mean_dir_out), var_outlyingness = unname(var_dir_out), distance = distance,
+                  ms_matrix = unname(ms_matrix), mcd_obj = mcd_obj, dirout_matrix = dir_out_matrix))
     } else{
-      return(list(mean_outlyingness = mean_dir_out, var_outlyingness = var_dir_out, distance = distance,
-                  ms_matrix = ms_matrix, mcd_obj = mcd_obj))
+      return(list(mean_outlyingness = unnname(mean_dir_out), var_outlyingness = unname(var_dir_out), distance = distance,
+                  ms_matrix = unname(ms_matrix), mcd_obj = mcd_obj))
     }
   }
   else{
     if(dirout_matrix){
-      return(list(mean_outlyingness = mean_dir_out,
-                  var_outlyingness = var_dir_out,
+      return(list(mean_outlyingness = unname(mean_dir_out),
+                  var_outlyingness = unname(var_dir_out),
                   dirout_matrix = dir_out_matrix))
     }
     else{
       return(list(mean_outlyingness = mean_dir_out,
-                  var_outlyingness = var_dir_out))
+                  var_outlyingness = unname(var_dir_out)))
     }
 
   }
