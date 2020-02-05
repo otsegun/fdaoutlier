@@ -8,7 +8,7 @@ dir_out(
   data,
   data_depth = c("random_projections", "mahalanobis", "simplicial", "half_space"),
   return_distance = T,
-  dirout_matrix = FALSE
+  return_dir_matrix = FALSE
 )
 }
 \arguments{
@@ -16,14 +16,15 @@ dir_out(
 by p domain points) or a 3-dimensional array for multivariate functional
 data (of size n observations by p domain points by d dimension).}
 
-\item{data_depth}{The method for computing the depth. Can be one of "mahalanobis", "random_projections",
-"simplicial", or "half_space" depth. Default is "random_projections".}
+\item{data_depth}{The method for computing the depth if \code{data} is a multivariate functional data.
+Can be one of "mahalanobis", "random_projections", "simplicial", or "half_space" depth.
+Default is "random_projections". For univariate functional data, the projection depth is always used.}
 
 \item{return_distance}{A logical scalar. If TRUE, returns the matrix whose columns are the mean and variation of directional
 outlyiness, the mahalanobis distance of the observations of this matrix, and the robust estimate of the
 mean and covariance of this matrix (computed using the minimum covariance determinant method).}
 
-\item{dirout_matrix}{A logical scalar. If TRUE, returns the directional outlyingness matrix (or array for multivariate data).
+\item{return_dir_matrix}{A logical scalar. If TRUE, returns the directional outlyingness matrix (or array for multivariate data).
 Computed from the chosen \code{depth_depth}}
 }
 \value{
@@ -35,10 +36,8 @@ Returns a list containing:
   of the mean and covariance.}
   \item{mcd_obj}{ if \code{return_distance} = T, a list containing the robust (minimum covariance determinant) estimate of the
    mean and covariance of the \code{ms_matrix}.}
-  \item{mcd_obj}{ if \code{return_distance} = T, a list containing the robust (minimum covariance determinant) estimate of the
-   mean and covariance of the \code{ms_matrix}.}
-  \item{dirout_matrix}{ if \code{dirout_matrix} = T, an n x p (x d) matrix (or array) containing the directional outlyingness
-  values for the univariate (or multivariate) functional \code{data}. Computed using the chosen \code{data_dapth}.}
+  \item{dirout_matrix}{ if \code{dirout_matrix} = T, an n x p (x d) matrix (array) containing the directional outlyingness
+  values for the univariate (multivariate) functional \code{data}.}
 }
 \description{
 Compute the directional outlyingness of a univariate or multivariate
@@ -49,6 +48,9 @@ This function computes the directional outlyingness of a univariate or multivari
 The directional outlyingness, as defined by Dai and Genton (2018) is
 \deqn{O(Y, F_Y) = (1/d(Y, F_Y) - 1).v}
 where \eqn{d} is a depth notion, and \eqn{v} is the unit vector pointing from the median of \eqn{F_Y} to \eqn{Y}.
+For univariate functional data, the projection depth based on Zuo (2003) is always used as suggested by Dai and Genton (2019)
+while for multivariate functional data, any of "mahalanobis", "random_projections", "simplicial", or "half_space" depths
+can be used.
 }
 \examples{
 
@@ -57,6 +59,8 @@ where \eqn{d} is a depth notion, and \eqn{v} is the unit vector pointing from th
 Dai, W., and Genton, M. G. (2018). Multivariate functional data visualization and outlier detection. \emph{Journal of Computational and Graphical Statistics}, 27(4), 923-934.
 
 Dai, W., and Genton, M. G. (2019). Directional outlyingness for multivariate functional data. \emph{Computational Statistics & Data Analysis}, 131, 50-65.
+
+Zuo, Y. (2003). Projection-based depth functions and associated medians. \emph{The Annals of Statistics}, 31(5), 1460-1490.
 }
 \seealso{
 
