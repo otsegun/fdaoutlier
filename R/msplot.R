@@ -15,9 +15,9 @@ ms_plot <- function(data, plot = F, plot_type = c("scatter", "parallel"),
     dir_result <- dir_out(data, data_depth = data_depth)
     if (return_outliers){
       dist <- dir_result$distance
-      rocke_factors <- facCal_num(n, 2) ## check this function next
-      rocke_factor1 <- rocke_factors$fac1 #rocke_factors$factor1
-      rocke_cutoff <- rocke_factors$fac2 #rocke_factors$cutoff # C in paper
+      rocke_factors <- hardin_factor_numeric(n, 2)
+      rocke_factor1 <- rocke_factors$factor1
+      rocke_cutoff <- rocke_factors$factor2 # C in paper
       cutoff_value <- rocke_cutoff/rocke_factor1 #rocke_cutoff/rocke_factor1
       outliers_index <- which(dist > cutoff_value)
       median_curve <- which.min(dist)
@@ -96,9 +96,9 @@ ms_plot <- function(data, plot = F, plot_type = c("scatter", "parallel"),
     n <- data_dim[1]
     d <- data_dim[3]
 
-    rocke_factors  <- facCal_num(n, dim = d + 1)
-    rocke_factor1 <- rocke_factors$fac1 #rocke_factors$factor1
-    rocke_cutoff <- rocke_factors$fac2 #rocke_factors$cutoff
+    rocke_factors  <- hardin_factor_numeric(n = n, dimension = d + 1)
+    rocke_factor1 <- rocke_factors$factor1
+    rocke_cutoff <- rocke_factors$factor2
 
     if (d == 2){
       dir_result = dir_out(data, data_depth = data_depth)
