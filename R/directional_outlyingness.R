@@ -177,7 +177,7 @@ dir_out <- function(data, data_depth = c( "random_projections", "mahalanobis",
                   mcd_obj = mcd_obj,
                   dirout_matrix = dir_out_matrix))
     } else{
-      return(list(mean_outlyingness = unnname(mean_dir_out),
+      return(list(mean_outlyingness = unname(mean_dir_out),
                   var_outlyingness = unname(var_dir_out),
                   distance = distance,
                   ms_matrix = unname(ms_matrix),
