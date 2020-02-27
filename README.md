@@ -3,6 +3,8 @@
 
 # fdalite
 
+Fast Outlier Detection and Visualization Tools for Functional Data
+
 <!-- badges: start -->
 
 [![Build

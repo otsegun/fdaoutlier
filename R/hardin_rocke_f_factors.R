@@ -1,12 +1,21 @@
 ## find the degrees of freedom for F distribution according Hardin and Rocke 2005
-hardin_factor_sim <- function(n, dimesnion, n_iter = 100){
-  sims_result <- cm(n, dimension, n_inter, 100) # check this call and function.
-  factors <- sims_result[1] * (sims_result[2] - dimension + 1)/(dimension * sims_result[2])
-  cutoff <- qf(.993, dimension, sims_result[2] - dimension +1)
-  return(list(factor1 = factors, factor2 = cutoff))
-}
+# hardin_factor_sim <- function(n, dimesnion, n_iter = 100){
+#   sims_result <- cm(n, dimension, n_inter, 100) # check this call and function.
+#   factors <- sims_result[1] * (sims_result[2] - dimension + 1)/(dimension * sims_result[2])
+#   cutoff <- qf(.993, dimension, sims_result[2] - dimension +1)
+#   return(list(factor1 = factors, factor2 = cutoff))
+# }
 
 
+#' Compute the factors for Hardin's F approximation cutoff asymptotically
+#'
+#' @param n A numeric value indicating the number of observations of the data
+#' @param dimension A numeric value indicating the number of columns or variables.
+#'
+#' @return
+#'
+#' @importFrom stats pchisq qchisq qf rchisq
+#' @examples
 hardin_factor_asymptotic <- function(n, dimension){
   h <- floor((n+dimension+1)/2)
   alpha <- (n-h)/n

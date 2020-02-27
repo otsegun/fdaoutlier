@@ -25,7 +25,7 @@ outlyiness, the mahalanobis distance of the observations of this matrix, and the
 mean and covariance of this matrix (computed using the minimum covariance determinant method).}
 
 \item{return_dir_matrix}{A logical scalar. If TRUE, returns the directional outlyingness matrix (or array for multivariate data).
-Computed from the chosen \code{depth_depth}}
+Computed from the chosen \code{depth_depth}.}
 }
 \value{
 Returns a list containing:

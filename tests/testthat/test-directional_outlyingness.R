@@ -14,8 +14,8 @@ test_that("dir_out produces correct results", {
   multiv_data <- array(multiv_data, dim = c(5, 3, 2))
   univ_data <- multiv_data[,,1]
 
-  multiv_result <- dir_out(data = multiv_data, dirout_matrix = T, data_depth = "MhD", return_distance = T)
-  univ_result <- dir_out(data = univ_data, dirout_matrix = T, data_depth = "MhD", return_distance = T)
+  multiv_result <- dir_out(data = multiv_data, return_dir_matrix = T, data_depth = "mahalanobis", return_distance = T)
+  univ_result <- dir_out(data = univ_data, return_dir_matrix = T, data_depth = "mahalanobis", return_distance = T)
 
   # that a list a returned
   expect_is(multiv_result,  "list")

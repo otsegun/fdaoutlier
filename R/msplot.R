@@ -38,21 +38,33 @@
 #' "simplicial", or "half_space" depths can be used.
 #'
 #' For univariate functional data, a 2-d scatter plot is always produced using ggplot2. This plot is one of the objects
-#' contained in the list returned by the function.
-#'
-#' For bivariate functional data, a 3-d scatter plot (made with the scatter3d package) or a parallel plot
-#' (made with ggplot2) is produced.
-#'
-#' For multivariate functional data (with dimensions >= 2), a 2-d scatter plot (of VO against the norm of MO) or a parallel plot
-#' (both returned as a ggplot2 object) is produced.
+#' contained in the list returned by the function. For bivariate functional data, a 3-d scatter plot (made with the scatter3d package)
+#' or a parallel plot (made with ggplot2) is produced. For multivariate functional data (with dimensions >= 2), a 2-d scatter plot
+#' (of VO against the norm of MO) or a parallel plot (both returned as a ggplot2 object) is produced.
 #'
 #' @return Returns a list containing:
-#'   \item{mean_outlyingness}{ an n x d matrix of the mean of directional outlyingness.}
-#'   \item{var_outlyingness}{ a vector of length n containing the variation of directional outlyingness.}
+#'   \item{outliers_index}{an integer vector containing the indices of the outliers if \code{return_outlier} is TRUE.}
+#'   \item{plot_object}{a ggplot2 object containing the plot of the MS-Plot if \code{plot} is TRUE, except when \code{plot_type}
+#'    is "scatter" and \code{data} is a bivariate functional data. The MS-Plot is made with the \code{scatterplot3d) package,
+#'    hence a ggplot2 object is not returned in this case.}
+#'   \item{mean_outlyingness}{an n x d matrix of the mean of directional outlyingness.}
+#'   \item{var_outlyingness}{a vector of length n containing the variation of directional outlyingness.}
+#'   \item{median_curve}{the indices of the median observation if \code{return_outlier} is TRUE. The median observation is the
+#'   observation with the smallest mahalanobis distance computed from the matrix whose columns are made up of MO and VO.}
+#' @author
+#' Version created by Oluwasegun Taiwo Ojo based on the original code written by Wenlin Dai and Marc G. Genton.
 #'
-#' @export
+#' @references
+#' Dai, W., and Genton, M. G. (2018). Multivariate functional data visualization and outlier detection. \emph{Journal of Computational and Graphical Statistics}, 27(4), 923-934.
+#'
+#' Dai, W., and Genton, M. G. (2019). Directional outlyingness for multivariate functional data. \emph{Computational Statistics & Data Analysis}, 131, 50-65.
+#' @seealso
 #'
 #' @examples
+#'
+#' @export
+#' @import ggplot2
+#' @importFrom grDevices rgb
 ms_plot <- function(data, plot = F, plot_type = c("scatter", "parallel"),
                     return_outliers = T,
                     data_depth = c("random_projections", "mahalanobis",
@@ -173,7 +185,7 @@ ms_plot <- function(data, plot = F, plot_type = c("scatter", "parallel"),
                                       mean_outlyingness = dir_result$mean_outlyingness,
                                       var_outlyingness = dir_result$var_outlyingness,
                                       outlier = point_col)
-            (p <- ggplot(data = reshape::melt(msplot_data,id.vars = c("id", "outlier")),
+            (p <- ggplot(data = reshape::melt(msplot_data, id.vars = c("id", "outlier")),
                    mapping = aes(x = variable, y = value, group = id, colour = outlier)) +
               geom_line() + geom_point() +
               labs(title = "MS-Plot with parallel coordinates") +
@@ -207,7 +219,7 @@ ms_plot <- function(data, plot = F, plot_type = c("scatter", "parallel"),
             point_col[outliers_index] <- outlier_col
             point_pch  <- rep(20, n)
             point_pch[outliers_index] <- 19
-            s3d <- scatterplot3d(x_1, y_1, z_1, xlim = x_lim, ylim = y_lim, zlim = z_lim,
+            s3d <- scatterplot3d::scatterplot3d(x_1, y_1, z_1, xlim = x_lim, ylim = y_lim, zlim = z_lim,
                                  type = "p", pch = 1, mar=c(2.5,2.5,2,2.5),
                                  color = rgb(173/255, 216/255, 230/255, 1),
                                  cex.symbols = 0.1, angle=45,
@@ -257,7 +269,7 @@ ms_plot <- function(data, plot = F, plot_type = c("scatter", "parallel"),
                         mean_outlyingness = dir_result$mean_outlyingness,
                         var_outlyingness = dir_result$var_outlyingness))
           } else if (plot_type == "scatter"){
-            scatterplot3d(mean_dir_out1, mean_dir_out2, var_dir_out,
+            scatterplot3d::scatterplot3d(mean_dir_out1, mean_dir_out2, var_dir_out,
                           type = "h", pch = 19, color = col, cex.symbols = 1,
                           angle = 45, mar = c(2.5, 2.5, 2, 1.5),
                           cex.lab = 0.8, axis = TRUE, xlim = x_lim, ylim = y_lim, box = FALSE,
