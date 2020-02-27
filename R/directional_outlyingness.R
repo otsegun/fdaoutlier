@@ -17,7 +17,7 @@
 #'  mean and covariance of this matrix (computed using the minimum covariance determinant method).
 #'
 #' @param return_dir_matrix A logical scalar. If TRUE, returns the directional outlyingness matrix (or array for multivariate data).
-#'  Computed from the chosen \code{depth_depth}
+#'  Computed from the chosen \code{depth_depth}.
 #'
 #' @details
 #'
