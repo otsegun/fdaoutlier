@@ -1,61 +1,89 @@
-#' Directional outlyingness for univariate or multivariate functional data.
+#'Directional outlyingness for univariate or multivariate functional data.
 #'
 #'
-#' Compute the directional outlyingness of a univariate or multivariate
-#' functional data based on Dai and Genton (2018).
+#'Compute the directional outlyingness of a univariate or multivariate functional data
+#'based on Dai and Genton (2018).
 #'
-#' @param data A matrix for univariate functional data (of size n observations
-#'   by p domain points) or a 3-dimensional array for multivariate functional
-#'   data (of size n observations by p domain points by d dimension).
+#'@param data A matrix for univariate functional data (of size n observations by p domain
+#'  points) or a 3-dimensional array for multivariate functional data (of size n
+#'  observations by p domain points by d dimension).
 #'
-#' @param data_depth The method for computing the depth if \code{data} is a multivariate functional data.
-#' Can be one of "mahalanobis", "random_projections", "simplicial", or "half_space" depth.
-#' Default is "random_projections". For univariate functional data, the projection depth is always used.
+#'@param data_depth The method for computing the depth if \code{data} is a multivariate
+#'  functional data. Can be one of "mahalanobis", "random_projections", "simplicial", or
+#'  "half_space" depth. Default is "random_projections". For univariate functional data,
+#'  the projection depth is always used.
 #'
-#' @param return_distance A logical scalar. If TRUE, returns the matrix whose columns are the mean and variation of directional
-#'  outlyiness, the mahalanobis distance of the observations of this matrix, and the robust estimate of the
-#'  mean and covariance of this matrix (computed using the minimum covariance determinant method).
+#'@param return_distance A logical scalar. If TRUE, returns the matrix whose columns are
+#'  the mean and variation of directional outlyiness, the mahalanobis distance of the
+#'  observations of this matrix, and the robust estimate of the mean and covariance of
+#'  this matrix (computed using the minimum covariance determinant method).
 #'
-#' @param return_dir_matrix A logical scalar. If TRUE, returns the directional outlyingness matrix (or array for multivariate data).
-#'  Computed from the chosen \code{depth_depth}.
+#'@param return_dir_matrix A logical scalar. If TRUE, returns the directional outlyingness
+#'  matrix (or array for multivariate data). Computed from the chosen \code{depth_depth}.
 #'
-#' @details
+#'@details
 #'
-#' This function computes the directional outlyingness of a univariate or multivariate functional data.
-#' The directional outlyingness, as defined by Dai and Genton (2018) is
-#' \deqn{O(Y, F_Y) = (1/d(Y, F_Y) - 1).v}
-#' where \eqn{d} is a depth notion, and \eqn{v} is the unit vector pointing from the median of \eqn{F_Y} to \eqn{Y}.
-#' For univariate functional data, the projection depth based on Zuo (2003) is always used as suggested by Dai and Genton (2019)
-#' while for multivariate functional data, any of "mahalanobis", "random_projections", "simplicial", or "half_space" depths
-#' can be used.
+#'This function computes the directional outlyingness of a univariate or multivariate
+#'functional data. The directional outlyingness, as defined by Dai and Genton (2018) is
+#'\deqn{O(Y, F_Y) = (1/d(Y, F_Y) - 1).v} where \eqn{d} is a depth notion, and \eqn{v} is
+#'the unit vector pointing from the median of \eqn{F_Y} to \eqn{Y}. For univariate
+#'functional data, the projection depth based on Zuo (2003) is always used as suggested by
+#'Dai and Genton (2019) while for multivariate functional data, any of "mahalanobis",
+#'"random_projections", "simplicial", or "half_space" depths can be used.
 #'
 #'
-#' @return Returns a list containing:
-#'   \item{mean_outlyingness}{ an n x d matrix of the mean of directional outlyingness.}
-#'   \item{var_outlyingness}{ a vector of length n containing the variation of directional outlyingness.}
-#'   \item{ms_matrix}{ if \code{return_distance} = T, an n x (d+1) matrix whose columns are the mean and variation of directional outlyiness.}
-#'   \item{distance}{ if \code{return_distance} = T, a vector of distance computed from the \code{ms_matrix} using the robust estimate
-#'   of the mean and covariance.}
-#'   \item{mcd_obj}{ if \code{return_distance} = T, a list containing the robust (minimum covariance determinant) estimate of the
-#'    mean and covariance of the \code{ms_matrix}.}
-#'   \item{dirout_matrix}{ if \code{dirout_matrix} = T, an n x p (x d) matrix (array) containing the directional outlyingness
-#'   values for the univariate (multivariate) functional \code{data}.}
-#' @author
-#' Version created by Oluwasegun Taiwo Ojo based on the original code written by Wenlin Dai and Marc G. Genton.
+#'@return Returns a list containing: \item{mean_outlyingness}{ an n x d matrix of the mean
+#'  of directional outlyingness.} \item{var_outlyingness}{ a vector of length n containing
+#'  the variation of directional outlyingness.} \item{ms_matrix}{ if
+#'  \code{return_distance} = T, an n x (d+1) matrix whose columns are the mean and
+#'  variation of directional outlyiness.} \item{distance}{ if \code{return_distance} = T,
+#'  a vector of distance computed from the \code{ms_matrix} using the robust estimate of
+#'  the mean and covariance.} \item{mcd_obj}{ if \code{return_distance} = T, a list
+#'  containing the robust (minimum covariance determinant) estimate of the mean and
+#'  covariance of the \code{ms_matrix}.} \item{dirout_matrix}{ if \code{return_dir_matrix}
+#'  = T, an n x p (x d) matrix (array) containing the directional outlyingness values for
+#'  the univariate (multivariate) functional \code{data}.}
+#'@author Version created by Oluwasegun Taiwo Ojo based on the original code written by
+#'Wenlin Dai and Marc G. Genton.
 #'
-#' @references
-#' Dai, W., and Genton, M. G. (2018). Multivariate functional data visualization and outlier detection. \emph{Journal of Computational and Graphical Statistics}, 27(4), 923-934.
+#'@references Dai, W., and Genton, M. G. (2018). Multivariate functional data
+#'visualization and outlier detection. \emph{Journal of Computational and Graphical
+#'Statistics}, 27(4), 923-934.
 #'
-#' Dai, W., and Genton, M. G. (2019). Directional outlyingness for multivariate functional data. \emph{Computational Statistics & Data Analysis}, 131, 50-65.
+#'Dai, W., and Genton, M. G. (2019). Directional outlyingness for multivariate functional
+#'data. \emph{Computational Statistics & Data Analysis}, 131, 50-65.
 #'
-#' Zuo, Y. (2003). Projection-based depth functions and associated medians. \emph{The Annals of Statistics}, 31(5), 1460-1490.
+#'Zuo, Y. (2003). Projection-based depth functions and associated medians. \emph{The
+#'Annals of Statistics}, 31(5), 1460-1490.
 #'
-#' @seealso
+#'@seealso
 #'
 #' @examples
+#' # univariate magnitude model in Dai and Genton (2018).
+#' data(model1_msplot)
+#' dirout_object <- dir_out(data = model1_msplot$data, return_distance = T)
 #'
-#' @export
-#' @importFrom stats mad mahalanobis median var
+#'\dontrun{
+#' # spanish weather data multivariate functional data
+#' data(aemet)
+#' # smooth data with bsplines 11 basis for temperature
+#' bsp11 <- fda::create.bspline.basis(aemet$temp$rangeval, nbasis=11)
+#' s_bsp11  <-  fda.usc::S.basis(aemet$temp$argvals, bsp11)
+#' sdata1 <- aemet$temp$data \%*\% s_bsp11
+#' # for log precipitation
+#' bsp11 <- fda::create.bspline.basis(aemet$logprec$rangeval, nbasis=11)
+#' s_bsp11  <-  fda.usc::S.basis(aemet$logprec$argvals, bsp11)
+#' sdata2 <- aemet$logprec$data \%*\% s_bsp11
+#' # set up array data of dimension n x p x d
+#' n <- dim(aemet$temp)[1]; p <- dim(aemet$temp)[2]
+#' data_multiv <- array(0, dim = c(n, p, 2),
+#'  dimnames = list(c(1:n), c(1:p), c("temp", "log_prep")))
+#' data_multiv[,,1] <- sdata1; data_multiv[,,2] <- sdata2
+#' # run directional outlyingness
+#' dirout_object <- dir_out(data = data_multiv, return_distance = T)
+#' }
+#'@export
+#'@importFrom stats mad mahalanobis median var
 
 dir_out <- function(data, data_depth = c( "random_projections", "mahalanobis",
                                           "simplicial", "half_space"),

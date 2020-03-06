@@ -1,67 +1,109 @@
-#' Magniude-Shape Plot (MS-Plot) based on the directional outlyingness for functional data.
+#' Magniude-Shape Plot (MS-Plot) based on the directional outlyingness for functional
+#' data.
 #'
-#' This functiona creates the MS-Plot, an outlier detection tool for univariate and
-#' multivariate functional data proposed in Wenlin and Genton (2019). Indices of observations
-#' flagged as outliers are returned, together with the corresponding plot which depends on the
-#'  dimension of the data (see details).
+#' This function creates the MS-Plot, an outlier detection tool for univariate and
+#' multivariate functional data proposed in Wenlin and Genton (2019). Indices of
+#' observations flagged as outliers are returned, together with the corresponding plot
+#' which depends on the dimension of the data (see details).
 #'
-#' @param data A matrix for univariate functional data (of size n observations
-#'   by p domain points) or a 3-dimensional array for multivariate functional
-#'   data (of size n observations by p domain points by d dimension).
-#' @param plot A logical scalar. If TRUE, makes the MS-Plot
-#' @param plot_type The type of plot to produce if \code{data} is a multivariate functional data.
-#' Can be one of "scatter" or "parallel". Default is "Scatter". For univariate functional data, the
-#' scatter plot is always produced.
-#' @param return_outliers A logical scalar. IF TRUE, returns the indices of the outliers. Furthermore, if
-#' \code{plot} is TRUE, differentiates the outlying points of the MS-Plot from those of the non-outlying
-#' points.
-#' @param data_depth The depth used in the computation of the directional outlyingness if \code{data} is a
-#' multivariate functional data. Can be one of "mahalanobis", "random_projections", "simplicial", or "half_space" depth.
-#' Default is "random_projections". For univariate functional data, the projection depth is always used.
+#' @param data A matrix for univariate functional data (of size n observations by p domain
+#'   points) or a 3-dimensional array for multivariate functional data (of size n
+#'   observations by p domain points by d dimension).
+#' @param plot A logical scalar. If TRUE, makes the MS-Plot.
+#' @param plot_type The type of plot to produce if \code{data} is a multivariate
+#'   functional data. Can be one of "scatter" or "parallel". Default is "Scatter". For
+#'   univariate functional data, the scatter plot is always produced.
+#' @param return_outliers A logical scalar. IF TRUE, returns the indices of the outliers.
+#'   Furthermore, if \code{plot} is TRUE, differentiates the outlying points from those of
+#'   the non-outlying points in the MS-Plot.
+#' @param data_depth The depth used in the computation of the directional outlyingness if
+#'   \code{data} is a multivariate functional data. Can be one of "mahalanobis",
+#'   "random_projections", "simplicial", or "half_space" depth. Default is
+#'   "random_projections". For univariate functional data, the projection depth is always
+#'   used.
 #'
-#' @param normal_col The color of non-outlying points in the MS-Plot. Must be a character vector
-#' #' containing one name of a standard color in R or the Hex code of a color.
+#' @param normal_col The color of non-outlying points in the MS-Plot. Must be a character
+#'   vector containing one name of a standard color in R or the Hex code of a color.
 #'
-#' @param outlier_col The color of outlying points in the MS-Plot. Must be a character vector
-#' #' containing one name of a standard color in R or the Hex code of a color.
+#' @param outlier_col The color of outlying points in the MS-Plot. Must be a character
+#'   vector containing one name of a standard color in R or the Hex code of a color.
 #'
-#' @param col The color for plotting points in the MS-Plot when \code{return_outliers} is FALSE and
-#' \code{plot} is TRUE.
+#' @param col The color for plotting points in the MS-Plot when \code{return_outliers} is
+#'   FALSE and \code{plot} is TRUE.
 #'
 #' @details
 #'
-#' This function implements the Magnitude-Shape Plot of Dai and Genton (2018). MS-Plot is a plot of the variation
-#' of directional outlyingness (VO) against the mean directional outlyingness (MO). MO and VO are computed based on
-#' the directional outlyingness defined in Dai and Genton (2019). For univariate functional data,
-#' the projection depth based on Zuo (2003) is always used (as suggested by Dai and Genton (2019)) for
-#' computing the directional outlyingess while for multivariate functional data, any of "mahalanobis", "random_projections",
-#' "simplicial", or "half_space" depths can be used.
+#' This function implements the Magnitude-Shape Plot of Dai and Genton (2018). MS-Plot is
+#' a plot of the variation of directional outlyingness (VO) against the mean directional
+#' outlyingness (MO). MO and VO are computed based on the directional outlyingness defined
+#' in Dai and Genton (2019). For univariate functional data, the projection depth based on
+#' Zuo (2003) is always used (as suggested by Dai and Genton (2019)) for computing the
+#' directional outlyingess while for multivariate functional data, any of "mahalanobis",
+#' "random_projections", "simplicial", or "half_space" depths can be used.
 #'
-#' For univariate functional data, a 2-d scatter plot is always produced using ggplot2. This plot is one of the objects
-#' contained in the list returned by the function. For bivariate functional data, a 3-d scatter plot (made with the scatter3d package)
-#' or a parallel plot (made with ggplot2) is produced. For multivariate functional data (with dimensions >= 2), a 2-d scatter plot
-#' (of VO against the norm of MO) or a parallel plot (both returned as a ggplot2 object) is produced.
+#' For univariate functional data, a 2-d scatter plot is always produced using ggplot2.
+#' This plot is one of the objects contained in the list returned by the function. For
+#' bivariate functional data, a 3-d scatter plot (made with the scatter3d package) or a
+#' parallel plot (made with ggplot2) is produced. For multivariate functional data (with
+#' dimensions >= 2), a 2-d scatter plot (of VO against the norm of MO) or a parallel plot
+#' (both returned as a ggplot2 object) is produced.
 #'
 #' @return Returns a list containing:
-#'   \item{outliers_index}{an integer vector containing the indices of the outliers if \code{return_outlier} is TRUE.}
-#'   \item{plot_object}{a ggplot2 object containing the plot of the MS-Plot if \code{plot} is TRUE, except when \code{plot_type}
-#'    is "scatter" and \code{data} is a bivariate functional data. The MS-Plot is made with the \code{scatterplot3d) package,
-#'    hence a ggplot2 object is not returned in this case.}
-#'   \item{mean_outlyingness}{an n x d matrix of the mean of directional outlyingness.}
-#'   \item{var_outlyingness}{a vector of length n containing the variation of directional outlyingness.}
-#'   \item{median_curve}{the indices of the median observation if \code{return_outlier} is TRUE. The median observation is the
-#'   observation with the smallest mahalanobis distance computed from the matrix whose columns are made up of MO and VO.}
-#' @author
-#' Version created by Oluwasegun Taiwo Ojo based on the original code written by Wenlin Dai and Marc G. Genton.
+#'  \item{outliers_index}{an integer vector containing
+#'   the indices of the outliers if \code{return_outlier} is TRUE.}
+#'  \item{plot_object}{a
+#'   ggplot2 object containing the plot of the MS-Plot if \code{plot} is TRUE, except when
+#'   \code{plot_type} is "scatter" and \code{data} is a bivariate functional data. The
+#'   MS-Plot is made with the \code{scatterplot3d} package, hence a ggplot2 object is not
+#'   returned in this case.}
+#'   \item{mean_outlyingness}{an n x d matrix of the mean of
+#'   directional outlyingness.}
+#'   \item{var_outlyingness}{a vector of length n containing
+#'   the variation of directional outlyingness.}
+#'   \item{median_curve}{the indices of the
+#'   median observation if \code{return_outlier} is TRUE. The median observation is the
+#'   observation with the smallest mahalanobis distance computed from the matrix whose
+#'   columns are made up of MO and VO.}
+#' @author Version created by Oluwasegun Taiwo Ojo based on the original code written by
+#' Wenlin Dai and Marc G. Genton.
 #'
-#' @references
-#' Dai, W., and Genton, M. G. (2018). Multivariate functional data visualization and outlier detection. \emph{Journal of Computational and Graphical Statistics}, 27(4), 923-934.
+#' @references Dai, W., and Genton, M. G. (2018). Multivariate functional data
+#'   visualization and outlier detection. \emph{Journal of Computational and Graphical
+#'   Statistics}, 27(4), 923-934.
 #'
-#' Dai, W., and Genton, M. G. (2019). Directional outlyingness for multivariate functional data. \emph{Computational Statistics & Data Analysis}, 131, 50-65.
+#'   Dai, W., and Genton, M. G. (2019). Directional outlyingness for multivariate
+#'   functional data. \emph{Computational Statistics & Data Analysis}, 131, 50-65.
 #' @seealso
 #'
 #' @examples
+#' # univariate magnitude model in Dai and Genton (2018).
+#' data(model1_msplot)
+#' msplot_object <- ms_plot(data = model1_msplot$data, plot = T)
+#' msplot_object$outliers_index
+#' # show plot
+#' #msplot_object$plot_object
 #'
+#' \dontrun{
+#' # spanish weather data multivariate functional data
+#' data(aemet)
+#' # smooth data with bsplines 11 basis
+#' # temperature
+#' bsp11 <- fda::create.bspline.basis(aemet$temp$rangeval, nbasis=11)
+#' s_bsp11  <-  fda.usc::S.basis(aemet$temp$argvals, bsp11)
+#' sdata1 <- aemet$temp$data \%*\% s_bsp11
+#' # log precipitation
+#' bsp11 <- fda::create.bspline.basis(aemet$logprec$rangeval, nbasis=11)
+#' s_bsp11  <-  fda.usc::S.basis(aemet$logprec$argvals, bsp11)
+#' sdata2 <- aemet$logprec$data \%*\% s_bsp11
+#' # set up array data of dimension n x p x d
+#' n <- dim(aemet$temp)[1]; p <- dim(aemet$temp)[2]
+#' data_multiv <- array(0, dim = c(n, p, 2),
+#'  dimnames = list(c(1:n), c(1:p), c("temp", "log_prep")))
+#' data_multiv[,,1] <- sdata1; data_multiv[,,2] <- sdata2
+#' # run msplot: 3d scatter for bivariate functional data
+#' msplot_object <- ms_plot(data = data_multiv, plot = T) ## 3d scatter for bivariate
+#' msplot_object$outliers_index
+#' }
 #' @export
 #' @import ggplot2
 #' @importFrom grDevices rgb
