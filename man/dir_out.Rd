@@ -6,8 +6,8 @@
 \usage{
 dir_out(
   data,
-  data_depth = c("random_projections", "mahalanobis", "simplicial", "half_space"),
-  return_distance = T,
+  data_depth = "random_projections",
+  return_distance = TRUE,
   return_dir_matrix = FALSE
 )
 }
@@ -16,10 +16,8 @@ dir_out(
 points) or a 3-dimensional array for multivariate functional data (of size n
 observations by p domain points by d dimension).}
 
-\item{data_depth}{The method for computing the depth if \code{data} is a multivariate
-functional data. Can be one of "mahalanobis", "random_projections", "simplicial", or
-"half_space" depth. Default is "random_projections". For univariate functional data,
-the projection depth is always used.}
+\item{data_depth}{The method for computing the depth. The random projection depth is
+always used as suggested in Dai and Genton (2018). Support more depth methods will be added.}
 
 \item{return_distance}{A logical scalar. If TRUE, returns the matrix whose columns are
 the mean and variation of directional outlyiness, the mahalanobis distance of the
@@ -27,7 +25,7 @@ observations of this matrix, and the robust estimate of the mean and covariance 
 this matrix (computed using the minimum covariance determinant method).}
 
 \item{return_dir_matrix}{A logical scalar. If TRUE, returns the directional outlyingness
-matrix (or array for multivariate data). Computed from the chosen \code{depth_depth}.}
+matrix (or array for multivariate functional data). Computed from the chosen \code{depth_depth}.}
 }
 \value{
 Returns a list containing: \item{mean_outlyingness}{ an n x d matrix of the mean
@@ -57,27 +55,27 @@ Dai and Genton (2019) while for multivariate functional data, any of "mahalanobi
 }
 \examples{
 # univariate magnitude model in Dai and Genton (2018).
-data(model1_msplot)
-dirout_object <- dir_out(data = model1_msplot$data, return_distance = T)
+data(sim_data1)
+dirout_object <- dir_out(data = sim_data1$data, return_distance = TRUE)
 
 \dontrun{
-# spanish weather data multivariate functional data
+# spanish weather data multivariate functional data in Dai and Genton (2018)
 data(aemet)
 # smooth data with bsplines 11 basis for temperature
 bsp11 <- fda::create.bspline.basis(aemet$temp$rangeval, nbasis=11)
 s_bsp11  <-  fda.usc::S.basis(aemet$temp$argvals, bsp11)
-sdata1 <- aemet$temp$data \%*\% s_bsp11
+sdata1 <- aemet$temp$data \\%*\\% s_bsp11
 # for log precipitation
 bsp11 <- fda::create.bspline.basis(aemet$logprec$rangeval, nbasis=11)
 s_bsp11  <-  fda.usc::S.basis(aemet$logprec$argvals, bsp11)
-sdata2 <- aemet$logprec$data \%*\% s_bsp11
+sdata2 <- aemet$logprec$data \\%*\\% s_bsp11
 # set up array data of dimension n x p x d
 n <- dim(aemet$temp)[1]; p <- dim(aemet$temp)[2]
 data_multiv <- array(0, dim = c(n, p, 2),
  dimnames = list(c(1:n), c(1:p), c("temp", "log_prep")))
 data_multiv[,,1] <- sdata1; data_multiv[,,2] <- sdata2
 # run directional outlyingness
-dirout_object <- dir_out(data = data_multiv, return_distance = T)
+dirout_object <- dir_out(data = data_multiv, return_distance = TRUE)
 }
 }
 \references{

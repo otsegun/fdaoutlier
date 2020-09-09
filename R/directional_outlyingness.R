@@ -58,11 +58,11 @@
 #'
 #' @examples
 #' # univariate magnitude model in Dai and Genton (2018).
-#' data(model1_msplot)
-#' dirout_object <- dir_out(data = model1_msplot$data, return_distance = T)
+#' data(sim_data1)
+#' dirout_object <- dir_out(data = sim_data1$data, return_distance = TRUE)
 #'
 #'\dontrun{
-#' # spanish weather data multivariate functional data
+#' # spanish weather data multivariate functional data in Dai and Genton (2018)
 #' data(aemet)
 #' # smooth data with bsplines 11 basis for temperature
 #' bsp11 <- fda::create.bspline.basis(aemet$temp$rangeval, nbasis=11)
@@ -78,14 +78,14 @@
 #'  dimnames = list(c(1:n), c(1:p), c("temp", "log_prep")))
 #' data_multiv[,,1] <- sdata1; data_multiv[,,2] <- sdata2
 #' # run directional outlyingness
-#' dirout_object <- dir_out(data = data_multiv, return_distance = T)
+#' dirout_object <- dir_out(data = data_multiv, return_distance = TRUE)
 #' }
 #'@export
 #'@importFrom stats mad mahalanobis median var
 
 dir_out <- function(data, data_depth = "random_projections",
-                    return_distance = T, return_dir_matrix = FALSE){
-  # library used: Mass::cov_rob, fda.usc::mdepth.RP, fda.usc::mdepth.MhD, fda.usc::mdepth.SD, fda.usc::mdepth.HS
+                    return_distance = TRUE, return_dir_matrix = FALSE){
+  # library used: Mass::cov_rob,
   data_dim  <-  dim(data)
   #data_depth <- match.arg(data_depth)
   if(is.data.frame(data)){

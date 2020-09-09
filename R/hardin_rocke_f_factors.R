@@ -53,6 +53,7 @@ hardin_factor_asymptotic <- function(n, dimension){
 #'
 #' @references Hardin, J., and Rocke, D. M. (2005). The distribution of robust distances.
 #'   \emph{Journal of Computational and Graphical Statistics}, 14(4), 928-946.
+#' @export
 #' @importFrom stats pchisq qchisq qf rchisq
 #' @examples
 #' h_factor <- hardin_factor_numeric(50, 5)

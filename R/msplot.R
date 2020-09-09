@@ -76,15 +76,15 @@
 #' @seealso
 #'
 #' @examples
-#' # univariate magnitude model in Dai and Genton (2018).
-#' data(model1_msplot)
-#' msplot_object <- ms_plot(data = model1_msplot$data, plot = T)
+#' # Univariate magnitude model in Dai and Genton (2018).
+#' data(sim_data1)
+#' msplot_object <- ms_plot(data = sim_data1$data, plot = TRUE)
 #' msplot_object$outliers_index
 #' # show plot
 #' #msplot_object$plot_object
 #'
 #' \dontrun{
-#' # spanish weather data multivariate functional data
+#' # Spanish weather multivariate functional data in Dai and Genton (2018).
 #' data(aemet)
 #' # smooth data with bsplines 11 basis
 #' # temperature

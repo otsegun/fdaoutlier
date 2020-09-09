@@ -1,0 +1,93 @@
+#' Spanish Weather Data
+#'
+#'
+#' A dataset containing daily teperature, log precipitation and wind speed of 73 spanish weather stations
+#' in Spain between 1980 - 2009.
+#' @name aemet
+#'
+#' @docType data
+#'
+#' @format A list containing :
+#' \itemize{
+#'   \item \code{$df:}  A dataframe containing geographic information from the 73 weather stations.
+#'    Contains the variables:
+#'    \itemize{
+#'    \item \code{ind:}  id of weather station
+#'    \item \code{name:} name of weather station
+#'    \item \code{province:} province of weather station
+#'    \item \code{altitude:} altitude in meters of the station
+#'    \item \code{year.ini:} start year
+#'    \item \code{year.end:} end year
+#'    \item \code{longitude:} longitude of the coordinates of the weather staton (in decimal degrees)
+#'    \item \code{longitude: } latitude of the coordinates of the weather station (in decimal degrees)
+#'    }
+#'    \item \code{temp:} A functional data of class \code{fdata} containing
+#'    average daily temperature for the period 1980-2009 (in degrees Celsius, marked
+#'    with UTF-8 string). Leap years temperatures for February 28 and 29 were averaged.
+#'
+#'    \item \code{wind.speed:} A functional data of class \code{fdata} containing
+#'    average daily windspeed for the period 1980-2009 (in m/s).
+#'
+#'    \item \code{logprec:} A functional data of \code{fdata} containing average daily log precipitation
+#'   for the period 1980-2009 (in log mm). Negligible precipitation (less than 1 tenth of mm)
+#'   is replaced by 0.05 and no precipitation (\code{0.0} mm) is replaced by \code{0.01}. Then the logarithm is applied.
+#'  }
+#'
+#'
+#'
+#'
+#'
+#'
+#' @details
+#' Data was copied from the \code{fda.usc} package for illustration and testing purposes.
+#' See the documentation of \code{fda.usc} for more details about data.
+#'
+#' @source
+#' Data obtained from the \code{fda.usc} package.
+#'
+#' @author
+#' Manuel Febrero Bande, Manuel Oviedo de la Fuente \email{manuel.oviedo@@usc.es}.
+#' @keywords datasets
+#' @examples
+#' \dontrun{
+#' data(aemet)
+#' names(aemet)
+#' names(aemet$df)
+#' }
+"aemet"
+
+
+#' Simulated functional data from a simple magnitude model
+#'
+#'
+#' @description A simulated dataset containing 100 functional observation observed on 50 domain points.
+#' Data was simulated from a simple magnitude/shifted model. There are 90 non-outliers and
+#' 10 magnitude outliers.
+#'
+#'
+#' @name sim_data1
+#'
+#' @docType data
+#'
+#' @format A list containing 2 elements:
+#' \itemize{
+#'   \item \code{data:}  A matrix of 100 by 50 contanining 100 functional observed on 50 domain points.
+#'    \item \code{true_outlier:} An integer vector contaning indices which indicate observations in \code{sim_data1$data}
+#'    that are magnitude outliers.
+#'  }
+#'
+#' @details
+#' Data included for illustration and testing purposes.
+#'
+#' @source
+#' Data was simulated from the main model:
+#'
+#' @author
+#' Oluwasegun Ojo
+#' @keywords datasets
+#' @examples
+#' \dontrun{
+#' data(sim_data1)
+#' str(sim_data1)
+#' }
+"sim_data1"
