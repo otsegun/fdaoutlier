@@ -8,10 +8,8 @@
 #'  points) or a 3-dimensional array for multivariate functional data (of size n
 #'  observations by p domain points by d dimension).
 #'
-#'@param data_depth The method for computing the depth if \code{data} is a multivariate
-#'  functional data. Can be one of "mahalanobis", "random_projections", "simplicial", or
-#'  "half_space" depth. Default is "random_projections". For univariate functional data,
-#'  the projection depth is always used.
+#'@param data_depth The method for computing the depth. The random projection depth is
+#'  always used as suggested in Dai and Genton (2018). Support more depth methods will be added.
 #'
 #'@param return_distance A logical scalar. If TRUE, returns the matrix whose columns are
 #'  the mean and variation of directional outlyiness, the mahalanobis distance of the
@@ -19,7 +17,7 @@
 #'  this matrix (computed using the minimum covariance determinant method).
 #'
 #'@param return_dir_matrix A logical scalar. If TRUE, returns the directional outlyingness
-#'  matrix (or array for multivariate data). Computed from the chosen \code{depth_depth}.
+#'  matrix (or array for multivariate functional data). Computed from the chosen \code{depth_depth}.
 #'
 #'@details
 #'
@@ -85,12 +83,11 @@
 #'@export
 #'@importFrom stats mad mahalanobis median var
 
-dir_out <- function(data, data_depth = c( "random_projections", "mahalanobis",
-                                          "simplicial", "half_space"),
+dir_out <- function(data, data_depth = "random_projections",
                     return_distance = T, return_dir_matrix = FALSE){
   # library used: Mass::cov_rob, fda.usc::mdepth.RP, fda.usc::mdepth.MhD, fda.usc::mdepth.SD, fda.usc::mdepth.HS
   data_dim  <-  dim(data)
-  data_depth <- match.arg(data_depth)
+  #data_depth <- match.arg(data_depth)
   if(is.data.frame(data)){
     data <- as.matrix(data)
   }
@@ -104,7 +101,7 @@ dir_out <- function(data, data_depth = c( "random_projections", "mahalanobis",
     stop("n must be greater than 3.")
   }
 
-  if (length(data_dim) == 2){
+  if (length(data_dim) == 2){ # univariate
     #############################################################3
     #median_vec <- apply(dt, 2, median)
     #mad_vec <- apply(dt, 2, mad)
@@ -124,51 +121,58 @@ dir_out <- function(data, data_depth = c( "random_projections", "mahalanobis",
       robust_mean <- (mcd_obj$center)
       distance <- unname(mahalanobis(ms_matrix, robust_mean, robust_cov))
     }
-  } else if (length(data_dim) == 3) {
+  } else if (length(data_dim) == 3) {# multivariate
     n <- data_dim[1]
     p <- data_dim[2]
     d <- data_dim[3]
-    dir_out_matrix  <- array(0, dim = c(n, p, d))  # to cpp
+    #dir_out_matrix2  <- array(0, dim = c(n, p, d))  # to cpp
     if(data_depth == "random_projections"){
-      for (j in 1:p) {
-        outlyingness <- (1/fda.usc::mdepth.RP(data[,j,], proj=200)$dep) - 1
-        median_vec  <-  data[order(outlyingness)[1],j,]
-        median_dev <- sweep(data[,j,], 2, median_vec ) #t(data[,j,])-median_obs
-        spatial_sign <- rowSums((median_dev)^2)^(1/2) #sqrt(rowSums((median_dev)^2))
+      dir_out_matrix <- apply(data, 2, function(x){
+        outlyingness <- (1/projection_depth(x, n_projections = 500, seed = 20)) - 1
+        median_vec  <-  x[order(outlyingness)[1], ] # data[order(outlyingness)[1],j,]
+        median_dev <- sweep(x, 2, median_vec )
+        spatial_sign <- sqrt(rowSums((median_dev)^2))
         spatial_sign <- median_dev/spatial_sign
         spatial_sign[!is.finite(spatial_sign[,1]), ] <- 0 # check which row has an nan or infinite
-        dir_out_matrix[,j,] <- spatial_sign * outlyingness
-      }
+        spatial_sign * outlyingness
+      })
+      dir_out_matrix <- aperm(`dim<-`(t(dir_out_matrix), list(p, n, d)), c(2, 1, 3))
+
     } else if(data_depth == "mahalanobis") {
-      for (j in 1:p) {
-        outlyingness  <- (1/fda.usc::mdepth.MhD(data[,j,])$dep) - 1
-        median_vec  <-  data[order(outlyingness)[1],j,]
-        median_dev <- sweep(data[,j,], 2, median_vec ) #t(data[,j,])-median_obs
-        spatial_sign <- rowSums((median_dev)^2)^(1/2) #sqrt(rowSums((median_dev)^2))
-        spatial_sign <- median_dev/spatial_sign
-        spatial_sign[!is.finite(spatial_sign[,1]), ] <- 0 # check which row has an nan or infinite
-        dir_out_matrix[,j,] <- spatial_sign * outlyingness
-      }
+      cat("support for mahalanobis depth not yet added")
+      # for (j in 1:p) {
+      #   outlyingness  <- (1/fda.usc::mdepth.MhD(data[,j,])$dep) - 1
+      #   median_vec  <-  data[order(outlyingness)[1],j,]
+      #   median_dev <- sweep(data[,j,], 2, median_vec ) #t(data[,j,])-median_obs
+      #   spatial_sign <- rowSums((median_dev)^2)^(1/2) #sqrt(rowSums((median_dev)^2))
+      #   spatial_sign <- median_dev/spatial_sign
+      #   spatial_sign[!is.finite(spatial_sign[,1]), ] <- 0 # check which row has an nan or infinite
+      #   dir_out_matrix[,j,] <- spatial_sign * outlyingness
+      # }
     } else if (data_depth == "simplicial"){
-      for (j in 1:p) {
-        outlyingness  <- (1/fda.usc::mdepth.SD(data[,j,])$dep) - 1
-        median_vec  <-  data[order(outlyingness)[1],j,]
-        median_dev <- sweep(data[,j,], 2, median_vec ) #t(data[,j,])-median_obs
-        spatial_sign <- rowSums((median_dev)^2)^(1/2) #sqrt(rowSums((median_dev)^2))
-        spatial_sign <- median_dev/spatial_sign
-        spatial_sign[!is.finite(spatial_sign[,1]), ] <- 0 # check which row has an nan or infinite
-        dir_out_matrix[,j,] <- spatial_sign * outlyingness
-      }
+      cat("support for simplicial depth not yet added")
+      # for (j in 1:p) {
+      #   outlyingness  <- (1/fda.usc::mdepth.SD(data[,j,])$dep) - 1
+      #   median_vec  <-  data[order(outlyingness)[1],j,]
+      #   median_dev <- sweep(data[,j,], 2, median_vec ) #t(data[,j,])-median_obs
+      #   spatial_sign <- rowSums((median_dev)^2)^(1/2) #sqrt(rowSums((median_dev)^2))
+      #   spatial_sign <- median_dev/spatial_sign
+      #   spatial_sign[!is.finite(spatial_sign[,1]), ] <- 0 # check which row has an nan or infinite
+      #   dir_out_matrix[,j,] <- spatial_sign * outlyingness
+      # }
     } else if(data_depth == "half_space" ) {
-      for (j in 1:p) {
-        outlyingness  <- (1/fda.usc::mdepth.HS(data[,j,])$dep) - 1
-        median_vec  <-  data[order(outlyingness)[1],j,]
-        median_dev <- sweep(data[,j,], 2, median_vec ) #t(data[,j,])-median_obs
-        spatial_sign <- rowSums((median_dev)^2)^(1/2) #sqrt(rowSums((median_dev)^2))
-        spatial_sign <- median_dev/spatial_sign
-        spatial_sign[!is.finite(spatial_sign[,1]), ] <- 0 # check which row has an nan or infinite
-        dir_out_matrix[,j,] <- spatial_sign * outlyingness
-      }
+      cat("half space depth not yet added")
+      # for (j in 1:p) {
+      #   outlyingness  <- (1/fda.usc::mdepth.HS(data[,j,])$dep) - 1
+      #   median_vec  <-  data[order(outlyingness)[1],j,]
+      #   median_dev <- sweep(data[,j,], 2, median_vec ) #t(data[,j,])-median_obs
+      #   spatial_sign <- rowSums((median_dev)^2)^(1/2) #sqrt(rowSums((median_dev)^2))
+      #   spatial_sign <- median_dev/spatial_sign
+      #   spatial_sign[!is.finite(spatial_sign[,1]), ] <- 0 # check which row has an nan or infinite
+      #   dir_out_matrix[,j,] <- spatial_sign * outlyingness
+      # }
+    } else {
+      cat("depth not suported")
     }
     mean_dir_out  <- apply(dir_out_matrix, c(1,3), mean, na.rm = T)
     var_dir_out <- (apply(dir_out_matrix^2, 1, sum, na.rm = T)/p) - rowSums(mean_dir_out^2, na.rm = T)

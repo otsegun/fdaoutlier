@@ -107,7 +107,9 @@
 #' @export
 #' @import ggplot2
 #' @importFrom grDevices rgb
-ms_plot <- function(data, plot = F, plot_type = c("scatter", "parallel"),
+ms_plot <- function(data,
+                    plot = F,
+                    plot_type = c("scatter", "parallel"),
                     return_outliers = T,
                     data_depth = c("random_projections", "mahalanobis",
                                    "simplicial", "half_space"),
