@@ -4,6 +4,7 @@ test_that("projection_depth handles unconventional inputs, non-matrices,  and no
 })
 
 test_that("projection_depth produces correct results", {
+  data("iris")
   dt <- iris[1:5, -5]
   test_depth <- projection_depth(dt = dt, n_projections = 500, seed = 29)
 
