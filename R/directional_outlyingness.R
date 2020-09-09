@@ -136,7 +136,10 @@ dir_out <- function(data, data_depth = "random_projections",
         spatial_sign[!is.finite(spatial_sign[,1]), ] <- 0 # check which row has an nan or infinite
         spatial_sign * outlyingness
       })
-      dir_out_matrix <- aperm(`dim<-`(t(dir_out_matrix), list(p, n, d)), c(2, 1, 3))
+      #dir_out_matrix <- t(dir_out_matrix)
+      #dim(dir_out_matrix) <- c(p, n, d)
+      #dir_out_matrix <- aperm(dir_out_matrix, c(2, 1, 3))
+      dir_out_matrix <- aperm(`dim<-`(t(dir_out_matrix), c(p, n, d)), c(2, 1, 3))
 
     } else if(data_depth == "mahalanobis") {
       cat("support for mahalanobis depth not yet added")
