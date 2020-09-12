@@ -141,6 +141,18 @@ dir_out <- function(data, data_depth = "random_projections",
       #dir_out_matrix <- aperm(dir_out_matrix, c(2, 1, 3))
       dir_out_matrix <- aperm(`dim<-`(t(dir_out_matrix), c(p, n, d)), c(2, 1, 3))
 
+    } else if(data_depth == "random_projections2") {
+      #stop("support for mahalanobis depth not yet added")
+      dir_out_matrix  <- array(0, dim = c(n, p, d))  # to cpp
+      for (j in 1:p) {
+        outlyingness  <- (1/projection_depth(data[,j,], n_projections = 500, seed = 20)) - 1
+        median_vec  <-  data[order(outlyingness)[1],j,]
+        median_dev <- sweep(data[,j,], 2, median_vec ) #t(data[,j,])-median_obs
+        spatial_sign <- rowSums((median_dev)^2)^(1/2) #sqrt(rowSums((median_dev)^2))
+        spatial_sign <- median_dev/spatial_sign
+        spatial_sign[!is.finite(spatial_sign[,1]), ] <- 0 # check which row has an nan or infinite
+        dir_out_matrix[,j,] <- spatial_sign * outlyingness
+      }
     } else if(data_depth == "mahalanobis") {
       cat("support for mahalanobis depth not yet added")
       # for (j in 1:p) {

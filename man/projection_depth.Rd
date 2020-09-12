@@ -4,24 +4,27 @@
 \alias{projection_depth}
 \title{Random Projection for Multivariate Data}
 \usage{
-projection_depth(dt, n_projections = 500L, seed = NULL, delta = 1e-15)
+projection_depth(dts, dt = dts, n_projections = 500L, seed = NULL)
 }
 \arguments{
-\item{dt}{A matrix or dataframe of size n observations by d dimension).}
+\item{dts}{A matrix or data frame of size \code{m} observations by \code{d} dimension or vector a of length \code{d}.
+Contains the observation(s) whose depth is to be computed.}
 
-\item{n_projections}{An integer, indicating the number of directions for random projections. By default,
-500 random directions for projection are generated from a scaled uniform distribution.}
+\item{dt}{A matrix or dataframe of size \code{n} observations by \code{d} dimension. Equals to
+\code{dts} by default.}
 
-\item{seed}{An integer to set a seed when generating the random directions. Useful for reproducibility.}
+\item{n_projections}{The number of directions for random projections. By default,
+500 random directions for projection are generated from a scaled uniform distribution between -1 and 1.}
 
-\item{delta}{Accuracy. The left limit of the empirical distribution function.}
+\item{seed}{The random seed to set when generating the random directions. Defaults to NULL.}
 }
 \value{
 A vector contaning the depth values \code{dt} with respect to itself.
 }
 \description{
-Helper function to compute the random projection depth of a multivariate data with respect to itself.
+Helper function to compute the random projection depth of multivariate point(s) with respect
+to a multivativariate data.
 }
 \author{
-Version adapted from original code contained in \code{fda.usc}.
+Oluwasegun Ojo \code{fda.usc}.
 }
