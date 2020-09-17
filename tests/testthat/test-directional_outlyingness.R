@@ -4,17 +4,18 @@ test_that("dir_out handles unconventional inputs, non-matrices,  and non-array o
   expect_error(dir_out(data = data.frame()) )
 })
 
+multiv_data <- c(-1.00699287, -0.53823436, -0.55879513, -0.18606117, -0.52050693,
+                 0.46096140, -0.32240037, -0.46775918, -0.38068162, 0.02840495,
+                 -0.16316400,  0.18996883, -0.25430960, -0.06389951, -0.46119745,
+                 -0.30353525, -1.21554894, -1.22182643, -0.63857941, -0.84320227,
+                 -0.77277610, -0.88696090, -0.80527829, -0.33013994, -0.25724301,
+                 0.86073945, -0.75379286, -0.81968759, -0.57461555, -1.02516021)
+
+multiv_data <- array(multiv_data, dim = c(5, 3, 2))
+univ_data <- multiv_data[,,1]
 
 test_that("dir_out produces correct results", {
-  multiv_data <- c(-1.00699287, -0.53823436, -0.55879513, -0.18606117, -0.52050693,
-                   0.46096140, -0.32240037, -0.46775918, -0.38068162, 0.02840495,
-                   -0.16316400,  0.18996883, -0.25430960, -0.06389951, -0.46119745,
-                   -0.30353525, -1.21554894, -1.22182643, -0.63857941, -0.84320227,
-                   -0.77277610, -0.88696090, -0.80527829, -0.33013994, -0.25724301,
-                   0.86073945, -0.75379286, -0.81968759, -0.57461555, -1.02516021)
 
-  multiv_data <- array(multiv_data, dim = c(5, 3, 2))
-  univ_data <- multiv_data[,,1]
 
   multiv_result <- dir_out(data = multiv_data, return_dir_matrix = T,
                            data_depth = "random_projections",
@@ -94,7 +95,28 @@ test_that("dir_out produces correct results", {
 })
 
 
+test_that("dir_out arguments return_dir_matrix and return_distance works well", {
 
+    multiv_result_test3 <- dir_out(data = multiv_data, return_dir_matrix = F,
+                           data_depth = "random_projections",
+                           n_projections = 3,
+                           seed = NULL,
+                           return_distance = T)
+    expect_null(multiv_result_test3$dirout_matrix)
+
+    multiv_result_test4 <- dir_out(data = multiv_data, return_dir_matrix = F,
+                                   data_depth = "random_projections",
+                                   n_projections = 3,
+                                   seed = NULL,
+                                   return_distance = F)
+    expect_null(multiv_result_test4$dirout_matrix)
+    expect_null(multiv_result_test4$distance)
+    expect_null(multiv_result_test4$mcd_obj)
+    expect_null(multiv_result_test4$msmatrix)
+
+
+
+})
 
 
 
