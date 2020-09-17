@@ -3,7 +3,7 @@
 
 # fdalite
 
-Fast Outlier Detection and Visualization Tools for Functional Data
+Outlier Detection Tools for Functional Data
 
 <!-- badges: start -->
 
@@ -15,13 +15,12 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 coverage](https://codecov.io/gh/otsegun/fdalite/branch/master/graph/badge.svg)](https://codecov.io/gh/otsegun/fdalite?branch=master)
 <!-- badges: end -->
 
-`fdalite` is a collection of outlier detection and visualization tools
-for functional data analysis. `fdalite` is still at an early
-experimental stage.
+`fdalite` is a collection of outlier detection tools for functional data
+analysis. `fdalite` is still at an early experimental stage.
 
 ## Installation
 
-Since fdalite is still at an experimental stage, you can only install
+Since `fdalite` is still at an experimental stage, you can only install
 the development version from [GitHub](https://github.com/) with:
 
 ``` r
@@ -41,3 +40,7 @@ msplot(sim_data1$data, data_depth = "random_projection")$outliers_index
 sim_data1$true_outliers
 #>  [1]  4 12 17 23 40 59 79 82 83 84
 ```
+
+## Methods Implemented
+
+1.  MS-Plot (Dai & Genton, 2018)
