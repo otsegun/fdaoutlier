@@ -87,7 +87,6 @@
 #' msplot_object$outliers_index
 #' }
 #' @export
-#' @import ggplot2
 #' @importFrom grDevices rgb
 msplot <- function(data,
                    data_depth = c("random_projections"),

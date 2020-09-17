@@ -85,6 +85,7 @@
 #' }
 #'@export
 #'@importFrom stats mad mahalanobis median var
+#'@importFrom MASS cov.rob
 
 dir_out <- function(data, data_depth = "random_projections",
                     n_projections = 200, seed = NULL,
@@ -121,7 +122,7 @@ dir_out <- function(data, data_depth = "random_projections",
 
     if(return_distance){
       ms_matrix <- (cbind(mean_dir_out, var_dir_out))
-      mcd_obj  <- MASS::cov.rob(ms_matrix, method = "mcd", nsamp = "best")
+      mcd_obj  <- cov.rob(ms_matrix, method = "mcd", nsamp = "best")
       robust_cov <- mcd_obj$cov
       robust_mean <- (mcd_obj$center)
       distance <- unname(mahalanobis(ms_matrix, robust_mean, robust_cov))

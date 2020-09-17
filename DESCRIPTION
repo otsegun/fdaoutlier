@@ -1,5 +1,5 @@
 Package: fdalite
-Title: Fast Outlier Detection and Visualization Tools for Functional Data
+Title: Outlier Detection Tools for Functional Data Analysis
 Version: 0.0.0.9000
 Authors@R: 
     c(person(given = "Oluwasegun Taiwo",
@@ -14,7 +14,7 @@ Authors@R:
            family = "Fern\'andez Anta",
            role = c("aut", "fnd"),
            email = "antonio.fernandez@imdea.org"))
-Description: fdalite is a collection of functions and tools for outlier detection and visualisation in functional data analysis.
+Description: fdalite is a collection of tools for outlier detection in functional data analysis.
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
@@ -23,9 +23,6 @@ Suggests:
     covr
 RoxygenNote: 7.1.1
 Imports: 
-    MASS,
-    reshape,
-    scatterplot3d,
-    ggplot2,
+    MASS
 Depends:
     R (>= 2.10)
