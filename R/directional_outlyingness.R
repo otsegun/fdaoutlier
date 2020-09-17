@@ -56,7 +56,8 @@
 #'Zuo, Y. (2003). Projection-based depth functions and associated medians. \emph{The
 #'Annals of Statistics}, 31(5), 1460-1490.
 #'
-#'@seealso
+#'@seealso \code{\link{msplot}} for outlier detection using msplot and \code{\link{projection_depth}}
+#'  for multivariate projection depth.
 #'
 #' @examples
 #' # univariate magnitude model in Dai and Genton (2018).
@@ -180,7 +181,7 @@ dir_out <- function(data, data_depth = "random_projections",
       #   dir_out_matrix[,j,] <- spatial_sign * outlyingness
       # }
     } else if(data_depth == "half_space" ) {
-      cat("half space depth not yet added")
+      stop("half space depth not yet added")
       # for (j in 1:p) {
       #   outlyingness  <- (1/fda.usc::mdepth.HS(data[,j,])$dep) - 1
       #   median_vec  <-  data[order(outlyingness)[1],j,]
@@ -191,7 +192,7 @@ dir_out <- function(data, data_depth = "random_projections",
       #   dir_out_matrix[,j,] <- spatial_sign * outlyingness
       # }
     } else {
-      cat("depth not suported")
+      stop("depth not suported")
     }
     mean_dir_out  <- apply(dir_out_matrix, c(1,3), mean, na.rm = T)
     var_dir_out <- (apply(dir_out_matrix^2, 1, sum, na.rm = T)/p) - rowSums(mean_dir_out^2, na.rm = T)

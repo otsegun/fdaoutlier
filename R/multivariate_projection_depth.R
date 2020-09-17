@@ -17,6 +17,8 @@
 #' @export
 #' @importFrom stats runif
 #' @useDynLib fdalite, .registration = TRUE, .fixes = "C_"
+#' @seealso \code{\link{msplot}} for outlier detection using msplot and \code{\link{dir_out}}
+#'  for directional outlyingess.
 #' @examples
 #' projection_depth(dts = iris[1:5, -5], dt = iris[1:10, -5], n_projection = 7, seed = 20)
 #'

@@ -2,7 +2,7 @@
 
 export(dir_out)
 export(hardin_factor_numeric)
-export(ms_plot)
+export(msplot)
 export(projection_depth)
 import(ggplot2)
 importFrom(grDevices,rgb)

@@ -96,7 +96,8 @@ Zuo, Y. (2003). Projection-based depth functions and associated medians. \emph{T
 Annals of Statistics}, 31(5), 1460-1490.
 }
 \seealso{
-
+\code{\link{msplot}} for outlier detection using msplot and \code{\link{projection_depth}}
+ for multivariate projection depth.
 }
 \author{
 Oluwasegun Taiwo Ojo.

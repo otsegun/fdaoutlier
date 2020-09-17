@@ -29,6 +29,10 @@ to a multivariate data.
 projection_depth(dts = iris[1:5, -5], dt = iris[1:10, -5], n_projection = 7, seed = 20)
 
 }
+\seealso{
+\code{\link{msplot}} for outlier detection using msplot and \code{\link{dir_out}}
+ for directional outlyingess.
+}
 \author{
 Oluwasegun Taiwo Ojo
 }

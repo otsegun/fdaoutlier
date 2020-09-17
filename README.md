@@ -35,7 +35,7 @@ devtools::install_github("otsegun/fdalite")
 library(fdalite)
 data(sim_data1)
 # MSPLOT Dai & Genton (2018)
-ms_plot(sim_data1$data, data_depth = "random_projection")$outliers_index
+msplot(sim_data1$data, data_depth = "random_projection")$outliers_index
 #>  [1]  4 12 17 23 40 59 70 79 82 83 84 93
 
 sim_data1$true_outliers
