@@ -3,11 +3,12 @@ test_that("projection_depth handles unconventional inputs, non-matrices,  and no
   expect_error(projection_depth(dts = list()) )
 })
 
+# correctness tested Sep 12, 2020
 test_that("projection_depth produces correct results", {
   data("iris")
   dts <- iris[1:5, -5]
   dt <- iris[1:10, -5]
-  test_depth <- projection_depth(dts = dts, dt = dt, n_projections = 50, seed = 29)
+  test_depth <- projection_depth(dts = dts, dt = dt, n_projections = 7, seed = 29)
 
   # that a numeric vector is returned
   expect_is(test_depth, "numeric")
@@ -20,7 +21,7 @@ test_that("projection_depth produces correct results", {
 
   # works for a vector
   test_depth2 <- projection_depth(dts = unlist(unname(dts[1, ])),
-                                  dt = dt, n_projections = 50, seed = 29)
+                                  dt = dt, n_projections = 7, seed = 29)
   expect_equal(test_depth2, test_depth[1])
 
 })
@@ -29,14 +30,14 @@ test_that("projection_depth produces correct results", {
 test_that("projection_depth throws error for dts of different dimension", {
   data("iris")
 
-  dts <- iris[1:5, -(4:5)]
-  dt <- iris[1:10, -5]
+  dts <- iris[1:5, -(4:5)] # 5 by 3
+  dt <- iris[1:10, -5] # 10 by 4
   #matrix
-  expect_error(projection_depth(dts = dts, dt = dt, n_projections = 50, seed = 29))
+  expect_error(projection_depth(dts = dts, dt = dt, n_projections = 5, seed = 20))
 
   # works for a vector
   expect_error(projection_depth(dts = unlist(unname(dts[1, ])),
-                                  dt = dt, n_projections = 50, seed = 29))
+                                  dt = dt, n_projections = 5, seed = 20))
 
 })
 

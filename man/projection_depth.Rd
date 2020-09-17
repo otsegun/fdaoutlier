@@ -2,7 +2,7 @@
 % Please edit documentation in R/multivariate_projection_depth.R
 \name{projection_depth}
 \alias{projection_depth}
-\title{Random Projection for Multivariate Data}
+\title{Random projection for multivariate data}
 \usage{
 projection_depth(dts, dt = dts, n_projections = 500L, seed = NULL)
 }
@@ -19,12 +19,16 @@ Contains the observation(s) whose depth is to be computed.}
 \item{seed}{The random seed to set when generating the random directions. Defaults to NULL.}
 }
 \value{
-A vector contaning the depth values \code{dt} with respect to itself.
+A vector contaning the depth values \code{dts} with respect to \code{dt}.
 }
 \description{
 Helper function to compute the random projection depth of multivariate point(s) with respect
-to a multivativariate data.
+to a multivariate data.
+}
+\examples{
+projection_depth(dts = iris[1:5, -5], dt = iris[1:10, -5], n_projection = 7, seed = 20)
+
 }
 \author{
-Oluwasegun Ojo \code{fda.usc}.
+Oluwasegun Taiwo Ojo
 }

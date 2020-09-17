@@ -23,13 +23,9 @@ Suggests:
     covr
 RoxygenNote: 7.1.1
 Imports: 
-    fda.usc,
     MASS,
     reshape,
     scatterplot3d,
     ggplot2,
-    Rcpp
 Depends:
     R (>= 2.10)
-LinkingTo: 
-    Rcpp

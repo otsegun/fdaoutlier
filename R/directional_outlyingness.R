@@ -1,4 +1,4 @@
-#'Directional outlyingness for univariate or multivariate functional data.
+#'Dai & Genton's directional outlyingness for univariate or multivariate functional data.
 #'
 #'
 #'Compute the directional outlyingness of a univariate or multivariate functional data
@@ -11,8 +11,8 @@
 #'@param data_depth The method for computing the depth. The random projection depth is
 #'  always used as suggested in Dai and Genton (2018). Support more depth methods will be added.
 #'
-#'@param return_distance A logical scalar. If TRUE, returns the matrix whose columns are
-#'  the mean and variation of directional outlyiness, the mahalanobis distance of the
+#'@param return_distance A logical scalar. If TRUE, returns: a matrix whose columns are
+#'  the mean and variation of directional outlyingness, the mahalanobis distance of the
 #'  observations of this matrix, and the robust estimate of the mean and covariance of
 #'  this matrix (computed using the minimum covariance determinant method).
 #'
@@ -21,28 +21,25 @@
 #'
 #'@details
 #'
-#'This function computes the directional outlyingness of a univariate or multivariate
-#'functional data. The directional outlyingness, as defined by Dai and Genton (2018) is
+#'The directional outlyingness, as defined by Dai and Genton (2018) is
 #'\deqn{O(Y, F_Y) = (1/d(Y, F_Y) - 1).v} where \eqn{d} is a depth notion, and \eqn{v} is
-#'the unit vector pointing from the median of \eqn{F_Y} to \eqn{Y}. For univariate
-#'functional data, the projection depth based on Zuo (2003) is always used as suggested by
-#'Dai and Genton (2019) while for multivariate functional data, any of "mahalanobis",
-#'"random_projections", "simplicial", or "half_space" depths can be used.
+#'the unit vector pointing from the median of \eqn{F_Y} to \eqn{Y}. For univariate and
+#'multivariate functional data, the projection depth is always used as suggested by
+#'Dai and Genton (2019).
 #'
 #'
-#'@return Returns a list containing: \item{mean_outlyingness}{ an n x d matrix of the mean
+#'@return Returns a list containing: \item{mean_outlyingness}{ an \code{n x d} matrix of the mean
 #'  of directional outlyingness.} \item{var_outlyingness}{ a vector of length n containing
 #'  the variation of directional outlyingness.} \item{ms_matrix}{ if
-#'  \code{return_distance} = T, an n x (d+1) matrix whose columns are the mean and
+#'  \code{return_distance} = T, an \code{n x (d+1)} matrix whose columns are the mean and
 #'  variation of directional outlyiness.} \item{distance}{ if \code{return_distance} = T,
-#'  a vector of distance computed from the \code{ms_matrix} using the robust estimate of
-#'  the mean and covariance.} \item{mcd_obj}{ if \code{return_distance} = T, a list
+#'  a vector of distance computed from the \code{ms_matrix} using a robust estimate of
+#'  the mean and covariance matrix.} \item{mcd_obj}{ if \code{return_distance} = T, a list
 #'  containing the robust (minimum covariance determinant) estimate of the mean and
 #'  covariance of the \code{ms_matrix}.} \item{dirout_matrix}{ if \code{return_dir_matrix}
 #'  = T, an n x p (x d) matrix (array) containing the directional outlyingness values for
 #'  the univariate (multivariate) functional \code{data}.}
-#'@author Version created by Oluwasegun Taiwo Ojo based on the original code written by
-#'Wenlin Dai and Marc G. Genton.
+#'@author Oluwasegun Taiwo Ojo.
 #'
 #'@references Dai, W., and Genton, M. G. (2018). Multivariate functional data
 #'visualization and outlier detection. \emph{Journal of Computational and Graphical
@@ -84,7 +81,8 @@
 #'@importFrom stats mad mahalanobis median var
 
 dir_out <- function(data, data_depth = "random_projections",
-                    return_distance = TRUE, return_dir_matrix = FALSE){
+                    return_distance = TRUE,
+                    return_dir_matrix = FALSE){
   # library used: Mass::cov_rob,
   data_dim  <-  dim(data)
   #data_depth <- match.arg(data_depth)
@@ -92,10 +90,10 @@ dir_out <- function(data, data_depth = "random_projections",
     data <- as.matrix(data)
   }
   if(!is.array(data))
-    stop("Data must be a dataframe, a matrix or 3-dimensional array.")
+    stop("Argument \"data\" must be a dataframe, a matrix or 3-dimensional array.")
 
-  if (any(is.na(data)) || any(is.infinite(data)))
-    stop("Missing or infinite values are not allowed.")
+  if (any(!is.finite(data)))
+    stop("Missing or infinite values are not allowed in argument \"data\".")
 
   if(data_dim[1] < 3){
     stop("n must be greater than 3.")

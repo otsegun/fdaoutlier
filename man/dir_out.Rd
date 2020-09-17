@@ -2,7 +2,7 @@
 % Please edit documentation in R/directional_outlyingness.R
 \name{dir_out}
 \alias{dir_out}
-\title{Directional outlyingness for univariate or multivariate functional data.}
+\title{Dai & Genton's directional outlyingness for univariate or multivariate functional data.}
 \usage{
 dir_out(
   data,
@@ -19,8 +19,8 @@ observations by p domain points by d dimension).}
 \item{data_depth}{The method for computing the depth. The random projection depth is
 always used as suggested in Dai and Genton (2018). Support more depth methods will be added.}
 
-\item{return_distance}{A logical scalar. If TRUE, returns the matrix whose columns are
-the mean and variation of directional outlyiness, the mahalanobis distance of the
+\item{return_distance}{A logical scalar. If TRUE, returns: a matrix whose columns are
+the mean and variation of directional outlyingness, the mahalanobis distance of the
 observations of this matrix, and the robust estimate of the mean and covariance of
 this matrix (computed using the minimum covariance determinant method).}
 
@@ -28,13 +28,13 @@ this matrix (computed using the minimum covariance determinant method).}
 matrix (or array for multivariate functional data). Computed from the chosen \code{depth_depth}.}
 }
 \value{
-Returns a list containing: \item{mean_outlyingness}{ an n x d matrix of the mean
+Returns a list containing: \item{mean_outlyingness}{ an \code{n x d} matrix of the mean
  of directional outlyingness.} \item{var_outlyingness}{ a vector of length n containing
  the variation of directional outlyingness.} \item{ms_matrix}{ if
- \code{return_distance} = T, an n x (d+1) matrix whose columns are the mean and
+ \code{return_distance} = T, an \code{n x (d+1)} matrix whose columns are the mean and
  variation of directional outlyiness.} \item{distance}{ if \code{return_distance} = T,
- a vector of distance computed from the \code{ms_matrix} using the robust estimate of
- the mean and covariance.} \item{mcd_obj}{ if \code{return_distance} = T, a list
+ a vector of distance computed from the \code{ms_matrix} using a robust estimate of
+ the mean and covariance matrix.} \item{mcd_obj}{ if \code{return_distance} = T, a list
  containing the robust (minimum covariance determinant) estimate of the mean and
  covariance of the \code{ms_matrix}.} \item{dirout_matrix}{ if \code{return_dir_matrix}
  = T, an n x p (x d) matrix (array) containing the directional outlyingness values for
@@ -45,13 +45,11 @@ Compute the directional outlyingness of a univariate or multivariate functional 
 based on Dai and Genton (2018).
 }
 \details{
-This function computes the directional outlyingness of a univariate or multivariate
-functional data. The directional outlyingness, as defined by Dai and Genton (2018) is
+The directional outlyingness, as defined by Dai and Genton (2018) is
 \deqn{O(Y, F_Y) = (1/d(Y, F_Y) - 1).v} where \eqn{d} is a depth notion, and \eqn{v} is
-the unit vector pointing from the median of \eqn{F_Y} to \eqn{Y}. For univariate
-functional data, the projection depth based on Zuo (2003) is always used as suggested by
-Dai and Genton (2019) while for multivariate functional data, any of "mahalanobis",
-"random_projections", "simplicial", or "half_space" depths can be used.
+the unit vector pointing from the median of \eqn{F_Y} to \eqn{Y}. For univariate and
+multivariate functional data, the projection depth is always used as suggested by
+Dai and Genton (2019).
 }
 \examples{
 # univariate magnitude model in Dai and Genton (2018).
@@ -93,6 +91,5 @@ Annals of Statistics}, 31(5), 1460-1490.
 
 }
 \author{
-Version created by Oluwasegun Taiwo Ojo based on the original code written by
-Wenlin Dai and Marc G. Genton.
+Oluwasegun Taiwo Ojo.
 }

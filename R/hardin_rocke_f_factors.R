@@ -86,7 +86,7 @@ hardin_factor_numeric <- function(n, dimension){
     factor1 <- asymp_result$factor1
     factor2 <- asymp_result$factor2
   } else{
-    stop("dimension must be at least 2")
+    stop("Argument \'dimension\' must be greater than or equal to 2.")
   }
   return(list(factor1 = factor1, factor2 = factor2))
 }
