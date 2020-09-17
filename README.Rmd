@@ -21,13 +21,12 @@ Fast Outlier Detection and Visualization Tools for Functional Data
 [![Codecov test coverage](https://codecov.io/gh/otsegun/fdalite/branch/master/graph/badge.svg)](https://codecov.io/gh/otsegun/fdalite?branch=master)
 <!-- badges: end -->
 
-fdalite is a collection of outlier detection and visualization function for functional data. fdalit is still at an early experimental stage. 
+`fdalite` is a collection of outlier detection and visualization tools for functional data analysis. `fdalite` is still at an early experimental stage. 
 
 ## Installation
 
 
 ```{r echo = F, eval = F}
-#You can install the released version of fdalite from [CRAN](https://CRAN.R-project.org) with:
 install.packages("fdalite")
 ```
 
@@ -40,28 +39,11 @@ devtools::install_github("otsegun/fdalite")
 ## Example
 
 ```{r}
-
-```
-
-This is a basic example which shows you how to solve a common problem:
-
-```{r example}
 library(fdalite)
-## basic example code
+data(sim_data1)
+# MSPLOT Dai & Genton (2018)
+ms_plot(sim_data1$data, data_depth = "random_projection")$outliers_index
+
+sim_data1$true_outliers
 ```
 
-What is special about using `README.Rmd` instead of just `README.md`? You can include R chunks like so:
-
-```{r cars}
-summary(cars)
-```
-
-You'll still need to render `README.Rmd` regularly, to keep `README.md` up-to-date.
-
-You can also embed plots, for example:
-
-```{r pressure, echo = FALSE}
-plot(pressure)
-```
-
-In that case, don't forget to commit and push the resulting figure files, so they display on GitHub!
