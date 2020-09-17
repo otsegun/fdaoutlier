@@ -7,7 +7,7 @@
 dir_out(
   data,
   data_depth = "random_projections",
-  n_projections = 500,
+  n_projections = 200,
   seed = NULL,
   return_distance = TRUE,
   return_dir_matrix = FALSE
@@ -22,9 +22,10 @@ observations by \code{p} domain points by \code{d} dimension).}
 always used as suggested in Dai and Genton (2018). Support more depth methods will be added.}
 
 \item{n_projections}{The number of directions for computing random projection depth. By default,
-500 random directions are generated from a scaled uniform distribution between -1 and 1.}
+200 random directions are generated from a scaled uniform distribution between -1 and 1.}
 
-\item{seed}{The random seed to set when generating the random directions. Defaults to NULL.}
+\item{seed}{The random seed to set when generating the random directions. Defaults to NULL
+in which case a seed is not set.}
 
 \item{return_distance}{A logical scalar. If TRUE, returns: a matrix whose columns are
 the mean and variation of directional outlyingness, the mahalanobis distance of the
