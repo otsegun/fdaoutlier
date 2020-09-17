@@ -7,17 +7,24 @@
 dir_out(
   data,
   data_depth = "random_projections",
+  n_projections = 500,
+  seed = NULL,
   return_distance = TRUE,
   return_dir_matrix = FALSE
 )
 }
 \arguments{
-\item{data}{A matrix for univariate functional data (of size n observations by p domain
-points) or a 3-dimensional array for multivariate functional data (of size n
-observations by p domain points by d dimension).}
+\item{data}{A matrix for univariate functional data (of size \code{n} observations by \code{p} domain
+points) or a 3-dimensional array for multivariate functional data (of size \code{n}
+observations by \code{p} domain points by \code{d} dimension).}
 
 \item{data_depth}{The method for computing the depth. The random projection depth is
 always used as suggested in Dai and Genton (2018). Support more depth methods will be added.}
+
+\item{n_projections}{The number of directions for computing random projection depth. By default,
+500 random directions are generated from a scaled uniform distribution between -1 and 1.}
+
+\item{seed}{The random seed to set when generating the random directions. Defaults to NULL.}
 
 \item{return_distance}{A logical scalar. If TRUE, returns: a matrix whose columns are
 the mean and variation of directional outlyingness, the mahalanobis distance of the
@@ -49,7 +56,7 @@ The directional outlyingness, as defined by Dai and Genton (2018) is
 \deqn{O(Y, F_Y) = (1/d(Y, F_Y) - 1).v} where \eqn{d} is a depth notion, and \eqn{v} is
 the unit vector pointing from the median of \eqn{F_Y} to \eqn{Y}. For univariate and
 multivariate functional data, the projection depth is always used as suggested by
-Dai and Genton (2019).
+Dai and Genton (2018).
 }
 \examples{
 # univariate magnitude model in Dai and Genton (2018).

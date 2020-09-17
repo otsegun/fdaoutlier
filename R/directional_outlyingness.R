@@ -4,12 +4,16 @@
 #'Compute the directional outlyingness of a univariate or multivariate functional data
 #'based on Dai and Genton (2018).
 #'
-#'@param data A matrix for univariate functional data (of size n observations by p domain
-#'  points) or a 3-dimensional array for multivariate functional data (of size n
-#'  observations by p domain points by d dimension).
+#'@param data A matrix for univariate functional data (of size \code{n} observations by \code{p} domain
+#'  points) or a 3-dimensional array for multivariate functional data (of size \code{n}
+#'  observations by \code{p} domain points by \code{d} dimension).
 #'
 #'@param data_depth The method for computing the depth. The random projection depth is
 #'  always used as suggested in Dai and Genton (2018). Support more depth methods will be added.
+#'
+#'@param n_projections The number of directions for computing random projection depth. By default,
+#'   500 random directions are generated from a scaled uniform distribution between -1 and 1.
+#'@param seed The random seed to set when generating the random directions. Defaults to NULL.
 #'
 #'@param return_distance A logical scalar. If TRUE, returns: a matrix whose columns are
 #'  the mean and variation of directional outlyingness, the mahalanobis distance of the
@@ -25,7 +29,7 @@
 #'\deqn{O(Y, F_Y) = (1/d(Y, F_Y) - 1).v} where \eqn{d} is a depth notion, and \eqn{v} is
 #'the unit vector pointing from the median of \eqn{F_Y} to \eqn{Y}. For univariate and
 #'multivariate functional data, the projection depth is always used as suggested by
-#'Dai and Genton (2019).
+#'Dai and Genton (2018).
 #'
 #'
 #'@return Returns a list containing: \item{mean_outlyingness}{ an \code{n x d} matrix of the mean
@@ -81,6 +85,7 @@
 #'@importFrom stats mad mahalanobis median var
 
 dir_out <- function(data, data_depth = "random_projections",
+                    n_projections = 500, seed = NULL,
                     return_distance = TRUE,
                     return_dir_matrix = FALSE){
   # library used: Mass::cov_rob,
@@ -126,7 +131,7 @@ dir_out <- function(data, data_depth = "random_projections",
     #dir_out_matrix2  <- array(0, dim = c(n, p, d))  # to cpp
     if(data_depth == "random_projections"){
       dir_out_matrix <- apply(data, 2, function(x){
-        outlyingness <- (1/projection_depth(x, n_projections = 500, seed = 20)) - 1
+        outlyingness <- (1/projection_depth(x, n_projections = n_projections, seed = seed)) - 1
         median_vec  <-  x[order(outlyingness)[1], ] # data[order(outlyingness)[1],j,]
         median_dev <- sweep(x, 2, median_vec )
         spatial_sign <- sqrt(rowSums((median_dev)^2))

@@ -16,51 +16,81 @@ test_that("dir_out produces correct results", {
   multiv_data <- array(multiv_data, dim = c(5, 3, 2))
   univ_data <- multiv_data[,,1]
 
-  multiv_result <- dir_out(data = multiv_data, return_dir_matrix = T, data_depth = "random_projections", return_distance = T)
-  multiv_result2 <- dir_out(data = multiv_data, return_dir_matrix = T, data_depth = "random_projections2", return_distance = T)
+  multiv_result <- dir_out(data = multiv_data, return_dir_matrix = T,
+                           data_depth = "random_projections",
+                           n_projections = 500,
+                           seed = 20,
+                           return_distance = T)
+  multiv_result2 <- dir_out(data = multiv_data, return_dir_matrix = T,
+                            data_depth = "random_projections2",
+                            n_projections = 500,
+                            seed = 20,
+                            return_distance = T)
 
   univ_result <- dir_out(data = univ_data, return_dir_matrix = T, data_depth = "random_projections", return_distance = T)
-
-  # that randomprojection and randomprojection2 are the same
-  expect_equal(multiv_result, multiv_result)
 
   # that a list a returned
   expect_is(multiv_result,  "list")
   expect_is(univ_result, "list")
 
+  # that randomprojection and randomprojection2 are the same
+  expect_equal(multiv_result, multiv_result)
+
+
+  # correctness
+
   ## univariate correctness
+
   # distance
-  tmp_distance_univ <- tempfile()
-  expect_known_value(univ_result$distance, tmp_distance_univ, print = T)
+  #tmp_distance_univ <- "tests/reference_files/ref_dirout_distance_univ.rda"
+  #expect_known_value(univ_result$distance, tmp_distance_univ, update = T, print = T)
+  # expect_known_value(univ_result$distance, "../reference_files/ref_dirout_distance_univ.rda",
+  #                    update = F, print = TRUE)
+
   # directional outlyingness matrix
-  tmp_dirout_univ <- tempfile()
-  expect_known_value(univ_result$dirout_matrix, tmp_dirout_univ, print = T)
+
+  # tmp_dirout_univ <- "tests/reference_files/ref_dirout_dirout_univ.rda"
+  # expect_known_value(univ_result$dirout_matrix, tmp_dirout_univ, update = T, print = T)
+  expect_known_value(univ_result$dirout_matrix, "../reference_files/ref_dirout_dirout_univ.rda",
+                     update = F, print = T)
+
   # mean outlyingness
-  tmp_mean_out_univ <- tempfile()
-  expect_known_value(univ_result$mean_outlyingness, tmp_mean_out_univ, print = T)
+  # tmp_mean_out_univ <- "tests/reference_files/ref_dirout_mean_out_univ.rda"
+  # expect_known_value(univ_result$mean_outlyingness, tmp_mean_out_univ, update = T, print = T)
+  expect_known_value(univ_result$mean_outlyingness, "../reference_files/ref_dirout_mean_out_univ.rda",
+                     update = F, print = T)
   # var outlyingness
-  tmp_var_out_univ <- tempfile()
-  expect_known_value(univ_result$var_outlyingness, tmp_var_out_univ, print = T)
-  # centre
-  tmp_centre_univ <- tempfile()
-  expect_known_value(univ_result$center, tmp_centre_univ, print = T)
+  #tmp_var_out_univ <- "tests/reference_files/ref_dirout_var_out_univ.rda"
+  #expect_known_value(univ_result$var_outlyingness, tmp_var_out_univ, print = T)
+  expect_known_value(univ_result$var_outlyingness, "../reference_files/ref_dirout_var_out_univ.rda",
+                     update = F, print = T)
+
+    # centre
+  # tmp_centre_univ <- tempfile()
+  # expect_known_value(univ_result$center, tmp_centre_univ, print = T)
 
   ## multivariate correcness
   # that distance is correct
-  tmp_distance <- tempfile()
-  expect_known_value(multiv_result$distance, tmp_distance, print = T)
+  # tmp_distance <- tempfile()
+  # expect_known_value(multiv_result$distance, tmp_distance, print = T)
   # directional outlyingness matrix
-  tmp_dirout <- tempfile()
-  expect_known_value(multiv_result$dirout_matrix, tmp_dirout, print =T)
+  # tmp_dirout <- "tests/reference_files/ref_dirout_dirout_multiv.rda"
+  # expect_known_value(multiv_result$dirout_matrix, tmp_dirout, print =T)
+  expect_known_value(multiv_result$dirout_matrix, "../reference_files/ref_dirout_dirout_multiv.rda",
+                     update = F, print = T)
   # mean outlyingness
-  tmp_mean_out <- tempfile()
-  expect_known_value(multiv_result$mean_outlyingness, tmp_mean_out, print = T)
+  # tmp_mean_out <- "tests/reference_files/ref_dirout_mean_out_multiv.rda"
+  # expect_known_value(multiv_result$mean_outlyingness, tmp_mean_out, print = T)
+  expect_known_value(multiv_result$mean_outlyingness, "../reference_files/ref_dirout_mean_out_multiv.rda",
+                     update = F, print = T)
   # var outlyingness
-  tmp_var_out <- tempfile()
-  expect_known_value(multiv_result$var_outlyingness, tmp_var_out, print = T)
+  # tmp_var_out <- "tests/reference_files/ref_dirout_var_out_multiv.rda"
+  # expect_known_value(multiv_result$var_outlyingness, tmp_var_out, print = T)
+  expect_known_value(multiv_result$var_outlyingness, "../reference_files/ref_dirout_var_out_multiv.rda",
+                    update = F, print = T)
   # centre
-  tmp_centre <- tempfile()
-  expect_known_value(multiv_result$center, tmp_centre, print = T)
+  # tmp_centre <- tempfile()
+  # expect_known_value(multiv_result$center, tmp_centre, print = T)
 })
 
 
