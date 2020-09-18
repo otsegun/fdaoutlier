@@ -5,7 +5,13 @@
 \title{Outlier Detection using Magniude-Shape Plot (MS-Plot) based on the directional outlyingness for functional
 data.}
 \usage{
-msplot(data, data_depth = c("random_projections"), return_mvdir = TRUE)
+msplot(
+  data,
+  data_depth = c("random_projections"),
+  n_projections = 200,
+  seed = NULL,
+  return_mvdir = TRUE
+)
 }
 \arguments{
 \item{data}{A matrix for univariate functional data (of size \eqn{n} observations by \eqn{p} domain
@@ -14,6 +20,12 @@ observations by \eqn{p} domain points by \eqn{d} dimension).}
 
 \item{data_depth}{The depth used in the computation of the directional outlyingness of
 \code{data}. The projection depth is always used. Support for other depth methods will be added.}
+
+\item{n_projections}{The number of random directions to generate for computing the random projection
+depth. By default 200 directions are generated.}
+
+\item{seed}{The seed to set when generating random directions for computing the random projection depth.
+NULL by default in which case no seed is set.}
 
 \item{return_mvdir}{A logical scalar indicating whether to return the mean and variation of directional
 outlyingness (\eqn{MO} and \eqn{VO}). For univariate functional data, \eqn{MO} and \eqn{VO} are vectors.
@@ -75,7 +87,7 @@ data_multiv <- array(0, dim = c(n, p, 2),
 dimnames = list(c(1:n), c(1:p), c("temp", "log_prep")))
 data_multiv[,,1] <- sdata1; data_multiv[,,2] <- sdata2
 
-msplot_object <- msplot(data = data_multiv, plot = T)
+msplot_object <- msplot(data = data_multiv, return_mvdir = TRUE)
 msplot_object$outliers_index
 }
 }
