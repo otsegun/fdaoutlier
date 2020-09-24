@@ -6,6 +6,17 @@
 #' @param emp_factor The empirical factor of the boxplot used on the modified shape
 #'   similarity index.
 #'
+#' This method uses a combination of total variation depth (TVD) and modified shape similarity (MSS) index
+#'  defined in Huang and Sun (2019) to find magnitude and shape outliers. The MSS of the observations are
+#'  first computed and a classical boxplot applied on the indices. Outliers detected by the boxplot are
+#'  flagged as shape outliers. The shape outliers are then removed from the data and then TVD of the
+#'  remaning observations are used in a functional boxplot to detect magnitude outliers.
+#'
+#' @author Oluwasegun Ojo
+#'
+#' @references Huang, H., & Sun, Y. (2019). A decomposition of total variation depth for
+#' understanding functional outliers. \emph{Technometrics}, 61(4), 445-458.
+#'
 #' @returns Returns a list contaning the following
 #' \describe{
 #'   \item{\code{outliers}}{the indices of the (shape and magnitude) outliers}
@@ -15,7 +26,7 @@
 #'   \item{\code{mss}}{the modified shape similarity index of the observations of \code{data}}
 #'   }
 #' @export
-#'
+#' @seealso \code{\link{msplot}} for outlier detection using msplot.
 #' @examples
 #' data(sim_data1)
 #' res <- tvd_mss(sim_data1$data)
