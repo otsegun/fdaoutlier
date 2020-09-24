@@ -9,9 +9,11 @@
 
 /* .Call calls */
 extern SEXP projectionDepth(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
+extern SEXP totalVariationDepth(SEXP, SEXP, SEXP, SEXP);
 
 static const R_CallMethodDef CallEntries[] = {
-  {"projectionDepth", (DL_FUNC) &projectionDepth, 7},
+  {"projectionDepth",     (DL_FUNC) &projectionDepth,     7},
+  {"totalVariationDepth", (DL_FUNC) &totalVariationDepth, 4},
   {NULL, NULL, 0}
 };
 
