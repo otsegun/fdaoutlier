@@ -4,14 +4,23 @@
 \alias{total_variation_depth}
 \title{Compute total variation depth}
 \usage{
-total_variation_depth(data, n_curves = nrow(data), n_points = ncol(data))
+total_variation_depth(data)
 }
 \arguments{
-\item{n_points}{}
+\item{data}{A matrix or dataframe of size \eqn{n} observations/curves by \eqn{p} domain/evaluation
+points.}
 }
 \value{
-
+Returns a list contaning the following
+\describe{
+  \item{\code{tvd}}{the total variation depths of the observations of \code{data}}
+  \item{\code{mss}}{the modified shape similarity index of the observations of \code{data}}
+  }
 }
 \description{
 Compute total variation depth
+}
+\examples{
+data(sim_data1)
+tvd_object <- total_variation_depth(sim_data1$data)
 }

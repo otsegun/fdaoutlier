@@ -102,17 +102,22 @@ extern "C" {
 
     // compute weights
     for(int i = 0; i < n; i++){
-      double diffs[d];
+      double* diffs = new double[d];
       std::vector<double> dtsRow(dtsMatrix[i], dtsMatrix[i] + d);
       std::adjacent_difference(dtsRow.begin(), dtsRow.end(), diffs, customDifference);
       for(int j = 0; j< d; j++){
         diffData[i*d + j] = diffs[j];
       }
+      delete[] diffs;
     }
     const char *names[] = {"shape_variation", "difference_data", ""};
     SEXP reslist = PROTECT(Rf_mkNamed(VECSXP, names));  // creates a list of length 2
     SET_VECTOR_ELT(reslist, 0, shape_var_return); // x and y are arbitrary SEXPs
     SET_VECTOR_ELT(reslist, 1, differenced_data_return);
+
+    // clean up
+    delete[] dtsMatrix;
+    delete[] dtsTMatrix;
 
     UNPROTECT(3);
     return reslist;

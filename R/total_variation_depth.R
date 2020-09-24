@@ -1,16 +1,38 @@
 #' Compute total variation depth
 #'
-#' @param data
-#' @param n_curve
-#' @param n_points
+#' @param data A matrix or dataframe of size \eqn{n} observations/curves by \eqn{p} domain/evaluation
+#'   points.
 #'
-#' @return
+#' @return Returns a list contaning the following
+#' \describe{
+#'   \item{\code{tvd}}{the total variation depths of the observations of \code{data}}
+#'   \item{\code{mss}}{the modified shape similarity index of the observations of \code{data}}
+#'   }
 #' @export
 #'
 #' @examples
-total_variation_depth <- function(data,
-                                  n_curves = nrow(data),
-                                  n_points = ncol(data)){
+#' data(sim_data1)
+#' tvd_object <- total_variation_depth(sim_data1$data)
+#' @importFrom graphics boxplot
+total_variation_depth <- function(data){
+  if(is.data.frame(data)){
+    data <- as.matrix(data)
+  }
+
+  #i
+
+  if(!is.array(data) || !is.numeric(data))
+    stop("Argument \"data\" must be a numeric matrix or dataframe.")
+
+  if (any(!is.finite(data))){
+    stop("Missing or infinite values are not allowed in argument \"data\"")
+  }
+
+  if(nrow(data) < 3) stop("The number of curves must be greater than 2")
+
+  n_curves = nrow(data)
+  n_points = ncol(data)
+
   data_t <- t(data)
   pointwise_ranks <- t(apply(data_t,1,rank))/n_curves
   total_variation <- pointwise_ranks * (1 - pointwise_ranks)

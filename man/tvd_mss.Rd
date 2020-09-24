@@ -5,25 +5,30 @@
 \title{Find shape and magnitude outliers  using the Total Variation Depth
  and Modified Shape Similarity Index}
 \usage{
-tvd_mss(data, n_curves = nrow(data), n_points = ncol(data), emp_factor = 1.5)
+tvd_mss(data, emp_factor = 1.5)
 }
 \arguments{
-\item{data}{A matrix of size \eqn{n} observations by \eqn{p} domain
+\item{data}{A matrix or dataframe of size \eqn{n} observations/curves by \eqn{p} domain/evaluation
 points.}
-
-\item{n_curves}{The number of observations or curves. Set to \code{nrow(data)}
-by default.}
-
-\item{n_points}{The number of domain/evaluation points. Set to \code{ncol(data)}
-by default.}
 
 \item{emp_factor}{The empirical factor of the boxplot used on the modified shape
 similarity index.}
 }
 \value{
-
+Returns a list contaning the following
+\describe{
+  \item{\code{outliers}}{the indices of the (shape and magnitude) outliers}
+  \item{\code{shape_outliers}}{the indices of the shape outliers}
+  \item{\code{magnitude_outliers}}{the indices of the magnitude outliers}
+  \item{\code{tvd}}{the total variation depths of the observations of \code{data}}
+  \item{\code{mss}}{the modified shape similarity index of the observations of \code{data}}
+  }
 }
 \description{
 Find shape and magnitude outliers  using the Total Variation Depth
  and Modified Shape Similarity Index
+}
+\examples{
+data(sim_data1)
+res <- tvd_mss(sim_data1$data)
 }

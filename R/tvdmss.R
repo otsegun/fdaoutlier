@@ -1,54 +1,64 @@
 #' Find shape and magnitude outliers  using the Total Variation Depth
 #'  and Modified Shape Similarity Index
 #'
-#' @param data A matrix of size \eqn{n} observations by \eqn{p} domain
+#' @param data A matrix or dataframe of size \eqn{n} observations/curves by \eqn{p} domain/evaluation
 #'   points.
-#' @param n_curves The number of observations or curves. Set to \code{nrow(data)}
-#'   by default.
-#' @param n_points The number of domain/evaluation points. Set to \code{ncol(data)}
-#'   by default.
 #' @param emp_factor The empirical factor of the boxplot used on the modified shape
 #'   similarity index.
 #'
-#' @returns
+#' @returns Returns a list contaning the following
+#' \describe{
+#'   \item{\code{outliers}}{the indices of the (shape and magnitude) outliers}
+#'   \item{\code{shape_outliers}}{the indices of the shape outliers}
+#'   \item{\code{magnitude_outliers}}{the indices of the magnitude outliers}
+#'   \item{\code{tvd}}{the total variation depths of the observations of \code{data}}
+#'   \item{\code{mss}}{the modified shape similarity index of the observations of \code{data}}
+#'   }
 #' @export
 #'
 #' @examples
+#' data(sim_data1)
+#' res <- tvd_mss(sim_data1$data)
 tvd_mss <- function(data,
-                    n_curves = nrow(data),
-                    n_points = ncol(data),
                     emp_factor = 1.5){
-  depths_mss <- total_variation_depth(data = data,
-                                      n_curves =  n_curves,
-                                      n_points = n_points)
+
+  depths_mss <- total_variation_depth(data = data)
+
   tvd <- depths_mss$tvd
   mss <- depths_mss$mss
 
+
+  n_curves <- nrow(data)
+  n_points <- ncol(data)
+  index <- (1:n_curves)
+  n_central_obs <- ceiling(n_curves/2)
+
   # shape outliers
   shape_boxstats <- boxplot(tvd, range = emp_factor, plot=F);
-  shape_outliers <- sapply(shape_boxstats$out, function(x) which(tvd == x))
+  shape_outliers = NULL
 
-  # magnitude outliers
-  n_central_obs <- ceiling(n_curves/2)
-  data_pure <- data[-shape_outliers, ]
-  tvd_pure <- tvd[-shape_outliers]
-  index_pure <- (1:n_curves)[-shape_outliers]
-  sorted_index <- order(tvd_pure, decreasing = T)
+  if(length(shape_boxstats$out) != 0){
+    shape_outliers <- sapply(shape_boxstats$out, function(x) which(tvd == x))
+    data <- data[-shape_outliers, ]
+    tvd <- tvd[-shape_outliers]
+    index <- index[-shape_outliers]
+  }
 
-  central_obs <- data_pure[sorted_index[1:n_central_obs], ]
+  sorted_index <- order(tvd, decreasing = T)
+
+  central_obs <- data[sorted_index[1:n_central_obs], ]
   inf <- apply(central_obs, 2, min)
   sup <- apply(central_obs, 2, max)
   dist <- 1.5 * (sup - inf)
   upper_bound <- sup + dist
   lower_bound <- inf - dist
 
-  outliers <- which(
-    apply(data_pure, 1, function(x){
+  outliers <- which(apply(data, 1, function(x){
     any(x <= lower_bound) || any(x >= upper_bound)
-  })
-  )
+  }))
 
-  magnitude_outliers = index_pure[outliers]
+  magnitude_outliers = NULL
+  if(length(outliers) != 0) magnitude_outliers = index[outliers]
   return(list(outliers = sort(c(magnitude_outliers, shape_outliers)),
               shape_outliers = shape_outliers,
               magnitude_outliers = magnitude_outliers,

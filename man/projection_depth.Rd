@@ -7,7 +7,7 @@
 projection_depth(dts, dt = dts, n_projections = 500L, seed = NULL)
 }
 \arguments{
-\item{dts}{A matrix or data frame of size \code{m} observations by \code{d} dimension or vector a of length \code{d}.
+\item{dts}{A matrix or data frame of size \code{m} observations by \code{d} dimension or vector of length \code{d}.
 Contains the observation(s) whose depth is to be computed.}
 
 \item{dt}{A matrix or dataframe of size \code{n} observations by \code{d} dimension. Equals to

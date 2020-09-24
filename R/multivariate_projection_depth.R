@@ -4,7 +4,7 @@
 #' Helper function to compute the random projection depth of multivariate point(s) with respect
 #' to a multivariate data.
 #'
-#' @param dts A matrix or data frame of size \code{m} observations by \code{d} dimension or vector a of length \code{d}.
+#' @param dts A matrix or data frame of size \code{m} observations by \code{d} dimension or vector of length \code{d}.
 #'   Contains the observation(s) whose depth is to be computed.
 #' @param dt A matrix or dataframe of size \code{n} observations by \code{d} dimension. Equals to
 #'   \code{dts} by default.
@@ -38,7 +38,7 @@ projection_depth <- function(dts, dt = dts, n_projections = 500L, seed = NULL){
     stop("Argument \"dts\ must have the same dimension as \"dt\".")
   }
 
-  if(!(is.array(dt) && is.array(dts) && is.numeric(dt) && is.numeric(dts)  ))
+  if(!is.array(dt) || !is.array(dts) || !is.numeric(dt) || !is.numeric(dts))
     stop("Arguments \"dt\" and \"dts\" must be a numeric matrix or dataframe.")
 
   if (any(!is.finite(dt)) || any(!is.finite(dts)))
