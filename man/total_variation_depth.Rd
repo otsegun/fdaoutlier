@@ -2,7 +2,7 @@
 % Please edit documentation in R/total_variation_depth.R
 \name{total_variation_depth}
 \alias{total_variation_depth}
-\title{Compute total variation depth}
+\title{Compute the Total Variation Depth and Modified Shape Similarity Index}
 \usage{
 total_variation_depth(data)
 }
@@ -18,9 +18,23 @@ Returns a list contaning the following
   }
 }
 \description{
-Compute total variation depth
+Compute the Total Variation Depth and Modified Shape Similarity Index
+}
+\details{
+This function computes the total variation depth (TVD) and modified shape similarity (MSS) index of a univariate
+functional data. The definition of the estimates of TVD and MSS can be found in Huang and Sun (2019).
 }
 \examples{
 data(sim_data1)
 tvd_object <- total_variation_depth(sim_data1$data)
+}
+\references{
+Huang, H., & Sun, Y. (2019). A decomposition of total variation depth for
+understanding functional outliers. \emph{Technometrics}, 61(4), 445-458.
+}
+\seealso{
+\code{\link{tvd_mss}} for outlier detection using TVD and MSS.
+}
+\author{
+Oluwasegun Ojo
 }
