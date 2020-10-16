@@ -44,3 +44,4 @@ sim_data1$true_outliers
 ## Methods Implemented
 
 1.  MS-Plot (Dai & Genton, 2018)
+2.  TVDMSS (Huang & Sun, 2019)
