@@ -45,3 +45,4 @@ sim_data1$true_outliers
 
 1.  MS-Plot (Dai & Genton, 2018)
 2.  TVDMSS (Huang & Sun, 2019)
+3.  Extremal Depth (Narisetty & Nair, 2016)
