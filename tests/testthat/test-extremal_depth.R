@@ -1,7 +1,7 @@
 test_that("extremal depth handles unconventional data", {
-  expect_error(extremal_depth(data = list()) )
-  expect_error(extremal_depth(data = data.frame()) )
-  expect_error(extremal_depth(data = matrix(0, nrow = 2, ncol = 3)))
+  expect_error(extremal_depth(dt = list()) )
+  expect_error(extremal_depth(dt = data.frame()) )
+  expect_error(extremal_depth(dt = matrix(0, nrow = 2, ncol = 3)))
 })
 
 test_that("extremal depth produces correct results", {
