@@ -154,7 +154,7 @@ dir_out <- function(data, data_depth = "random_projections",
         outlyingness  <- (1/projection_depth(data[,j,], n_projections = 500, seed = 20)) - 1
         median_vec  <-  data[order(outlyingness)[1],j,]
         median_dev <- sweep(data[,j,], 2, median_vec ) #t(data[,j,])-median_obs
-        spatial_sign <- rowSums((median_dev)^2)^(1/2) #sqrt(rowSums((median_dev)^2))
+        spatial_sign <- sqrt(rowSums((median_dev)^2)) #sqrt(rowSums((median_dev)^2))
         spatial_sign <- median_dev/spatial_sign
         spatial_sign[!is.finite(spatial_sign[,1]), ] <- 0 # check which row has an nan or infinite
         dir_out_matrix[,j,] <- spatial_sign * outlyingness

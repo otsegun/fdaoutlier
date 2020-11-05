@@ -62,7 +62,7 @@ extremal_depth <- function(dt){
   })
   ordered_functions <- unlist(ordered_functions)
   depth_values <- ((1:n)/n)[order(ordered_functions)]
-  }
+}
 
 pwise_depth <- function(dt, n) {
   pdepth <- apply(dt, 2, function(i){

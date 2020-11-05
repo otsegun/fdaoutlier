@@ -3,15 +3,22 @@
 #'
 #' @param data A matrix or dataframe of size \eqn{n} observations/curves by \eqn{p} domain/evaluation
 #'   points.
-#' @param emp_factor The empirical factor of the boxplot used on the modified shape
-#'   similarity index.
+#' @param emp_factor_mss The empirical factor of the classical boxplot used on the modified shape
+#'   similarity index. Defaults to 1.5.
+#' @param emp_factor_tvd The empirical factor of the functional boxplot used on the TVD of observations.
+#'   Defaults to 1.5.
+#' @param central_region_tvd A number between 0 and 1 indicating the central region probability of
+#'   the functional boxplot used on the TVD of the observations. Defaults to 0.5. See also details
 #'
 #'@details
 #' This method uses a combination of total variation depth (TVD) and modified shape similarity (MSS) index
-#'  defined in Huang and Sun (2019) to find magnitude and shape outliers. The MSS of the observations are
-#'  first computed and a classical boxplot applied on the indices. Outliers detected by the boxplot are
-#'  flagged as shape outliers. The shape outliers are then removed from the data and then TVD of the
-#'  remaning observations are used in a functional boxplot to detect magnitude outliers.
+#'  defined in Huang and Sun (2019) to find magnitude and shape outliers. The TVD and MSS of all the observations are
+#'  first computed and a classical boxplot is then applied on the MSS. Outliers detected by the boxplot of MSS are
+#'  flagged as shape outliers. The shape outliers are then removed from the data and the TVD of the
+#'  remaining observations are used in a functional boxplot to detect magnitude outliers.  The central region
+#'  of this functional boxplot (\code{central_region_tvd}) is w.r.t. to the original number of curves. Thus if
+#'  8 shape outliers are found out of 100 curves, specifying \code{central_region_tvd} = 0.5 will ensure that
+#'  50 observations are used as the central region in the functional boxplot on the ramining 92 observations.
 #'
 #'
 #' @returns Returns a list contaning the following
@@ -35,49 +42,60 @@
 #' data(sim_data1)
 #' res <- tvd_mss(sim_data1$data)
 tvd_mss <- function(data,
-                    emp_factor = 1.5){
+                    emp_factor_mss = 1.5,
+                    emp_factor_tvd = 1.5,
+                    central_region_tvd = 0.5){
 
   depths_mss <- total_variation_depth(data = data)
 
-  tvd <- depths_mss$tvd
+  tvd <- tvd_old <- depths_mss$tvd
   mss <- depths_mss$mss
 
 
   n_curves <- nrow(data)
   n_points <- ncol(data)
   index <- (1:n_curves)
-  n_central_obs <- ceiling(n_curves/2)
+  n_central_obs <- ceiling(n_curves/2)# set fbplot to .5
 
   # shape outliers
-  shape_boxstats <- boxplot(tvd, range = emp_factor, plot=F);
-  shape_outliers = NULL
+  shape_boxstats <- boxplot(mss, range = emp_factor_mss, plot=F);
+  shape_outliers <- NULL
 
   if(length(shape_boxstats$out) != 0){
-    shape_outliers <- sapply(shape_boxstats$out, function(x) which(tvd == x))
+    #segun:
+    #shape_outliers <- sapply(shape_boxstats$out, function(x) which(mss == x))
+    shape_outliers <- which(mss %in% shape_boxstats$out[shape_boxstats$out < mean(mss)])
     data <- data[-shape_outliers, ]
     tvd <- tvd[-shape_outliers]
     index <- index[-shape_outliers]
   }
 
-  sorted_index <- order(tvd, decreasing = T)
+  magnitude_outliers  <- NULL
+  # central region wrt to original number of curves
+  outliers <- functional_boxplot(data, depth_values = tvd,
+                                 emp_factor = emp_factor_tvd,
+                                 central_region = central_region_tvd*n_curves/nrow(data))$outliers
+  # sorted_index <- order(tvd, decreasing = T)
+  #
+  #
+  #
+  # central_obs <- data[sorted_index[1:n_central_obs], ]
+  # inf <- apply(central_obs, 2, min)
+  # sup <- apply(central_obs, 2, max)
+  # dist <- 1.5 * (sup - inf)
+  # upper_bound <- sup + dist
+  # lower_bound <- inf - dist
+  #
+  # outliers <- which(apply(data, 1, function(x){
+  #   any(x <= lower_bound) || any(x >= upper_bound)
+  # }))
 
-  central_obs <- data[sorted_index[1:n_central_obs], ]
-  inf <- apply(central_obs, 2, min)
-  sup <- apply(central_obs, 2, max)
-  dist <- 1.5 * (sup - inf)
-  upper_bound <- sup + dist
-  lower_bound <- inf - dist
 
-  outliers <- which(apply(data, 1, function(x){
-    any(x <= lower_bound) || any(x >= upper_bound)
-  }))
-
-  magnitude_outliers = NULL
   if(length(outliers) != 0) magnitude_outliers = index[outliers]
   return(list(outliers = sort(c(magnitude_outliers, shape_outliers)),
               shape_outliers = shape_outliers,
               magnitude_outliers = magnitude_outliers,
-              tvd = tvd,
+              tvd = tvd_old,
               mss = mss))
 }
 

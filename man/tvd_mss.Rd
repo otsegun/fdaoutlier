@@ -5,14 +5,25 @@
 \title{Find shape and magnitude outliers  using the Total Variation Depth
  and Modified Shape Similarity Index}
 \usage{
-tvd_mss(data, emp_factor = 1.5)
+tvd_mss(
+  data,
+  emp_factor_mss = 1.5,
+  emp_factor_tvd = 1.5,
+  central_region_tvd = 0.5
+)
 }
 \arguments{
 \item{data}{A matrix or dataframe of size \eqn{n} observations/curves by \eqn{p} domain/evaluation
 points.}
 
-\item{emp_factor}{The empirical factor of the boxplot used on the modified shape
-similarity index.}
+\item{emp_factor_mss}{The empirical factor of the classical boxplot used on the modified shape
+similarity index. Defaults to 1.5.}
+
+\item{emp_factor_tvd}{The empirical factor of the functional boxplot used on the TVD of observations.
+Defaults to 1.5.}
+
+\item{central_region_tvd}{A number between 0 and 1 indicating the central region probability of
+the functional boxplot used on the TVD of the observations. Defaults to 0.5. See also details}
 }
 \value{
 Returns a list contaning the following
@@ -30,10 +41,13 @@ Find shape and magnitude outliers  using the Total Variation Depth
 }
 \details{
 This method uses a combination of total variation depth (TVD) and modified shape similarity (MSS) index
- defined in Huang and Sun (2019) to find magnitude and shape outliers. The MSS of the observations are
- first computed and a classical boxplot applied on the indices. Outliers detected by the boxplot are
- flagged as shape outliers. The shape outliers are then removed from the data and then TVD of the
- remaning observations are used in a functional boxplot to detect magnitude outliers.
+ defined in Huang and Sun (2019) to find magnitude and shape outliers. The TVD and MSS of all the observations are
+ first computed and a classical boxplot is then applied on the MSS. Outliers detected by the boxplot of MSS are
+ flagged as shape outliers. The shape outliers are then removed from the data and the TVD of the
+ remaining observations are used in a functional boxplot to detect magnitude outliers.  The central region
+ of this functional boxplot (\code{central_region_tvd}) is w.r.t. to the original number of curves. Thus if
+ 8 shape outliers are found out of 100 curves, specifying \code{central_region_tvd} = 0.5 will ensure that
+ 50 observations are used as the central region in the functional boxplot on the ramining 92 observations.
 }
 \examples{
 data(sim_data1)

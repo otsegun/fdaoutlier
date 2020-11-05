@@ -19,8 +19,8 @@ test_that("tvd_mss behaves well when outliers are not found", {
 })
 
 test_that("tvd_mss behaves well when shape outliers are found", {
-  dt <- sim_data1$data
-  tvdmssobj <- tvd_mss(dt)
-  expect_equal(tvdmssobj$shape_outliers, 79)
+  add_shape <- rbind(sim_data1$data, rep(c(-5, 5), 25))
+  tvdmssobj <- tvd_mss(add_shape)
+  expect_equal(tvdmssobj$shape_outliers, 101)
 
 })
