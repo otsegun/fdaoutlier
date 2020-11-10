@@ -2,6 +2,7 @@
 
 export(dir_out)
 export(extremal_depth)
+export(extreme_rank_length)
 export(hardin_factor_numeric)
 export(msplot)
 export(projection_depth)

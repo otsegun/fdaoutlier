@@ -1,13 +1,6 @@
-
-
-dir_out <- function(data, data_depth = "random_projections",
-                    n_projections = 200, seed = NULL,
-                    return_distance = TRUE,
-                    return_dir_matrix = FALSE)
-
 functional_boxplot <- function(dt,
                                depth_method = c("mbd", "tvd", "extremal", "dirout",
-                                                "linfinity", "bd"),
+                                                "linfinity", "bd", "erld"),
                                depth_values = NULL,
                                emp_factor = 1.5,
                                central_region = 0.5){
@@ -25,7 +18,9 @@ functional_boxplot <- function(dt,
       depth_values <- l_infinity_depth(dt)
     }else if(depth_method == "bd"){
       depth_values <- band_depth(dt)
-    } else{
+    } else if(depth_method == "erld"){
+      depth_values <- extreme_rank_length(dt)
+    }else{
       cat(depth_method, " not supported \n")
     }
   }

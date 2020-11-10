@@ -2,7 +2,7 @@
 # depth should be allowed
 seq_transform <- function(dt, sequence = c("T0", "T1", "T2"),
                           depth = c("mbd", "tvd", "extremal", "dirout",
-                                    "linfinity", "bd"),
+                                    "linfinity", "bd", "erld"),
                           save_data = T,
                           seed = NULL,
                           n_projections = 500L){
