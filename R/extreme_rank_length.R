@@ -1,82 +1,85 @@
 #' Compute the Extreme Rank Length Depth.
 #'
 #'
+#'@param dt A matrix or data frame of size \eqn{n} observations/curves by \eqn{p} domain/evaluation points.
 #'
-#' @param dt A matrix or data frame of size \eqn{n} observations/curves by \eqn{p} domain/evaluation
-#'   points.
-#' @param type A character vector. Can be one of \code{"two_sided"}, \code{"one_sided_left"} and \code{"one_sided_right"}.
-#'   If \code{"two_sided"} is specified, small and large values in \code{dt} will be considered extreme. If \code{"one_sided_left"} is specified,
-#'   then only small values in \code{dt} are considered to be extreme while for \code{"one_sided_right"}, only large values  in
-#'   \code{dt} are considered to be extreme. \code{"two_sided"} is the default. See \code{Details} for more details.
+#'@param type A character vector. Can be one of \code{"two_sided"}, \code{"one_sided_left"} or \code{"one_sided_right"}.
+#'  If \code{"two_sided"} is specified, small and large values in \code{dt} will be considered extreme. If \code{"one_sided_left"} is specified,
+#'  then only small values in \code{dt} are considered to be extreme while for \code{"one_sided_right"}, only large values  in
+#'  \code{dt} are considered to be extreme. \code{"two_sided"} is the default. See \code{Details} for more details.
 #'
-#'  @details This function computes the extreme rank length depth (ERLD) of a sample of curves or functions.
-#'  Functions have to be discretely observed on common domain points. In principle, the ERLD of a funciton \eqn{X_i}
+#'@details
+#'
+#'This function computes the extreme rank length depth (ERLD) of a sample of curves or functions.
+#' Functions have to be discretely observed on common domain points. In principle, the ERLD of a funciton \eqn{X_i}
 #'  is the proportion of functions in the sample that is considered to be more extreme than \eqn{X_i}. To determine which functions are
 #'  more extreme, pointwise ranks of the functions are computed and there are three possibilities. First possiblity is to
-#'  consider only small values as extreme (when \code{type = "one_sided_left"}) in which case the raw pointwise ranks \eqn{r_{ij} are used.
+#'  consider only small values as extreme (when \code{type = "one_sided_left"}) in which case the raw pointwise ranks \eqn{r_{ij}} are used.
 #'  The second possibility is to consider only large values as extreme (when \code{type = "one_sided_right"}) in which case the
 #'  pointwise ranks used is computed as \eqn{R_{ij} = n + 1 - r_{ij} } where \eqn{r_{ij}} is the raw pointwise rank of function
 #'  \eqn{i} at design point \eqn{j} and \eqn{n} is the number of functions in the sample. Third possiblity is to consider
 #'  both small and large values as extreme (when \code{type = "two_sided"}) in which case the pointwise ranks used is computed
-#'  as \eqn{R_{ij} = min(r_ij, n + 1 - r_{ij})}. In the computation of the raw pointwise ranks \eqn{r_{ij}, ties are broken using
+#'  as \eqn{R_{ij} = min(r_ij, n + 1 - r_{ij})}. In the computation of the raw pointwise ranks \eqn{r_{ij}}, ties are broken using
 #'  an average. See Dai et al. (2020) and Myllymäki et al. (2017) for more details.
 #'
-#' @return A numeric vector containing the depth of each curve
+#'@return A numeric vector containing the depth of each curve
 #'
-#' @author Oluwasegun Ojo
+#'@author Oluwasegun Ojo
 #'
-#' @references
-#'
+#'@references
 #' Dai, W., Mrkvička, T., Sun, Y., & Genton, M. G. (2020). Functional outlier detection and taxonomy by sequential transformations.
 #'  \emph{Computational Statistics & Data Analysis}, 106960.
 #'
 #' Myllymäki, M., Mrkvička, T., Grabarnik, P., Seijo, H., & Hahn, U. (2017).
 #'  Global envelope tests for spatial processes. \emph{J. R. Stat. Soc. B}, 79:381-404.
 #'
-#' @export
+#'@export
 #'
-#' @examples
+#'@examples
 #' data(sim_data1)
 #' erld <- extreme_rank_length(sim_data1$data)
 #'
-#'
-#'
-extreme_rank_length <- function(dt,
-                                type = c("two_sided", "one_sided_left", "one_sided_right")){
-  if(is.data.frame(dt)){
-    dt <- as.matrix(dt)
+extreme_rank_length <-
+  function(dt,
+           type = c("two_sided", "one_sided_left", "one_sided_right")) {
+    if (is.data.frame(dt)) {
+      dt <- as.matrix(dt)
+    }
+
+    if (!is.array(dt) || !is.numeric(dt))
+      stop("Argument \"dt\" must be a numeric matrix or dataframe.")
+
+    if (any(!is.finite(dt))) {
+      stop("Missing or infinite values are not allowed in argument \"dt\"")
+    }
+
+    if (nrow(dt) < 3)
+      stop("The number of curves must be greater than 1")
+
+    type <- match.arg(type)
+    dm <- dim(dt)
+    n <- dm[1]
+    p <- dm[2]
+    rank_matrix_forward <-
+      apply(dt, 2L, rank, ties.method = "average") # low values have low ranks
+
+    if (type == "two_sided") {
+      # both low and high are extreme
+      rank_ij <- pmin(rank_matrix_forward, n + 1 - rank_matrix_forward)
+      sorted_rank <- apply(rank_ij, 1, sort, method = "quick")
+    } else if (type == "one_sided_right") {
+      sorted_rank <-
+        apply(n + 1 - rank_matrix_forward, 1, sort, method = "quick")
+
+    } else if (type == "one_sided_left") {
+      #low values considered extreme
+      sorted_rank <-
+        apply(rank_matrix_forward, 1, sort, method = "quick")
+    } else{
+      stop("Argument \'type\' can only be: 'two_sided', 'one_sided_left' or 'one_sided_red'. ")
+    }
+    depths <- .Call(C_extremeRank, as.double(t(sorted_rank)), n, p,
+                    PACKAGE = "fdalite")
+    return(depths / n)
+
   }
-
-  if(!is.array(dt) || !is.numeric(dt))
-    stop("Argument \"dt\" must be a numeric matrix or dataframe.")
-
-  if (any(!is.finite(dt))){
-    stop("Missing or infinite values are not allowed in argument \"dt\"")
-  }
-
-  if(nrow(dt) < 3) stop("The number of curves must be greater than 1")
-
-  type <- match.arg(type)
-  dm <- dim(dt)
-  n <- dm[1]
-  p <- dm[2]
-  rank_matrix_forward <- apply(dt, 2L, rank, ties.method = "average") # low values have low ranks
-
-  if(type == "two_sided"){ # both low and high are extreme
-    rank_ij <- pmin(rank_matrix_forward, n+1-rank_matrix_forward)
-    sorted_rank <- apply(rank_ij,1, sort, method = "quick")
-    # import cpp code to compute depth
-  } else if (type == "one_sided_right"){# high values extreme
-    sorted_rank <- apply(n+1-rank_matrix_forward, 1, sort, method = "quick")
-
-  } else if (type == "one_sided_left"){ #low values considered extreme
-    sorted_rank <- apply(rank_matrix_forward,1, sort, method = "quick")
-  } else{
-    stop("Argument \'type\' can only be: 'two_sided', 'one_sided_left' or 'one_sided_red' ")
-  }
-
-  depths <- .Call(C_extremeRank, as.double(t(sorted_rank)), n, p,
-                  PACKAGE = "fdalite")
-  depths/n
-
-}

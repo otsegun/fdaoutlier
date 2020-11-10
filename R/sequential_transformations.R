@@ -25,12 +25,12 @@ seq_transform <- function(dt, sequence = c("T0", "T1", "T2"),
       if(save_data) transformed_data[[transformation]] <- dt
     } else if(transformation == "T2"){
       dt <- normalize_curves(dt)
-      t2_outliers <- functional_boxplot(dt, depth_measure = depth)$outliers
+      t2_outliers <- functional_boxplot(dt, depth_method = depth)$outliers
       outliers[[transformation]] <- t2_outliers
       if(save_data) transformed_data[[transformation]] <- dt
     } else if(transformation == "D1"|| transformation == "D2"){
       dt <- difference_curves(dt)
-      d1_outliers <- functional_boxplot(dt, depth_measure = depth)$outliers
+      d1_outliers <- functional_boxplot(dt, depth_method = depth)$outliers
       outliers[[transformation]] <- d1_outliers
       if(save_data) transformed_data[[transformation]] <- dt
     } else if(transformation == "O"){
