@@ -2,7 +2,7 @@
 % Please edit documentation in R/directional_quantile.R
 \name{directional_quantile}
 \alias{directional_quantile}
-\title{Title}
+\title{Compute directional quantile outlyingness for a sample of discretely observed curves}
 \usage{
 directional_quantile(dt, quantiles = c(0.025, 0.975))
 }
@@ -11,11 +11,29 @@ directional_quantile(dt, quantiles = c(0.025, 0.975))
 points.}
 
 \item{quantiles}{A numeric vector of length 2 specifying the probabilities of the lower and upper quantiles.
-Defaults to \code{c(0.025, 0.975)}}
+Values must be between 0 and 1. Defaults to \code{c(0.025, 0.975)} as specified in Dai et al. (2020).}
 }
 \value{
-A numeric vector containing the negative of the directional quantile.
+A numeric vector containing the the directional quantiles of each observation of \code{dt}.
 }
 \description{
-Title
+Compute directional quantile outlyingness for a sample of discretely observed curves
+}
+\details{
+The method computes the directional quantile of a sample of curves discretely observed on common points.
+The directional quantile of a function/curve \eqn{X_i(t)} is the maximum pointwise scaled outlyingness of
+\eqn{X_i(t)}. The scaling is done using the pointwise absolute difference between the mean and the lower (and upper)
+quantiles. See Dai et al. (2020) and Myllymäki et al. (2017) for more details.
+}
+\examples{
+data(sim_data1)
+dq <- directional_quantile(sim_data1$data)
+
+}
+\references{
+Dai, W., Mrkvička, T., Sun, Y., & Genton, M. G. (2020). Functional outlier detection and taxonomy by sequential transformations.
+ \emph{Computational Statistics & Data Analysis}, 106960.
+
+Myllymäki, M., Mrkvička, T., Grabarnik, P., Seijo, H., & Hahn, U. (2017).
+ Global envelope tests for spatial processes. \emph{J. R. Stat. Soc. B}, 79:381-404.
 }

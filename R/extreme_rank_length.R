@@ -53,7 +53,7 @@ extreme_rank_length <-
       stop("Missing or infinite values are not allowed in argument \"dt\"")
     }
 
-    if (nrow(dt) < 3)
+    if (nrow(dt) < 2)
       stop("The number of curves must be greater than 1")
 
     type <- match.arg(type)
