@@ -2,7 +2,7 @@ test_that("extreme_rank_lenk depth handles unconventional data", {
   expect_error(extreme_rank_length(dt = list()))
   expect_error(extreme_rank_length(dt = data.frame()) )
   expect_error(extreme_rank_length(dt = matrix(0, nrow = 1, ncol = 3)))
-  expect_error(extreme_rank_length(dt = matrix(NA, nrow = 1, ncol = 3)))
+  #expect_error(extreme_rank_length(dt = matrix(NA, nrow = 1, ncol = 3)))
   expect_error(extreme_rank_length(dt = matrix(c(1:2, NA), nrow = 1, ncol = 3)))
 })
 
