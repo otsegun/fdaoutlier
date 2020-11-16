@@ -1,81 +1,151 @@
+#' Functional Boxplot for a sample of functions.
+#'
+#' This function finds outliers in a sample of curves using the functional boxplot by Sun and Genton (2011).
+#' Unlike the name suggests, the function does not actually produce a plot but is only used as support in
+#' finding outliers in other functions. Different depth and outlyingness methods are supported for ordering
+#' functions. Alternatively, the depth values of the functions can be supplied directly.
+#'
+#' @param dt A matrix or data frame of size \eqn{n} observations/curves by \eqn{p} domain/evaluation points for univariate functional data.
+#' @param depth_method A character value specifying the method to use for computing the depth values (if \code{depth_values} is not supplied)
+#'  used in ordering the functions. The following methods are are supported:
+#'  \describe{
+#'   \item{"mbd":}{The modified band depth with bands defined by 2 functions.
+#'   Uses the algorithm of Sun et al. (2012).}
+#'   \item{"tvd"}{The total variation depth of Huang and Sun (2019).}
+#'   \item{"extremal"}{The extremal depth of Narisetty and Nair (2016).}
+#'   \item{"dirout"}{Uses the robust distance of the mean and variation of directional outlyingess (\code{\link{dir_out}})
+#'   defined in Dai and Genton (2018). Since this method is a measure of outlyingess of a function the negative of the
+#'   computed robust distance is used in ordering the functions.}
+#'   \item{"linfinity"}{The L-infinity depth defined in Long and Huang (2015) is used in ordering functions.}
+#'   \item{"bd"}{Uses the band depth with bands defined by 2 functions according to the algorithm of Sun et al. (2012)}
+#'   \item{erld}{Uses the extreme rank length depth defined in Myllymäki et al. (2017) and Dai et al. (2020).}
+#'   \item{dq}{Uses the directional quantile (DQ) defined in Myllymäki et al. (2017) and Dai et al. (2020).
+#'    Since DQ is a measure of outlyingness, the negative of the DQ values is used in ordering the functions.}
+#'    }
+#'   The default method is \code{"mbd"}. Alternatively, the \code{depth_values} of the functions can be supplied in which case
+#' the depths are not computed and \code{depth_method} is ignored.
+#' @param depth_values A numeric vector containing the depth values of the functions in \code{dt} to use for ordering functions.
+#'    \code{length(depth_values)} must be equal to number of rows of \code{dt}. If \code{depth_values} is specified, the depth is not
+#'     computed and any method specified in \code{depth_method} is ignored.
+#' @param emp_factor A numeric value specifying the emperical factor for the boxplot. Defaults to 1.5.
+#' @param central_region A numeric value between 0 and 1 indicating the probabilty of central region. Defaults to 0.5.
+#' @param erld_type If \code{depth_method = "erld"}, the type of ordering to use in computing the extreme rank length depth.
+#' Can be one of \code{"two_sided"}, \code{"one_sided_left"} or \code{"one_sided_right"}. A \code{"two_sided"} ordering is used by
+#' default if \code{erld_type} is not specified.
+#' See \link{extreme_rank_length} for more details.
+#' @param dq_quantiles If \code{depth_method = "dq"}, a numeric vector of length 2 specifying the probabilites
+#'  of upper and lower quantiles. Defaults to \code{c(0.025, 0.975)} for the upper and lower 2.5\% quantiles.
+#'  See \link{directional_quantile} for details.
+#'
+#'
+#'
+#' @return A list containing: \item{outliers}{The indices of the functions/curves flagged as outliers.}
+#' \item{depth_values}{The depths of the functions/curves in \code{dt}.}
+#' \item{median_curve}{The index of the median curve, which is the curve with the largest depth value}
+#'
+#' @references
+#' Sun, Y., & Genton, M. G. (2011). Functional boxplots. \emph{Journal of Computational and Graphical
+#'  Statistics}, 20(2), 316-334.
+#'
+#' @seealso \code{\link{seq_transform}} for functional outlier detection using  sequential transformation.
+#'
+#'@export
+#' @examples
+#' fbplot_obj <- functional_boxplot(sim_data1$data, depth_method = "mbd")
+#' fbplot_obj$outliers
 functional_boxplot <- function(dt,
                                depth_method = c("mbd", "tvd", "extremal", "dirout",
-                                                "linfinity", "bd", "erld"),
+                                                 "linfinity", "bd", "erld", "dq"),
                                depth_values = NULL,
                                emp_factor = 1.5,
-                               central_region = 0.5){
+                               central_region = 0.5,
+                               erld_type = NULL,
+                               dq_quantiles = NULL){
+  dm <- dim(dt)
+  n <- dm[1]
+  p <- dm[2]
+
+  if (is.data.frame(dt)) {
+    dt <- as.matrix(dt)
+  }
+
+  if (!is.array(dt) || !is.numeric(dt))
+    stop("Argument \"dt\" must be a numeric matrix or dataframe.")
+
+  if (any(!is.finite(dt))) {
+    stop("Missing or infinite values are not allowed in argument \"dt\"")
+  }
+
+  if (length(dm) != 2) stop("Dimension of 'dt' must be 2. Only univariate functional data is supported.")
+
   if(is.null(depth_values)){
     depth_method <- match.arg(depth_method)
     if(depth_method == "mbd"){
       depth_values <- modified_band_depth(dt)
     }else if( depth_method == "tvd"){
-      depth_values <- total_variation_depth(dt)
+      depth_values <- total_variation_depth(dt)$tvd
     }else if(depth_method == "extremal"){
       depth_values <- extremal_depth(dt)
     }else if(depth_method == "dirout"){
-      depth_values <- -dir_out(dt)$distance
+      depth_values <- -dir_out(dt, return_distance = T)$distance
     }else if(depth_method == "linfinity"){
-      depth_values <- l_infinity_depth(dt)
+      depth_values <- linfinity_depth(dt)
     }else if(depth_method == "bd"){
       depth_values <- band_depth(dt)
     } else if(depth_method == "erld"){
-      depth_values <- extreme_rank_length(dt)
-    }else{
-      cat(depth_method, " not supported \n")
+      if(is.null(erld_type)){
+        warning("The 'type' argument for extreme rank length depth not specified. Using the default type of 'two_sided'. ")
+        depth_values <- extreme_rank_length(dt)
+      }else{
+        depth_values <- extreme_rank_length(dt, type = erld_type)
+      }
+
+    }else if(depth_method == "dq"){
+      if(is.null(dq_quantiles)){
+        warning("Using the default quantile probabilites of 0.025 and 0.975 for directional quantile.")
+        depth_values <- -directional_quantile(dt)
+      }else{
+        depth_values <- -directional_quantile(dt, quantiles = dq_quantiles)
+      }
+    }
+  } else{
+    if(length(depth_values) != n){
+      stop("Length of argument 'depth_values' must be equal to the number of rows in 'dt'.")
     }
   }
+
+  if(central_region >= 1 || central_region <= 0   ){
+    stop("Argument 'central_region' must be greater than 0 and less than 1.")
+  }
+
+
 
   sorted_depths <- sort(depth_values, decreasing = T, index.r = T)
   index_sorted_depth <- sorted_depths$ix
   sorted_depths <- sorted_depths$x
   median_curve <- index_sorted_depth[1]
 
-  n <- nrow(dt)
-  #p <- ncol(dt)
+  #repnp <- rep(n, p)
 
   n_obs_central <- ceiling(n*central_region) # at least 50%
   center <- dt[index_sorted_depth[1:n_obs_central], ]
-  #out=fit[,index[(m+1):n]]## replaced downwards
+
   inf <- apply(center,2,min)
   sup <- apply(center,2,max)
-  dist <- emp_factor*(sup-inf)
-  upper <- sup + dist
-  lower <- inf - dist
-  dt_t <- t(dt)
-  outlier_test <- (dt_t <= lower) + (dt_t >= upper)
+  distt <- emp_factor*(sup-inf)
+  upper <- sup + distt
+  lower <- inf - distt
+  dt <- t(dt)
+  outlier_test <- (dt <= lower) + (dt >= upper)
   outliers <- which(colSums(outlier_test) > 0)
   return(list(outliers = outliers,
               depth_values = depth_values,
               median_curve = median_curve))
 }
 
-band_depth <- function(dt){
-  n <- nrow(dt)
-  rank_matrix <- apply(dt, 2, rank)
-  down <- apply(rank_matrix, 1, min) - 1
-  up <- n-apply(rank_matrix, 1, max)
-  unname((up*down+n-1)/choose(n,2))
-}
 
 
-modified_band_depth <- function(dt){
-  p <- ncol(dt)
-  n <- nrow(dt)
-  rnkmat <- apply(dt,2,rank) # switches matrix to max(p,n) by min(p,n)
-  down <- rnkmat-1
-  up <- n-rnkmat
-  unname((rowSums(up*down)/p+n-1)/choose(n,2))
-}
 
-# dts <- sim_data1$data[1:9, 1:10]
-# all.equal(modified_band_depth(dts),fMBD(t(dts)))
-# all.equal(band_depth(dts),fBD2(t(dts)))
 
-l_infinity_depth <- function(dt){
-  # distance very large if n is big.
-  # to cpp for memory?
-  distances <- as.matrix(dist(dt, method = "maximum", diag = T, upper = T))
-  unname(1/(1+colMeans(distances)))
-}
 
-# l_infinity_depth(sim_data1$data)
+
