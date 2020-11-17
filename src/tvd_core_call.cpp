@@ -1,19 +1,9 @@
-#include <Rinternals.h>
-// #include <stdio.h>
-#include <vector>
-#include <algorithm>
-#include <numeric>
+# include "jumpstart.h"
 using namespace std;
 
 
 extern "C" {
-  void customMedian2(vector<double> &rowVector, double &median, const int len){
-    int position = len / 2;
-    std::nth_element(rowVector.begin(), rowVector.begin() + position, rowVector.end());
-    median = rowVector[position];
-  }
-  double customDifference(double x, double y){return abs(x - y);}
-
+  //uses customMedian, customDifference
   SEXP totalVariationDepth(SEXP dtsT, SEXP dts,
                        SEXP nn, SEXP dd){
     //derefence pointers
@@ -56,7 +46,7 @@ extern "C" {
       // find median at s
       double med;
       std::vector<double> dtsTRow(dtsTMatrix[s], dtsTMatrix[s] + n);
-      customMedian2(dtsTRow, med, n);
+      customMedian(dtsTRow, med, n);
 
       // printf("\n column %d median is:  %F \n", s, med);
       for(int t = 0; t < n; t++){

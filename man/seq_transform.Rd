@@ -80,10 +80,12 @@ in which case a seed is not set.}
 }
 \value{
 If \code{save_data = FALSE}, named list of length \code{length(sequence)} containing the index of outliers found after each
-transformation. The names of the elements of this list are the sequence strings supplied to \code{sequence}.
+transformation. The names of the elements of this list are the sequence strings supplied to \code{sequence}. The outliers found
+after each stage of transformation are not necessarily mutually exclusive.
 Otherwise if \code{save_data = TRUE}, a list containing two lists are returned. The contents of the returned list are:
 \item{outliers:}{A named list of length \code{length(sequence)} containing the index of outliers found after each
-transformation. The names of the elements of this list are the sequence strings supplied to \code{sequence}.}
+transformation. The names of the elements of this list are the sequence strings supplied to \code{sequence} and the
+ outliers found after each stage of transformation are not necessarily mutually exclusive. }
 \item{transformed_data}{A named list of length \code{length(sequence)} containing the transformed dataframes/matrix after each
 transformation. The names of the elements of this list are the sequence strings supplied to \code{sequence}.}
 }
@@ -142,8 +144,10 @@ seqobj$ransformed_data$D2 # the 2nd order differenced data
 dtm <- array(0, dim = c(100, 50, 2))
 dtm[,,1] <- sim_data1$data
 dtm[,,2] <- sim_data1$data
-seqobj <- seq_transform(dtm, sequence = "O", depth_method = "erld", erld_type = "one_sided_right")
-seqobj$O # multivariae outliers
+seqobj <- seq_transform(dtm, sequence = "O", depth_method = "erld",
+ erld_type = "one_sided_right", save_data = TRUE)
+seqobj$O # multivariate outliers
+seqobj$transformed_data$O # univariate outlyingness
 
 
 

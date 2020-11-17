@@ -1,36 +1,9 @@
-#include <Rinternals.h>
-#include <vector>
-#include <algorithm>
+#include "jumpstart.h"
 using namespace std;
 
 
 extern "C" {
-  void customMedian(vector<double> &rowVector, double &median, const int len){
-    int position = len / 2;
-    std::nth_element(rowVector.begin(), rowVector.begin() + position, rowVector.end());
-    median = rowVector[position];
-  }
-
-  void customMAD(vector<double> &rowVector, double &mad, const double &medn,  const int len){
-    /* Obtain median absolute deviation (from median) (MAD) */
-    vector<double> devs(len);
-    for (int i = 0; i < len; i++){
-      devs[i] = std::abs(rowVector[i] - medn);
-    }
-    int position = len/2;
-    std::nth_element(devs.begin(), devs.begin() + len/2, devs.end());
-    mad = devs[position];
-  }
-
-  void deleteMatrix(double** mat, int numRow){
-    for(int i = 0; i < numRow; i++) {
-      delete[] mat[i];
-    }
-    delete [] mat;
-  }
-
-
-
+// deleteMatrix, customMedian, customMedian, customMAD
   SEXP projectionDepth(SEXP dts, SEXP dt,  SEXP direction,
                     SEXP mm, SEXP nn, SEXP dd, SEXP kk) {
 

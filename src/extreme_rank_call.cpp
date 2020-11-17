@@ -17,24 +17,6 @@ extern "C" {
     for (int i = 0; i < n; i++){
       depths[i] = 1;
     }
-
-    // allocate matrix
-    // for (int i = 0; i < d; i++){
-    //   dtsTMatrix[i] = dtsTV + i*(n);
-    // }
-    //
-    // for (int i = 0; i < n; i++){
-    //   dtsMatrix[i] = dtsV + i*(d);
-    // }
-    //
-    // print matrix
-    // for (int i = 0; i < n; i++){
-    //   printf("\n Row i: %d \n", i);
-    //   for(int j = 0; j < d; j++){
-    //     printf("%F, ", dtsMatrix[i][j]);
-    //   }
-    // }
-
     // compare
     for (int s = 0; s < n; s++){
      for(int t = s+1; t < n; t++){
