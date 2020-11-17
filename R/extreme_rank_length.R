@@ -63,21 +63,24 @@ extreme_rank_length <-
     rank_matrix_forward <-
       apply(dt, 2L, rank, ties.method = "average") # low values have low ranks
 
-    if (type == "two_sided") {
-      # both low and high are extreme
-      rank_ij <- pmin(rank_matrix_forward, n + 1 - rank_matrix_forward)
-      sorted_rank <- apply(rank_ij, 1, sort, method = "quick")
-    } else if (type == "one_sided_right") {
-      sorted_rank <-
-        apply(n + 1 - rank_matrix_forward, 1, sort, method = "quick")
-
-    } else if (type == "one_sided_left") {
+    if (type == "one_sided_left") {
       #low values considered extreme
       sorted_rank <-
         apply(rank_matrix_forward, 1, sort, method = "quick")
-    } else{
-      stop("Argument \'type\' can only be: 'two_sided', 'one_sided_left' or 'one_sided_red'. ")
+    }else{
+      invert_rank <- n + 1 - rank_matrix_forward
+      if (type == "two_sided") {
+        # both low and high are extreme
+        rank_ij <- pmin(rank_matrix_forward, invert_rank)
+        sorted_rank <- apply(rank_ij, 1, sort, method = "quick")
+      } else if (type == "one_sided_right") {
+        sorted_rank <-
+          apply(invert_rank, 1, sort, method = "quick")
+      } else{
+        stop("Argument \'type\' can only be: 'two_sided', 'one_sided_left' or 'one_sided_red'. ")
+      }
     }
+
     depths <- .Call(C_extremeRank, as.double(t(sorted_rank)), n, p,
                     PACKAGE = "fdalite")
     return(depths / n)

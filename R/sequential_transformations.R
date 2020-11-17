@@ -1,12 +1,137 @@
-# for outlyingness transformation, only one-sided DQ and other one sided
-# depth should be allowed
+#' Find and classify outliers functional outliers using Sequential Transformation
+#'
+#' This method finds and classify outliers using sequential transformations proposed in Algorithm 1 of Dai et al. (2020).
+#' A sequence of transformations are applied to the functional data and after each transformation, a functional
+#' boxplot is applied on the transformed data and outliers flagged by the functional data are noted. A number of
+#' transformations mentioned in Dai et al. (2020) are supported including vertical alighnment ("T1(X)(t)"),
+#' normalization ("T2"), one order of differencing ("D1" and "D2") and point-wise outlyingness data ("O"). The feature alignment
+#' transformation based on warping/curve registration is not yet supported.
+#'
+#'
+#' @param dt A matrix for univariate functional data (of size \code{n} observations by \code{p} domain
+#'  points) or a 3-dimensional array for multivariate functional data (of size \code{n}
+#'  observations by \code{p} domain points by \code{d} dimension). Only the outlyingness transformation ("O")
+#'  supports multivariate functional data so the sequence of transformation must always start with outlyingness
+#'  whenever a multivariate functional data is parsed to \code{dt}.
+#' @param sequence A character vector usually of length between 1 and 6 containing any of the strings: \code{"T0", "T1", "T2",
+#' "D1", "D2"} and \code{"O"} (in any order). These sequence of strings specifies the sequence of transformation to be applied
+#'  on the data and their meanings are described as follows:
+#'  \describe{
+#'   \item{\code{"T0"}}{Functional boxplot applied on raw data (no transformation is applied)}.
+#'    \item{\code{"T1"}}{Apply vartical alignment on data, i.e. subtract from each curve its expectation over the domain of evaluation}.
+#'    \item{\code{"T2"}}{Apply normalization on data, i.e. divide each curve by its L-2 norm.}
+#'    \item{\code{"D1"} and \code{"D2" }}{Apply one order of differencing on data.}
+#'    \item{\code{"O"}}{Find the pointwise outlyingness of data. For multivariate functional data, this transformation replaces the multivariate
+#'    functional data with a univariate functional data of pointwise outlyingness.}
+#'  }
+#'  Examples of sequences of transformations include: \code{"T0"},  \code{c("T0", "T1", "D1")}, \code{c("T0", "T1", "T2")},
+#'   \code{c("T0", "D1", "D2")} and \code{c("T0", "T1", "T2", "D1", "D2")}. See Details for their meaning.
+#'
+#' @param depth_method A character value specifying depth/outlyingness method to use in the functional boxplot applied after each stage of transformation.
+#' Note that the same depth/outlyingness method is used in the functional boxplot applied after each trasformation in the sequence. The following methods
+#' are currently supported:
+#' \describe{
+#'   \item{"mbd":}{The modified band depth with bands defined by 2 functions.
+#'   Uses the algorithm of Sun et al. (2012).}
+#'   \item{"tvd"}{The total variation depth of Huang and Sun (2019).}
+#'   \item{"extremal"}{The extremal depth of Narisetty and Nair (2016).}
+#'   \item{"dirout"}{Uses the robust distance of the mean and variation of directional outlyingess (\code{\link{dir_out}})
+#'   defined in Dai and Genton (2018). Since this method is a measure of outlyingess of a function the negative of the
+#'   computed robust distance is used in ordering the functions.}
+#'   \item{"linfinity"}{The L-infinity depth defined in Long and Huang (2015) is used in ordering functions.}
+#'   \item{"bd"}{Uses the band depth with bands defined by 2 functions according to the algorithm of Sun et al. (2012)}
+#'   \item{erld}{Uses the extreme rank length depth defined in Myllymäki et al. (2017) and mentioned in Dai et al. (2020).}
+#'   \item{"dq"}{Uses the directional quantile (DQ) defined in Myllymäki et al. (2017) and mentioned in Dai et al. (2020).
+#'    Since DQ is a measure of outlyingness, the negative of the DQ values is used in ordering the functions.}
+#'    }
+#'
+#' @param save_data A logical. If TRUE, the intermediate transformed data are returned in a list.
+#' @param emp_factor The empirical factor for functional boxplot. Defaults to 1.5.
+#' @param central_region A value between 0 and 1 indicating the central region probability for functional_boxplot. Defaults to 0.5.
+#' @param erld_type If \code{depth_method = "erld"}, the type of ordering to use in computing the extreme rank length depth (ERLD).
+#' Can be one of \code{"two_sided"}, \code{"one_sided_left"} or \code{"one_sided_right"}. A \code{"two_sided"} ordering is used by
+#' default if \code{erld_type} is not specified and \code{depth_method = "erld"}. The \code{"one_sided_right"} ERLD is especially useful for
+#' ordering functions of outlyingness (the output of the \code{"O"} transformation) since it considers only large values as extreme.
+#' @param dq_quantiles If \code{depth_method = "dq"}, a numeric vector of length 2 specifying the probabilites
+#'  of upper and lower quantiles. Defaults to \code{c(0.025, 0.975)} for the upper and lower 2.5\% quantiles.
+#'  See \link{directional_quantile} for details.
+#' @param n_projections An integer indicating the number of random projections to use in computing the point-wise outlyingness if a 3-d array
+#'  is specified in \code{dt} i.e. (mutivariate functional data), and the transformation \code{"O"} is part of the sequence of transformations
+#'  parsed to \code{sequence}. Defaults to 200L.
+#' @param seed The random seed to set when generating the random directions in the computation of the point-wise outlyingness. Defaults to NULL.
+#' in which case a seed is not set.
+#' @return If \code{save_data = FALSE}, named list of length \code{length(sequence)} containing the index of outliers found after each
+#' transformation. The names of the elements of this list are the sequence strings supplied to \code{sequence}.
+#' Otherwise if \code{save_data = TRUE}, a list containing two lists are returned. The contents of the returned list are:
+#'\item{outliers:}{A named list of length \code{length(sequence)} containing the index of outliers found after each
+#' transformation. The names of the elements of this list are the sequence strings supplied to \code{sequence}.}
+#'\item{transformed_data}{A named list of length \code{length(sequence)} containing the transformed dataframes/matrix after each
+#' transformation. The names of the elements of this list are the sequence strings supplied to \code{sequence}.}
+#'
+#' @details
+#'This function implements outlier detection using sequential transformations described in Algorihm 1 of Dai et al. (2020).
+#'A sequence of transformations are applied consecutively with the functional boxplot applied on the transformed data after
+#'each transformation. The following example sequences (and their meanining) suggested in Dai et al. (2020) can be parsed to
+#'argument \code{sequence}.
+#'\describe{
+#'   \item{\code{"T0"}}{Apply functional boxplot on raw data (no transformation is applied)}.
+#'    \item{\code{c("T0", "T1", "D1")}}{Apply functional boxplot on raw data, then apply vartical alignment on data followed by applying
+#'    functional boxplot again. Finally apply one order of differencing on the vertically aligned data and apply functional boxplot again.}
+#'    \item{\code{c("T0", "T1", "T2")}}{Apply functional boxplot on raw data, then apply vartical alignment on data followed by applying
+#'    functional boxplot again. Finally apply normalization using L-2 norm on the vertically aligned data and apply functional boxplot for again.}
+#'    \item{\code{"T0", "D1", "D2"}}{Apply functional boxplot on raw data, then applyone order of difference on data followed by applying
+#'    functional boxplot again. Finally apply another one order of differencing on the differenced data apply functional boxplot for again.
+#'    Note that this sequence of transformation can also be specified by \code{"T0", "D1", "D1"}, \code{"T0", "D2", "D2"}, and
+#'     \code{"T0", "D2", "D1"} since \code{"D1"} and \code{"D2" } do the same thing which is to apply lag-1 difference on the data.}
+#'    \item{\code{"O"}}{Find the pointwise outlyingness of the multivariate or univariate functional data and then apply functional boxplot
+#'    on the resulting univariate functional data of pointwise outlyingness. Care must be taken to specify a one sided ordering function (e.g.
+#'    e.g "one_sided_right" extreme rank length depth) in the functional boxplot used on the data of piont-wise outlyingness. This is because only
+#'    large values should be considered extreme in the data of the piont-wise outlyingness.}
+#'  }
+#' For multivariate functional data (when a 3-d array is supplied to \code{dt}), the sequence of transformation must always begin with \code{"O"}
+#' so that the multivariate data can be replaced with the univariate data of point-wise outlyingness which the functional boxplot can subsequently process.
+#' (The \code{\link{functional_boxplot}} function anly supports univariate functional data).
+#'
+#' @export
+#'
+#' @examples
+#' # same as running a functional boxplot
+#' seqobj <- seq_transform(sim_data1$data, sequence = "T0", depth_method = "mbd")
+#' all.equal(seqobj$T0, functional_boxplot(sim_data1$data, depth_method = "mbd")$outliers)
+#'
+#' # more sequences
+#' seqobj <- seq_transform(sim_data1$data, sequence = c("T0", "D1", "D2"), depth_method = "mbd")
+#' seqobj$T0 # outliers found in raw data
+#' seqobj$D1 # outliers found after differencing data the first time
+#' seqobj$D2 # outliers found after differencing the data the second time
+#'
+#' # saving transformed data
+#' seqobj <- seq_transform(sim_data1$data, sequence = c("T0", "D1", "D2"),
+#'  depth_method = "mbd", save_data = TRUE)
+#' seqobj$outliers$T0 # outliers found in raw data
+#' seqobj$ransformed_data$T0  # the raw data
+#' seqobj$ransformed_data$D1 # the first order differenced data
+#' seqobj$ransformed_data$D2 # the 2nd order differenced data
+#'
+#' # multivariate data
+#' dtm <- array(0, dim = c(100, 50, 2))
+#' dtm[,,1] <- sim_data1$data
+#' dtm[,,2] <- sim_data1$data
+#' seqobj <- seq_transform(dtm, sequence = "O", depth_method = "erld", erld_type = "one_sided_right")
+#' seqobj$O # multivariae outliers
+#'
+#'
+#'
 seq_transform <- function(dt, sequence = c("T0", "T1", "T2"),
-                          depth = c("mbd", "tvd", "extremal", "dirout",
-                                    "linfinity", "bd", "erld"),
-                          save_data = T,
-                          seed = NULL,
-                          n_projections = 500L){
-  depth <- match.arg(depth)
+                          depth_method = c("mbd", "tvd", "extremal", "dirout",
+                                    "linfinity", "bd", "erld", "dq"),
+                          save_data = F,
+                          emp_factor = 1.5,
+                          central_region = 0.5,
+                          erld_type = NULL,
+                          dq_quantiles = NULL,
+                          n_projections = 200L,
+                          seed = NULL){
   outliers <- list()
   if(save_data){
     transformed_data <- list()
@@ -15,65 +140,93 @@ seq_transform <- function(dt, sequence = c("T0", "T1", "T2"),
   for (transformation in sequence) {
     if (transformation == "T0" || transformation == "D0"){
       ## apply functional boxplot here
-      t0_outliers <- functional_boxplot(dt, depth_method = depth)$outliers
+      t0_outliers <- functional_boxplot(dt, depth_method = depth_method,
+                                        central_region = central_region,
+                                        emp_factor = emp_factor,
+                                        erld_type = erld_type,
+                                        dq_quantiles = dq_quantiles)$outliers
       outliers[[transformation]] <- t0_outliers
       if(save_data) transformed_data[[transformation]] <- dt
     }else if(transformation == "T1"){
       dt <- center_curves(dt)
-      t1_outliers <- functional_boxplot(dt, depth_method = depth)$outliers
+      t1_outliers <- functional_boxplot(dt, depth_method = depth_method,
+                                        emp_factor = emp_factor,
+                                        central_region = central_region,
+                                        erld_type = erld_type,
+                                        dq_quantiles = dq_quantiles)$outliers
       outliers[[transformation]] <- t1_outliers
       if(save_data) transformed_data[[transformation]] <- dt
     } else if(transformation == "T2"){
       dt <- normalize_curves(dt)
-      t2_outliers <- functional_boxplot(dt, depth_method = depth)$outliers
+      t2_outliers <- functional_boxplot(dt, depth_method = depth_method,
+                                        emp_factor = emp_factor,
+                                        central_region = central_region,
+                                        erld_type = erld_type,
+                                        dq_quantiles = dq_quantiles)$outliers
       outliers[[transformation]] <- t2_outliers
       if(save_data) transformed_data[[transformation]] <- dt
     } else if(transformation == "D1"|| transformation == "D2"){
       dt <- difference_curves(dt)
-      d1_outliers <- functional_boxplot(dt, depth_method = depth)$outliers
+      d1_outliers <- functional_boxplot(dt, depth_method = depth_method,
+                                        emp_factor = emp_factor,
+                                        central_region = central_region,
+                                        erld_type = erld_type,
+                                        dq_quantiles = dq_quantiles)$outliers
       outliers[[transformation]] <- d1_outliers
       if(save_data) transformed_data[[transformation]] <- dt
     } else if(transformation == "O"){
       # implement directional quantile!
-      dt <- outlyingness_curves(dt,  n_projections = 500L, seed = NULL)
-      #o_outliers <- functional_boxplot(dt, depth_measure = "mbd")
-      #outliers[[transformation]] <- o_outliers
-      #if(save_data) transformed_data[[transformation]] <- dt
+      dt <- outlyingness_curves(dt,  n_projections = n_projections, seed = seed)
+      o_outliers <- functional_boxplot(dt, depth_method = depth_method,
+                                       emp_factor = emp_factor,
+                                       central_region = central_region,
+                                       erld_type = erld_type,
+                                       dq_quantiles = dq_quantiles)$outliers
+      outliers[[transformation]] <- o_outliers
+      if(save_data) transformed_data[[transformation]] <- dt
 
-    } else if(transformation == "R"){
+    }else {
+      stop("Transformation ", transformation, ' not supported. \n')
+    } #else if(transformation == "R"){
       #dt <- warp_transform(dt)
       #r_outliers <- functional_boxplot(dt, depth_measure = "mbd")
       #outliers[[transformation]] <- r_outliers
       #if(save_data) transformed_data[[transformation]] <- dt
-    }
+    #}
 
+  }
+
+  if(!save_data){
+    return(outliers)
+  }else{
+    return(list(outliers = outliers,
+                transformed_data = transformed_data))
   }
 
 }
 
 
 center_curves <- function(dt){
-  centered <- dt - rowMeans(dt)
+  return(dt - rowMeans(dt))
 }
-
 
 normalize_curves <- function(dt){
   return(dt/sqrt(rowSums(dt^2)))
 }
 
 difference_curves <- function(dt){
-  p <- ncol(dt)
+  p <- dim(dt)[2]
   dt[,2:p] - dt[, 1:(p-1)]
 }
 
 outlyingness_curves <- function(dt, n_projections = 500L, seed = NULL){
-  dim_data <- dim(dt)
-  if(length(dim_data) == 2){# data is univariate
-    data  <- t(dt)
-    median_vec <- apply(data, 1, median)
-    mad_vec <- apply(data, 1, mad)
-    return(t(abs(data-median_vec)/mad_vec))
-  } else if (length(dim_data) == 3) { # data is multivariate
+  dm <- dim(dt)
+  repnp <- rep(dm[1], dm[2])
+  if(length(dm) == 2){# data is univariate
+    median_vec <- apply(dt, 2, median)
+    mad_vec <- apply(dt, 2, mad)
+    return(abs(dt- rep(median_vec, repnp))/rep(mad_vec, repnp))
+  } else if (length(dm) == 3) { # data is multivariate
     outlyingness <- apply(dt, 2, function(x){
       (1/projection_depth(x, n_projections = n_projections, seed = seed)) - 1
     })
@@ -84,6 +237,8 @@ outlyingness_curves <- function(dt, n_projections = 500L, seed = NULL){
 
 }
 
-warp_curves <- function(dt){
 
-}
+# warp_curves <- function(dt){
+#
+# }
+

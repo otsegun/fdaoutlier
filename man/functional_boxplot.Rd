@@ -30,7 +30,7 @@ functional_boxplot(
   \item{"linfinity"}{The L-infinity depth defined in Long and Huang (2015) is used in ordering functions.}
   \item{"bd"}{Uses the band depth with bands defined by 2 functions according to the algorithm of Sun et al. (2012)}
   \item{erld}{Uses the extreme rank length depth defined in Myllymäki et al. (2017) and Dai et al. (2020).}
-  \item{dq}{Uses the directional quantile (DQ) defined in Myllymäki et al. (2017) and Dai et al. (2020).
+  \item{"dq"}{Uses the directional quantile (DQ) defined in Myllymäki et al. (2017) and Dai et al. (2020).
    Since DQ is a measure of outlyingness, the negative of the DQ values is used in ordering the functions.}
    }
   The default method is \code{"mbd"}. Alternatively, the \code{depth_values} of the functions can be supplied in which case

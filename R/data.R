@@ -21,14 +21,14 @@
 #'    \item{\code{longitude:}}{longitude of the coordinates of the weather staton (in decimal degrees)}
 #'    \item{\code{longitude:}}{latitude of the coordinates of the weather station (in decimal degrees)}
 #'    }
-#'    \item{\code{temp:}}{A functional data of class \code{fdata} containing
+#'    \item{\code{$temp:}}{A functional data of class \code{fdata} containing
 #'    average daily temperature for the period 1980-2009 (in degrees Celsius, marked
 #'    with UTF-8 string). Leap years temperatures for February 28 and 29 were averaged.}
 #'
-#'    \item{\code{wind.speed:}}{A functional data of class \code{fdata} containing
+#'    \item{\code{$wind.speed:}}{A functional data of class \code{fdata} containing
 #'    average daily windspeed for the period 1980-2009 (in m/s).}
 #'
-#'    \item{\code{logprec:}}{A functional data of \code{fdata} containing average daily log precipitation
+#'    \item{\code{$logprec:}}{A functional data of \code{fdata} containing average daily log precipitation
 #'   for the period 1980-2009 (in log mm). Negligible precipitation (less than 1 tenth of mm)
 #'   is replaced by 0.05 and no precipitation (\code{0.0} mm) is replaced by \code{0.01}. Then the logarithm is applied.}
 #'  }
