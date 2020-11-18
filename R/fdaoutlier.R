@@ -1,4 +1,4 @@
-#' fdaoutlier: A package for outlier detection in functional data.
+#' fdaoutlier: Outlier detection tools for functional data.
 #'
 #'
 #'

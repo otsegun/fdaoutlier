@@ -32,7 +32,7 @@ hardin_factor_asymptotic <- function(n, dimension){
 }
 
 #' Computes asymptotically, the factors for F approximation cutoff for (MCD) robust
-#' mahalanobis distances according to Hardin and Rocke (2005).
+#' mahalanobis distances according to \href{https://doi.org/10.1198/106186005X77685}{Hardin and Rocke (2005)}.
 #'
 #' @param n A numeric value indicating the number of observations of the data
 #' @param dimension A numeric value indicating the number of columns or variables.
@@ -40,12 +40,10 @@ hardin_factor_asymptotic <- function(n, dimension){
 #' @details This function computes two factors needed for the determining an appropriate
 #' cutoff for robust mahalanobis distances computed using the MCD method.
 #'
-#' The F approximation according to Hardin and Rocke 2005 is given by: \deqn{c(m-p+1)/(pm)
-#' * RMD^2 ~ F_{p, m-p+1}} where m is a parameter for finding the degree of freedom of the
-#' F distribution, c is a scaling constant and p is the dimension. The first factor
-#' returned by this function (\code{factor1}) is \eqn{c(m-p+1)/(pm)} and the second factor
-#' (\code{factor2}) is \eqn{F_{p, m-p+1}}.
-#'
+#' The F approximation according to Hardin and Rocke (2005)\href{https://doi.org/10.1198/106186005X77685}{<doi:10.1198/106186005X77685>}
+#' is given by: \deqn{c(m-p+1)/(pm) * RMD^2 ~ F_{p, m-p+1}} where \eqn{m} is a parameter for finding the degree of freedom of the
+#' \eqn{F} distribution, \eqn{c} is a scaling constant and \eqn{p} is the dimension. The first factor
+#' returned by this function (\code{factor1}) is \eqn{c(m-p+1)/(pm)} and the second factor (\code{factor2}) is \eqn{F_{p, m-p+1}}.
 #'
 #' @return Returns a list containing: \item{factor1}{ then estimated value of
 #'   \eqn{c(m-p+1)/(pm)} based on \code{n} and \code{dimension}.} \item{factor2}{ the
@@ -53,6 +51,7 @@ hardin_factor_asymptotic <- function(n, dimension){
 #'
 #' @references Hardin, J., and Rocke, D. M. (2005). The distribution of robust distances.
 #'   \emph{Journal of Computational and Graphical Statistics}, 14(4), 928-946.
+#'
 #' @export
 #' @importFrom stats pchisq qchisq qf rchisq
 #' @examples

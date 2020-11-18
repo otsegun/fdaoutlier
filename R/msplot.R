@@ -2,9 +2,9 @@
 #' data.
 #'
 #' This function finds outliers in univariate and multivariate functional data using the MS-Plot
-#' method described in Dai and Genton (2018). Indices of observations flagged as outliers are returned.
-#' Despite the name, this function does not produce a plot. However, the mean and variation of directional
-#' outlyingness (\eqn{MO} and \eqn{VO}) can be requested and a subsesequent
+#' method described in Dai and Genton (2018)\href{https://doi.org/10.1080/10618600.2018.1473781}{<doi:10.1080/10618600.2018.1473781>}.
+#' Indices of observations flagged as outliers are returned. Despite the name, this function does not produce a plot.
+#' However, the mean and variation of directional outlyingness (\eqn{MO} and \eqn{VO}) can be requested and a subsesequent
 #' plot of \eqn{MO} against \eqn{VO} can be easily generated using your preferred plotting method.
 #'
 #' @param data A matrix for univariate functional data (of size \eqn{n} observations by \eqn{p} domain
@@ -26,13 +26,13 @@
 #'
 #' MS-Plot finds outliers by computing
 #' the mean and variation of directional outlyingness (\eqn{MO} and \eqn{VO}) described
-#' in Dai and Genton (2019).
+#' in Dai and Genton (2019)\href{https://doi.org/10.1016/j.csda.2018.03.017}{<doi:10.1016/j.csda.2018.03.017>}.
 #' A multivariate data whose columns are the computed \eqn{MO} and \eqn{VO} is then constructed and
 #' the robust mahalanobis distance(s) of the rows of this matrix are computed
 #' (using the minimum covariate determinant estimate of the location and scatter). The tail
 #' of the distribution of these distances is approximated using the \eqn{F} distribution
-#' according to Hardin and Rocke (2005) to get the cutoff. The projection depth is always used
-#' for computing the directional outlyingess (as suggested by Dai and Genton (2019)).
+#' according to Hardin and Rocke (2005)\href{https://doi.org/10.1198/106186005X77685}{<doi:10.1198/106186005X77685>} to get the cutoff. The projection depth is always used
+#' for computing the directional outlyingess (as suggested by Dai and Genton (2019)\href{https://doi.org/10.1016/j.csda.2018.03.017}{<doi:10.1016/j.csda.2018.03.017>}).
 #'
 #'
 #' @return Returns a list containing:
@@ -69,27 +69,6 @@
 #' msplot_object$mean_outlyingness
 #' msplot_object$var_outlyingness
 #'
-#' \dontrun{
-#' # Spanish weather multivariate functional data example taken from Dai and Genton (2018).
-#' data(aemet)
-#' # smooth data with bsplines 11 basis
-#' bsp11 <- fda::create.bspline.basis(aemet$temp$rangeval, nbasis=11) # temperature
-#' s_bsp11  <-  fda.usc::S.basis(aemet$temp$argvals, bsp11)
-#' sdata1 <- aemet$temp$data \%*\% s_bsp11
-#'
-#' bsp11 <- fda::create.bspline.basis(aemet$logprec$rangeval, nbasis=11) # log precipitation
-#' s_bsp11  <-  fda.usc::S.basis(aemet$logprec$argvals, bsp11)
-#' sdata2 <- aemet$logprec$data \%*\% s_bsp11
-#'
-#' # set up array data of dimension n x p x d
-#' n <- dim(aemet$temp)[1]; p <- dim(aemet$temp)[2]
-#' data_multiv <- array(0, dim = c(n, p, 2),
-#' dimnames = list(c(1:n), c(1:p), c("temp", "log_prep")))
-#' data_multiv[,,1] <- sdata1; data_multiv[,,2] <- sdata2
-#'
-#' msplot_object <- msplot(data = data_multiv, return_mvdir = TRUE)
-#' msplot_object$outliers_index
-#' }
 #' @export
 #' @importFrom grDevices rgb
 msplot <- function(data,

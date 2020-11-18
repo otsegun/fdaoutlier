@@ -18,11 +18,11 @@ Compute extremal depth for functional data
 }
 \details{
 This function computes the extremal depth a univariate functional data. The extremal depth of a function
-\eqn{g} with respect to a set of function \eqn{S} denoted by \eqn{ED(s, S)} is the proportion
+\eqn{g} with respect to a set of function \eqn{S} denoted by \eqn{ED(g, S)} is the proportion
 of functions in \eqn{S} that is more extreme than \eqn{g}. The functions are ordered using depths cummulative
 distribution functions (d-CDFs). Extremal depth like the name implies is based on extreme outlyingness and it
-penalizes functions that are outliers even for a small part of the domain. See Narisetty and Nair (2016) for
-details.#'
+penalizes functions that are outliers even for a small part of the domain. Proposed/mentioned in
+Narisetty and Nair (2016)\href{https://doi.org/10.1080/01621459.2015.1110033}{<doi:10.1080/01621459.2015.1110033>}.
 }
 \examples{
 data(sim_data1)

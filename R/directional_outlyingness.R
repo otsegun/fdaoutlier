@@ -2,14 +2,15 @@
 #'
 #'
 #'Compute the directional outlyingness of a univariate or multivariate functional data
-#'based on Dai and Genton (2018).
+#'based on Dai and Genton (2018) \href{https://doi.org/10.1080/10618600.2018.1473781}{<doi:10.1080/10618600.2018.1473781>} and
+#'Dai and Genton (2019) \href{https://doi.org/10.1016/j.csda.2018.03.017}{<doi:10.1016/j.csda.2018.03.017>}.
 #'
 #'@param data A matrix for univariate functional data (of size \code{n} observations by \code{p} domain
 #'  points) or a 3-dimensional array for multivariate functional data (of size \code{n}
 #'  observations by \code{p} domain points by \code{d} dimension).
 #'
 #'@param data_depth The method for computing the depth. The random projection depth is
-#'  always used as suggested in Dai and Genton (2018). Support more depth methods will be added.
+#'  always used as suggested in Dai and Genton (2018) \href{https://doi.org/10.1080/10618600.2018.1473781}{<doi:10.1080/10618600.2018.1473781>}. Support more depth methods will be added.
 #'
 #'@param n_projections The number of directions for computing random projection depth. By default,
 #'   200 random directions are generated from a scaled uniform distribution between -1 and 1.
@@ -26,7 +27,7 @@
 #'
 #'@details
 #'
-#'The directional outlyingness, as defined by Dai and Genton (2018) is
+#'The directional outlyingness, as defined by Dai and Genton (2018) \href{https://doi.org/10.1080/10618600.2018.1473781}{<doi:10.1080/10618600.2018.1473781>} is
 #'\deqn{O(Y, F_Y) = (1/d(Y, F_Y) - 1).v} where \eqn{d} is a depth notion, and \eqn{v} is
 #'the unit vector pointing from the median of \eqn{F_Y} to \eqn{Y}. For univariate and
 #'multivariate functional data, the projection depth is always used as suggested by
@@ -63,26 +64,6 @@
 #' # univariate magnitude model in Dai and Genton (2018).
 #' data(sim_data1)
 #' dirout_object <- dir_out(data = sim_data1$data, return_distance = TRUE)
-#'
-#'\dontrun{
-#' # spanish weather data multivariate functional data in Dai and Genton (2018)
-#' data(aemet)
-#' # smooth data with bsplines 11 basis for temperature
-#' bsp11 <- fda::create.bspline.basis(aemet$temp$rangeval, nbasis=11)
-#' s_bsp11  <-  fda.usc::S.basis(aemet$temp$argvals, bsp11)
-#' sdata1 <- aemet$temp$data \%*\% s_bsp11
-#' # for log precipitation
-#' bsp11 <- fda::create.bspline.basis(aemet$logprec$rangeval, nbasis=11)
-#' s_bsp11  <-  fda.usc::S.basis(aemet$logprec$argvals, bsp11)
-#' sdata2 <- aemet$logprec$data \%*\% s_bsp11
-#' # set up array data of dimension n x p x d
-#' n <- dim(aemet$temp)[1]; p <- dim(aemet$temp)[2]
-#' data_multiv <- array(0, dim = c(n, p, 2),
-#'  dimnames = list(c(1:n), c(1:p), c("temp", "log_prep")))
-#' data_multiv[,,1] <- sdata1; data_multiv[,,2] <- sdata2
-#' # run directional outlyingness
-#' dirout_object <- dir_out(data = data_multiv, return_distance = TRUE)
-#' }
 #'@export
 #'@importFrom stats mad mahalanobis median var
 #'@importFrom MASS cov.rob

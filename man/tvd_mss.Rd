@@ -41,7 +41,8 @@ Find shape and magnitude outliers  using the Total Variation Depth
 }
 \details{
 This method uses a combination of total variation depth (TVD) and modified shape similarity (MSS) index
- defined in Huang and Sun (2019) to find magnitude and shape outliers. The TVD and MSS of all the observations are
+ defined in Huang and Sun (2019)\href{https://doi.org/10.1080/00401706.2019.1574241}{<doi:10.1080/00401706.2019.1574241>}
+ to find magnitude and shape outliers. The TVD and MSS of all the observations are
  first computed and a classical boxplot is then applied on the MSS. Outliers detected by the boxplot of MSS are
  flagged as shape outliers. The shape outliers are then removed from the data and the TVD of the
  remaining observations are used in a functional boxplot to detect magnitude outliers.  The central region

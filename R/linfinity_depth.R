@@ -2,7 +2,7 @@
 #' Compute the L-infinity depth a sample of curves/functions.
 #'
 #' The L-infinity depth is a simple generalization of the \eqn{L^p} multivariate depth to
-#' functional data proposed in \href{https://arxiv.org/abs/1506.01332}{Long and Huang (2015)}.
+#' functional data proposed in Long and Huang (2015) \href{https://arxiv.org/abs/1506.01332}{<arxiv:arXiv:1506.01332}.
 #'
 #' @param dt A matrix or data frame of size \eqn{n} functions/curves by \eqn{p} domain/evaluation points.
 #'

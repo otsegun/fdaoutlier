@@ -15,7 +15,11 @@ knitr::opts_chunk$set(
 # fdaoutlier
 Outlier Detection Tools for Functional Data
 
-
+<!-- badges: start -->
+[![Build Status](https://travis-ci.com/otsegun/fdaoutlier.svg?token=is9BrWwNvqBGoneFkbEL&branch=master)](https://travis-ci.com/otsegun/fdaoutlier)
+  [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
+  [![Codecov test coverage](https://codecov.io/gh/otsegun/fdaoutlier/branch/master/graph/badge.svg)](https://codecov.io/gh/otsegun/fdaoutlier?branch=master)
+  <!-- badges: end -->
 `fdaoutlier` is a collection of outlier detection tools for functional data analysis. `fdaoutlier` is still at an early experimental stage. 
 
 ## Installation

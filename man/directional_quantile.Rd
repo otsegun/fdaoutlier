@@ -17,12 +17,16 @@ Values must be between 0 and 1. Defaults to \code{c(0.025, 0.975)} as specified 
 A numeric vector containing the the directional quantiles of each observation of \code{dt}.
 }
 \description{
-Compute directional quantile outlyingness for a sample of discretely observed curves
+The directional quantile is a measure of outlyingness based on a scaled pointwise deviation from the mean.
+These deviations are usually scaled by the deviation of the mean from the 2.5\% upper and lower quantiles
+depending on if the (pointwise) observed value of a function is above or below the (pointwise) mean.
+Directional quantile was mentioned in Myllymäki et al. (2015)\href{https://doi.org/10.1016/j.spasta.2014.11.004}{<doi:10.1016/j.spasta.2014.11.004>},
+ Myllymäki et al. (2017) \href{https://doi.org/10.1111/rssb.12172}{<doi:10.1111/rssb.12172>} and Dai et al. (2020)\href{https://doi.org/10.1016/j.csda.2020.106960}{<doi:10.1016/j.csda.2020.106960>}.
 }
 \details{
 The method computes the directional quantile of a sample of curves discretely observed on common points.
 The directional quantile of a function/curve \eqn{X_i(t)} is the maximum pointwise scaled outlyingness of
-\eqn{X_i(t)}. The scaling is done using the pointwise absolute difference between the mean and the lower (and upper)
+\eqn{X_i(t)}. The scaling is done using the pointwise absolute difference between the 2.5\% mean and the lower (and upper)
 quantiles. See Dai et al. (2020) and Myllymäki et al. (2017) for more details.
 }
 \examples{
@@ -36,4 +40,7 @@ Dai, W., Mrkvička, T., Sun, Y., & Genton, M. G. (2020). Functional outlier dete
 
 Myllymäki, M., Mrkvička, T., Grabarnik, P., Seijo, H., & Hahn, U. (2017).
  Global envelope tests for spatial processes. \emph{J. R. Stat. Soc. B}, 79:381-404.
+}
+\author{
+Oluwasegun Taiwo Ojo
 }

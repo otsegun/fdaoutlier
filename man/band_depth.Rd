@@ -13,8 +13,9 @@ band_depth(dt)
 A numeric vector of size \code{nrow(dt)} containing the band depth values of each curve.
 }
 \description{
-This function computes the band depth of López-Pintado and Romo (2009). Bands of 2 functions are always considered using
-fast algorithm of Sun et al. (2012).
+This function computes the band depth of López-Pintado and Romo (2009) \href{https://doi.org/10.1198/jasa.2009.0108}{<doi:10.1198/jasa.2009.0108>}.
+Bands of 2 functions are always considered using fast algorithm of Sun et al. (2012)
+\href{https://doi.org/10.1002/sta4.8}{<doi:10.1002/sta4.8>}.
 }
 \examples{
 bd2 <- band_depth(sim_data1$data)

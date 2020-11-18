@@ -59,7 +59,8 @@ A list containing: \item{outliers}{The indices of the functions/curves flagged a
 \item{median_curve}{The index of the median curve, which is the curve with the largest depth value}
 }
 \description{
-This function finds outliers in a sample of curves using the functional boxplot by Sun and Genton (2011).
+This function finds outliers in a sample of curves using the functional boxplot by Sun and Genton (2011)
+\href{https://doi.org/10.1198/jcgs.2011.09224}{<doi:10.1198/jcgs.2011.09224>}.
 Unlike the name suggests, the function does not actually produce a plot but is only used as support in
 finding outliers in other functions. Different depth and outlyingness methods are supported for ordering
 functions. Alternatively, the depth values of the functions can be supplied directly.
