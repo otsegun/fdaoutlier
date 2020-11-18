@@ -82,7 +82,7 @@ extreme_rank_length <-
     }
 
     depths <- .Call(C_extremeRank, as.double(t(sorted_rank)), n, p,
-                    PACKAGE = "fdalite")
+                    PACKAGE = "fdaoutlier")
     return(depths / n)
 
   }

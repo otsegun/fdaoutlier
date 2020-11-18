@@ -55,7 +55,6 @@ directional_quantile <- function(dt, quantiles = c(0.025, 0.975)){
   # center data
   centered <- dt - rep(pwise_mean, rep(n, p))
   # find absolute value of quantiles - mean
-  #quants <- abs(apply(dt, 2L, quantile, probs = quantiles) - rep(pwise_mean, rep(2, p)))
   quants <- 1/abs(apply(centered, 2L, quantile, probs = quantiles))
   quants[!is.finite(quants)] <- 0
   #

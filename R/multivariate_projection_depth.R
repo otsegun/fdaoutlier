@@ -58,7 +58,7 @@ projection_depth <- function(dts, dt = dts, n_projections = 500L, seed = NULL){
   result = .Call(C_projectionDepth,
                  as.double(t(dts)), as.double(t(dt)), as.double(t(u_matrix)),
                  m, n, d, n_projections,
-                 PACKAGE = "fdalite")
+                 PACKAGE = "fdaoutlier")
   return(result)
 }
 

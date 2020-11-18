@@ -51,7 +51,7 @@ total_variation_depth <- function(data){
   tempres <- .Call(C_totalVariationDepth,
                           as.double(data), as.double(data_t),
                           n_curves, n_points,
-                          PACKAGE = "fdalite")
+                          PACKAGE = "fdaoutlier")
   shape_variation <- matrix(tempres$shape_variation, n_points - 1, n_curves, byrow = T)
   diff_data <- matrix(tempres$difference_data, nrow = n_curves, ncol = n_points, byrow = T)[,-1]
   #row_sum_diff_data <- rowSums(diff_data)

@@ -25,7 +25,7 @@ band_depth <- function(dt){
   }
 
   if (!is.array(dt) || !is.numeric(dt))
-    stop("Argument \"dt\" must be a numeric matrix or dataframe.")
+    stop("Argument \"dt\" must be a nonempty numeric matrix or dataframe.")
 
   if (any(!is.finite(dt))) {
     stop("Missing or infinite values are not allowed in argument \"dt\"")
