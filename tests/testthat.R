@@ -1,4 +1,4 @@
 library(testthat)
-library(fdalite)
+library(fdaoutlier)
 
-test_check("fdalite")
+test_check("fdaoutlier")

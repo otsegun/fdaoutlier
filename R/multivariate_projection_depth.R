@@ -16,7 +16,7 @@
 #' @author Oluwasegun Taiwo Ojo
 #' @export
 #' @importFrom stats runif
-#' @useDynLib fdalite, .registration = TRUE, .fixes = "C_"
+#' @useDynLib fdaoutlier, .registration = TRUE, .fixes = "C_"
 #' @seealso \code{\link{msplot}} for outlier detection using msplot and \code{\link{dir_out}}
 #'  for directional outlyingess.
 #' @examples
