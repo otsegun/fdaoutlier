@@ -14,7 +14,7 @@ test_that("sequential transformation fails gracefully when transformation is unk
 
 
 test_that("sequential transformation T0 and D0 works", {
-  res1 <- fdalite::functional_boxplot(dt = sim_data1$data, depth_method = "dirout")
+  res1 <- functional_boxplot(dt = sim_data1$data, depth_method = "dirout")
   res1q <- seq_transform(dt = sim_data1$data,
                          sequence = "T0", depth_method = "dirout",
                          save_data = F)
@@ -27,7 +27,7 @@ test_that("sequential transformation T0 and D0 works", {
 
 test_that("sequential transformation T1 works", {
   akin <- sim_data1$data - rowMeans(sim_data1$data)
-  res1 <- fdalite::functional_boxplot(dt = akin,
+  res1 <- functional_boxplot(dt = akin,
                                       depth_method = "mbd")
   res1q <- seq_transform(dt = sim_data1$data,
                          sequence = "T1",
@@ -39,7 +39,7 @@ test_that("sequential transformation T1 works", {
 
 test_that("sequential transformation T2 works", {
   akin <- sim_data1$data/sqrt(rowSums(sim_data1$data^2))
-  res1 <- fdalite::functional_boxplot(dt = akin,
+  res1 <- functional_boxplot(dt = akin,
                                       depth_method = "mbd")
   res1q <- seq_transform(dt = sim_data1$data,
                          sequence = "T2",
@@ -52,7 +52,7 @@ test_that("sequential transformation T2 works", {
 test_that("sequential transformation D1 and D2 works independently", {
   p <- dim(sim_data1$data)[2]
   akin <-   sim_data1$data[,2:p] - sim_data1$data[, 1:(p-1)]
-  res1 <- fdalite::functional_boxplot(dt = akin,
+  res1 <- functional_boxplot(dt = akin,
                                       depth_method = "mbd")
   res1q <- seq_transform(dt = sim_data1$data,
                          sequence = "D1",
@@ -73,7 +73,7 @@ test_that("sequential transformation D1 and D2 works combined", {
   akin <-   sim_data1$data[,2:p] - sim_data1$data[, 1:(p-1)]
   p2 <- dim(akin)[2]
   akin2 <- akin[,2:p2] - akin[, 1:(p2-1)]
-  res1 <- fdalite::functional_boxplot(dt = akin2,
+  res1 <- functional_boxplot(dt = akin2,
                                       depth_method = "mbd")
   res1q <- seq_transform(dt = sim_data1$data,
                          sequence = c("D1", "D2"),
