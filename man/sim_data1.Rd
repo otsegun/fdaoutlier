@@ -8,29 +8,35 @@
 A list containing 2 elements:
 \itemize{
   \item \code{data:}  A matrix of 100 by 50 contanining 100 functional observed on 50 domain points.
-   \item \code{true_outlier:} An integer vector contaning indices which indicate observations in \code{sim_data1$data}
+   \item \code{true_outlier:} An integer vector containing indices which indicate observations in \code{sim_data1$data}
    that are magnitude outliers.
  }
 }
 \source{
-Data was simulated from the main model:
+Simulation
 }
 \usage{
 sim_data1
 }
 \description{
 A simulated dataset containing 100 functional observation observed on 50 domain points.
-Data was simulated from a simple magnitude/shifted model. There are 90 non-outliers and
-10 magnitude outliers.
+Data was simulated from a simple magnitude outlier model with main model :
+\deqn{X(t) = 4t + e(t)}
+and contimation model:
+\deqn{X(t) = 4t + 8k + e(t)}
+where \eqn{t\in [0,1]}, and  \eqn{e(t)} is a Gaussian process with zero mean and covariance function
+\deqn{\gamma(s,t) = \exp\{-|t-s|\}}
+and \eqn{k \in [-1, 1]} with \eqn{P(k = -1) = P(k=1) = 0.5}.
+
+There are 90 non-outliers and 10 magnitude outliers.
 }
 \details{
 Data included for illustration and testing purposes.
 }
 \examples{
-\dontrun{
 data(sim_data1)
 str(sim_data1)
-}
+
 }
 \author{
 Oluwasegun Ojo

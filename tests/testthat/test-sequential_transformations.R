@@ -17,7 +17,7 @@ test_that("sequential transformation T0 and D0 works", {
   res1 <- functional_boxplot(dt = sim_data1$data, depth_method = "dirout")
   res1q <- seq_transform(dt = sim_data1$data,
                          sequence = "T0", depth_method = "dirout",
-                         save_data = F)
+                         save_data = T)
   res2q <- seq_transform(dt = sim_data1$data,
                          sequence = "D0", depth_method = "dirout",
                          save_data = F)
@@ -111,3 +111,44 @@ test_that("sequential transformation O works", {
   expect_identical(seqobj2$outliers, seqobj$outliers$O)
 
 })
+
+test_that("sequential transformation O works with univariate data", {
+
+  seqobj <- seq_transform(sim_data1$data, sequence = "O", depth_method = "erld",
+                          erld_type = "one_sided_right", save_data = TRUE)
+
+  expect_identical(seqobj$outliers$O,
+                   c(4L, 12L, 17L, 23L, 40L, 59L, 79L, 82L, 83L, 84L, 93L))
+
+})
+
+test_that("sequential transformation O works", {
+  dtm <- array(0, dim = c(100, 50, 2))
+  dtm[,,1] <- sim_data1$data
+  dtm[,,2] <- sim_data1$data
+  seqobj <- seq_transform(dtm, sequence = "O", depth_method = "erld",
+                          erld_type = "one_sided_right", save_data = TRUE)
+
+  expect_identical(seqobj$outliers$O,
+                   c(4L, 12L, 17L, 23L, 40L, 59L, 79L, 82L, 83L, 84L, 93L))
+
+  outt <- apply(dtm, 2, function(x){
+    (1/projection_depth(x, n_projections = 200L, seed = 123)) - 1
+  })
+  seqobj2 <- functional_boxplot(outt, depth_method = "erld",
+                                erld_type = "one_sided_right")
+  expect_identical(seqobj2$outliers, seqobj$outliers$O)
+
+})
+
+test_that("sequential transformation O works with univariate data", {
+
+  seqobj <- seq_transform(sim_data1$data, sequence = "O", depth_method = "erld",
+                          erld_type = "one_sided_right", save_data = TRUE)
+
+  expect_identical(seqobj$outliers$O,
+                   c(4L, 12L, 17L, 23L, 40L, 59L, 79L, 82L, 83L, 84L, 93L))
+
+})
+
+

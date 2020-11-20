@@ -1,15 +1,14 @@
 #' Spanish Weather Data
 #'
-#'
-#' A dataset containing daily teperature, log precipitation and wind speed of 73 spanish weather stations
+#'#' A dataset containing daily teperature, log precipitation and wind speed of 73 spanish weather stations
 #' in Spain between 1980 - 2009.
-#' @name aemet
+#' @name spanish_weather
 #'
 #' @docType data
 #'
 #' @format A list containing :
 #' \describe{
-#'   \item{\code{$df:}}{A dataframe containing geographic information from the 73 weather stations.
+#'   \item{\code{$station_info:}}{A dataframe containing geographic information from the 73 weather stations.
 #'    Contains the variables:}
 #'    \describe{
 #'    \item{\code{ind:}}{id of weather station}
@@ -21,49 +20,51 @@
 #'    \item{\code{longitude:}}{longitude of the coordinates of the weather staton (in decimal degrees)}
 #'    \item{\code{longitude:}}{latitude of the coordinates of the weather station (in decimal degrees)}
 #'    }
-#'    \item{\code{$temp:}}{A functional data of class \code{fdata} containing
+#'    \item{\code{$temperature:}}{A matrix of size 73 (stations) by 365 (days) containing
 #'    average daily temperature for the period 1980-2009 (in degrees Celsius, marked
 #'    with UTF-8 string). Leap years temperatures for February 28 and 29 were averaged.}
 #'
-#'    \item{\code{$wind.speed:}}{A functional data of class \code{fdata} containing
+#'    \item{\code{$wind_speed:}}{A matrix of size 73 (stations) by 365 (days) containing
 #'    average daily windspeed for the period 1980-2009 (in m/s).}
 #'
-#'    \item{\code{$logprec:}}{A functional data of \code{fdata} containing average daily log precipitation
+#'   \item{\code{$logprec:}}{A matrix of size \code{fdata} containing average daily log precipitation
 #'   for the period 1980-2009 (in log mm). Negligible precipitation (less than 1 tenth of mm)
-#'   is replaced by 0.05 and no precipitation (\code{0.0} mm) is replaced by \code{0.01}. Then the logarithm is applied.}
+#'   is replaced by 0.05 and no precipitation (\code{0.0} mm) is replaced by \code{0.01} after which
+#'   the logarithm was applied.}
 #'  }
 #'
 #'
-#'
-#'
-#'
-#'
 #' @details
-#' Data was copied from the \code{fda.usc} package for illustration and testing purposes.
+#' This is a stripped down version of the popular \code{aemet} spanish weather data available in
+#' the \code{fda.usc}\href{http://dx.doi.org/10.18637/jss.v051.i04}{<doi:10.18637/jss.v051.i04>} package.
 #' See the documentation of \code{fda.usc} for more details about data.
 #'
 #' @source
-#' Data obtained from the \code{fda.usc} package.
+#' Data obtained from the \code{fda.usc}\href{http://dx.doi.org/10.18637/jss.v051.i04}{<doi:10.18637/jss.v051.i04>} package.
 #'
-#' @author
-#' Manuel Febrero Bande, Manuel Oviedo de la Fuente \email{manuel.oviedo@@usc.es}.
 #' @keywords datasets
 #' @examples
-#' \dontrun{
-#' data(aemet)
-#' names(aemet)
-#' names(aemet$df)
-#' }
-"aemet"
+#'
+#' data(spanish_weather)
+#' names(spanish_weather)
+#' names(spanish_weather$station_info)
+#'
+"spanish_weather"
 
 
 #' Simulated functional data from a simple magnitude model
 #'
 #'
 #' @description A simulated dataset containing 100 functional observation observed on 50 domain points.
-#' Data was simulated from a simple magnitude/shifted model. There are 90 non-outliers and
-#' 10 magnitude outliers.
+#' Data was simulated from a simple magnitude outlier model with main model :
+#'\deqn{X(t) = 4t + e(t)}
+#'and contimation model:
+#'\deqn{X(t) = 4t + 8k + e(t)}
+#'where \eqn{t\in [0,1]}, and  \eqn{e(t)} is a Gaussian process with zero mean and covariance function
+#' \deqn{\gamma(s,t) = \exp\{-|t-s|\}}
+#' and \eqn{k \in [-1, 1]} with \eqn{P(k = -1) = P(k=1) = 0.5}.
 #'
+#' There are 90 non-outliers and 10 magnitude outliers.
 #'
 #' @name sim_data1
 #'
@@ -72,7 +73,7 @@
 #' @format A list containing 2 elements:
 #' \itemize{
 #'   \item \code{data:}  A matrix of 100 by 50 contanining 100 functional observed on 50 domain points.
-#'    \item \code{true_outlier:} An integer vector contaning indices which indicate observations in \code{sim_data1$data}
+#'    \item \code{true_outlier:} An integer vector containing indices which indicate observations in \code{sim_data1$data}
 #'    that are magnitude outliers.
 #'  }
 #'
@@ -80,14 +81,14 @@
 #' Data included for illustration and testing purposes.
 #'
 #' @source
-#' Data was simulated from the main model:
+#' Simulation
 #'
 #' @author
 #' Oluwasegun Ojo
+#'
 #' @keywords datasets
 #' @examples
-#' \dontrun{
 #' data(sim_data1)
 #' str(sim_data1)
-#' }
+#'
 "sim_data1"
