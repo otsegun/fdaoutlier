@@ -25,16 +25,20 @@ modified_band_depth <- function(dt){
     dt <- as.matrix(dt)
   }
 
-  if (!is.array(dt) || !is.numeric(dt))
-    stop("Argument \"dt\" must be a numeric matrix or dataframe.")
-
   if (any(!is.finite(dt))) {
     stop("Missing or infinite values are not allowed in argument \"dt\"")
   }
 
+  if (!is.array(dt) || !is.numeric(dt))
+    stop("Argument \"dt\" must be a non empty numeric matrix or dataframe.")
+
+
+
+
   dm <- dim(dt)
   p <- dm[2]
   n <- dm[1]
+  if(n < 2) stop("Number of row of argument 'dt' must be greater than 1")
   rnkmat <- apply(dt,2,rank) # switches matrix to max(p,n) by min(p,n)
   down <- rnkmat-1
   up <- n-rnkmat

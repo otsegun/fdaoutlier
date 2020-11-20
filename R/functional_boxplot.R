@@ -69,13 +69,14 @@ functional_boxplot <- function(dt,
   if (is.data.frame(dt)) {
     dt <- as.matrix(dt)
   }
+  if (any(!is.finite(dt))) {
+    stop("Missing or infinite values are not allowed in argument \"dt\"")
+  }
 
   if (!is.array(dt) || !is.numeric(dt))
     stop("Argument \"dt\" must be a numeric matrix or dataframe.")
 
-  if (any(!is.finite(dt))) {
-    stop("Missing or infinite values are not allowed in argument \"dt\"")
-  }
+
 
   if (length(dm) != 2) stop("Dimension of 'dt' must be 2. Only univariate functional data is supported.")
 

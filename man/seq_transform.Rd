@@ -28,7 +28,7 @@ whenever a multivariate functional data is parsed to \code{dt}.}
 "D1", "D2"} and \code{"O"} (in any order). These sequence of strings specifies the sequence of transformation to be applied
  on the data and their meanings are described as follows:
  \describe{
-  \item{\code{"T0"}}{Functional boxplot applied on raw data (no transformation is applied)}.
+  \item{\code{"T0"} and \code{"D0"}}{Functional boxplot applied on raw data (no transformation is applied)}.
    \item{\code{"T1"}}{Apply vartical alignment on data, i.e. subtract from each curve its expectation over the domain of evaluation}.
    \item{\code{"T2"}}{Apply normalization on data, i.e. divide each curve by its L-2 norm.}
    \item{\code{"D1"} and \code{"D2" }}{Apply one order of differencing on data.}
@@ -79,15 +79,13 @@ parsed to \code{sequence}. Defaults to 200L.}
 in which case a seed is not set.}
 }
 \value{
-If \code{save_data = FALSE}, named list of length \code{length(sequence)} containing the index of outliers found after each
-transformation. The names of the elements of this list are the sequence strings supplied to \code{sequence}. The outliers found
-after each stage of transformation are not necessarily mutually exclusive.
-Otherwise if \code{save_data = TRUE}, a list containing two lists are returned. The contents of the returned list are:
+A list containing two lists are returned. The contents of the returned list are:
 \item{outliers:}{A named list of length \code{length(sequence)} containing the index of outliers found after each
 transformation. The names of the elements of this list are the sequence strings supplied to \code{sequence} and the
  outliers found after each stage of transformation are not necessarily mutually exclusive. }
-\item{transformed_data}{A named list of length \code{length(sequence)} containing the transformed dataframes/matrix after each
-transformation. The names of the elements of this list are the sequence strings supplied to \code{sequence}.}
+\item{transformed_data}{If \code{save_data = TRUE} a named list of length \code{length(sequence)} containing the transformed matrix after each
+transformation. The names of the elements of this list are the sequence strings supplied to \code{sequence}. \code{NULL} otherwise if
+ \code{save_data = FALSE}.}
 }
 \description{
 This method finds and classify outliers using sequential transformations proposed in Algorithm 1 of
@@ -128,21 +126,30 @@ so that the multivariate data can be replaced with the univariate data of point-
 \examples{
 # same as running a functional boxplot
 seqobj <- seq_transform(sim_data1$data, sequence = "T0", depth_method = "mbd")
-all.equal(seqobj$T0, functional_boxplot(sim_data1$data, depth_method = "mbd")$outliers)
+seqobj$outliers$T0
+functional_boxplot(sim_data1$data, depth_method = "mbd")$outliers
 
 # more sequences
 seqobj <- seq_transform(sim_data1$data, sequence = c("T0", "D1", "D2"), depth_method = "mbd")
-seqobj$T0 # outliers found in raw data
-seqobj$D1 # outliers found after differencing data the first time
-seqobj$D2 # outliers found after differencing the data the second time
+seqobj$outliers$T0 # outliers found in raw data
+seqobj$outliers$D1 # outliers found after differencing data the first time
+seqobj$outliers$D2 # outliers found after differencing the data the second time
 
 # saving transformed data
 seqobj <- seq_transform(sim_data1$data, sequence = c("T0", "D1", "D2"),
  depth_method = "mbd", save_data = TRUE)
 seqobj$outliers$T0 # outliers found in raw data
-seqobj$ransformed_data$T0  # the raw data
-seqobj$ransformed_data$D1 # the first order differenced data
-seqobj$ransformed_data$D2 # the 2nd order differenced data
+head(seqobj$transformed_data$T0)  # the raw data
+head(seqobj$transformed_data$D1) # the first order differenced data
+head(seqobj$transformed_data$D2) # the 2nd order differenced data
+
+# double transforms e.g. c("T0", "D1", "D1")
+seqobj <- seq_transform(sim_data1$data, sequence = c("T0", "D1", "D1"),
+ depth_method = "mbd", save_data = TRUE)
+seqobj$outliers$T0 # outliers found in raw data
+head(seqobj$transformed_data$T0)  # the raw data
+head(seqobj$transformed_data$D1_1) # the first order differenced data
+head(seqobj$transformed_data$D1_1) # the 2nd order differenced data
 
 # multivariate data
 dtm <- array(0, dim = c(100, 50, 2))
@@ -150,8 +157,8 @@ dtm[,,1] <- sim_data1$data
 dtm[,,2] <- sim_data1$data
 seqobj <- seq_transform(dtm, sequence = "O", depth_method = "erld",
  erld_type = "one_sided_right", save_data = TRUE)
-seqobj$O # multivariate outliers
-seqobj$transformed_data$O # univariate outlyingness
+seqobj$outliers$O # multivariate outliers
+head(seqobj$transformed_data$O) # univariate outlyingness data
 
 
 

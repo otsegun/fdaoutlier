@@ -19,7 +19,7 @@
 #' "D1", "D2"} and \code{"O"} (in any order). These sequence of strings specifies the sequence of transformation to be applied
 #'  on the data and their meanings are described as follows:
 #'  \describe{
-#'   \item{\code{"T0"}}{Functional boxplot applied on raw data (no transformation is applied)}.
+#'   \item{\code{"T0"} and \code{"D0"}}{Functional boxplot applied on raw data (no transformation is applied)}.
 #'    \item{\code{"T1"}}{Apply vartical alignment on data, i.e. subtract from each curve its expectation over the domain of evaluation}.
 #'    \item{\code{"T2"}}{Apply normalization on data, i.e. divide each curve by its L-2 norm.}
 #'    \item{\code{"D1"} and \code{"D2" }}{Apply one order of differencing on data.}
@@ -62,15 +62,13 @@
 #'  parsed to \code{sequence}. Defaults to 200L.
 #' @param seed The random seed to set when generating the random directions in the computation of the point-wise outlyingness. Defaults to NULL.
 #' in which case a seed is not set.
-#' @return If \code{save_data = FALSE}, named list of length \code{length(sequence)} containing the index of outliers found after each
-#' transformation. The names of the elements of this list are the sequence strings supplied to \code{sequence}. The outliers found
-#' after each stage of transformation are not necessarily mutually exclusive.
-#' Otherwise if \code{save_data = TRUE}, a list containing two lists are returned. The contents of the returned list are:
-#'\item{outliers:}{A named list of length \code{length(sequence)} containing the index of outliers found after each
+#' @return A list containing two lists are returned. The contents of the returned list are:
+#' \item{outliers:}{A named list of length \code{length(sequence)} containing the index of outliers found after each
 #' transformation. The names of the elements of this list are the sequence strings supplied to \code{sequence} and the
 #'  outliers found after each stage of transformation are not necessarily mutually exclusive. }
-#'\item{transformed_data}{A named list of length \code{length(sequence)} containing the transformed dataframes/matrix after each
-#' transformation. The names of the elements of this list are the sequence strings supplied to \code{sequence}.}
+#'\item{transformed_data}{If \code{save_data = TRUE} a named list of length \code{length(sequence)} containing the transformed matrix after each
+#' transformation. The names of the elements of this list are the sequence strings supplied to \code{sequence}. \code{NULL} otherwise if
+#'  \code{save_data = FALSE}.}
 #'
 #' @details
 #'This function implements outlier detection using sequential transformations described in Algorihm 1 of
@@ -103,21 +101,30 @@
 #' @examples
 #' # same as running a functional boxplot
 #' seqobj <- seq_transform(sim_data1$data, sequence = "T0", depth_method = "mbd")
-#' all.equal(seqobj$T0, functional_boxplot(sim_data1$data, depth_method = "mbd")$outliers)
+#' seqobj$outliers$T0
+#' functional_boxplot(sim_data1$data, depth_method = "mbd")$outliers
 #'
 #' # more sequences
 #' seqobj <- seq_transform(sim_data1$data, sequence = c("T0", "D1", "D2"), depth_method = "mbd")
-#' seqobj$T0 # outliers found in raw data
-#' seqobj$D1 # outliers found after differencing data the first time
-#' seqobj$D2 # outliers found after differencing the data the second time
+#' seqobj$outliers$T0 # outliers found in raw data
+#' seqobj$outliers$D1 # outliers found after differencing data the first time
+#' seqobj$outliers$D2 # outliers found after differencing the data the second time
 #'
 #' # saving transformed data
 #' seqobj <- seq_transform(sim_data1$data, sequence = c("T0", "D1", "D2"),
 #'  depth_method = "mbd", save_data = TRUE)
 #' seqobj$outliers$T0 # outliers found in raw data
-#' seqobj$ransformed_data$T0  # the raw data
-#' seqobj$ransformed_data$D1 # the first order differenced data
-#' seqobj$ransformed_data$D2 # the 2nd order differenced data
+#' head(seqobj$transformed_data$T0)  # the raw data
+#' head(seqobj$transformed_data$D1) # the first order differenced data
+#' head(seqobj$transformed_data$D2) # the 2nd order differenced data
+#'
+#' # double transforms e.g. c("T0", "D1", "D1")
+#' seqobj <- seq_transform(sim_data1$data, sequence = c("T0", "D1", "D1"),
+#'  depth_method = "mbd", save_data = TRUE)
+#' seqobj$outliers$T0 # outliers found in raw data
+#' head(seqobj$transformed_data$T0)  # the raw data
+#' head(seqobj$transformed_data$D1_1) # the first order differenced data
+#' head(seqobj$transformed_data$D1_1) # the 2nd order differenced data
 #'
 #' # multivariate data
 #' dtm <- array(0, dim = c(100, 50, 2))
@@ -125,8 +132,8 @@
 #' dtm[,,2] <- sim_data1$data
 #' seqobj <- seq_transform(dtm, sequence = "O", depth_method = "erld",
 #'  erld_type = "one_sided_right", save_data = TRUE)
-#' seqobj$O # multivariate outliers
-#' seqobj$transformed_data$O # univariate outlyingness
+#' seqobj$outliers$O # multivariate outliers
+#' head(seqobj$transformed_data$O) # univariate outlyingness data
 #'
 #'
 #'
@@ -145,7 +152,9 @@ seq_transform <- function(dt, sequence = c("T0", "T1", "T2"),
     transformed_data <- list()
   }
 
-  for (transformation in sequence) {
+
+  for (i in seq_along(sequence)) {
+    transformation = sequence[i]
     if (transformation == "T0" || transformation == "D0"){
       ## apply functional boxplot here
       t0_outliers <- functional_boxplot(dt, depth_method = depth_method,
@@ -153,8 +162,8 @@ seq_transform <- function(dt, sequence = c("T0", "T1", "T2"),
                                         emp_factor = emp_factor,
                                         erld_type = erld_type,
                                         dq_quantiles = dq_quantiles)$outliers
-      outliers[[transformation]] <- t0_outliers
-      if(save_data) transformed_data[[transformation]] <- dt
+      outliers[[i]] <- t0_outliers
+      if(save_data) transformed_data[[i]] <- dt
     }else if(transformation == "T1"){
       dt <- center_curves(dt)
       t1_outliers <- functional_boxplot(dt, depth_method = depth_method,
@@ -162,8 +171,8 @@ seq_transform <- function(dt, sequence = c("T0", "T1", "T2"),
                                         central_region = central_region,
                                         erld_type = erld_type,
                                         dq_quantiles = dq_quantiles)$outliers
-      outliers[[transformation]] <- t1_outliers
-      if(save_data) transformed_data[[transformation]] <- dt
+      outliers[[i]] <- t1_outliers
+      if(save_data) transformed_data[[i]] <- dt
     } else if(transformation == "T2"){
       dt <- normalize_curves(dt)
       t2_outliers <- functional_boxplot(dt, depth_method = depth_method,
@@ -171,8 +180,8 @@ seq_transform <- function(dt, sequence = c("T0", "T1", "T2"),
                                         central_region = central_region,
                                         erld_type = erld_type,
                                         dq_quantiles = dq_quantiles)$outliers
-      outliers[[transformation]] <- t2_outliers
-      if(save_data) transformed_data[[transformation]] <- dt
+      outliers[[i]] <- t2_outliers
+      if(save_data) transformed_data[[i]] <- dt
     } else if(transformation == "D1"|| transformation == "D2"){
       dt <- difference_curves(dt)
       d1_outliers <- functional_boxplot(dt, depth_method = depth_method,
@@ -180,8 +189,8 @@ seq_transform <- function(dt, sequence = c("T0", "T1", "T2"),
                                         central_region = central_region,
                                         erld_type = erld_type,
                                         dq_quantiles = dq_quantiles)$outliers
-      outliers[[transformation]] <- d1_outliers
-      if(save_data) transformed_data[[transformation]] <- dt
+      outliers[[i]] <- d1_outliers
+      if(save_data) transformed_data[[i]] <- dt
     } else if(transformation == "O"){
       # implement directional quantile!
       dt <- outlyingness_curves(dt,  n_projections = n_projections, seed = seed)
@@ -190,8 +199,8 @@ seq_transform <- function(dt, sequence = c("T0", "T1", "T2"),
                                        central_region = central_region,
                                        erld_type = erld_type,
                                        dq_quantiles = dq_quantiles)$outliers
-      outliers[[transformation]] <- o_outliers
-      if(save_data) transformed_data[[transformation]] <- dt
+      outliers[[i]] <- o_outliers
+      if(save_data) transformed_data[[i]] <- dt
 
     }else {
       stop("Transformation ", transformation, ' not supported. \n')
@@ -204,11 +213,24 @@ seq_transform <- function(dt, sequence = c("T0", "T1", "T2"),
 
   }
 
-  if(!save_data){
-    return(outliers)
-  }else{
+  # fix duplicated transforms
+  if(any(duplicated(sequence))){
+    tt <- sequence[duplicated(sequence)][1] # which transform is duplicated
+    sequence[sequence == tt] <- paste0(tt, "_",
+                                       1:length(sequence[sequence == tt]))
+    warning("Duplicated transforms found in argument \'sequence\',
+            changing output labels to: ", paste(sequence, collapse = " "), ".")
+  }
+
+  names(outliers) <- sequence
+  if(save_data) names(transformed_data) <- sequence
+
+  if(save_data){
     return(list(outliers = outliers,
                 transformed_data = transformed_data))
+    } else{
+    return(list(outliers = outliers,
+                transformed_data = NULL))
   }
 
 }

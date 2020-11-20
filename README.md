@@ -12,10 +12,12 @@ Status](https://travis-ci.com/otsegun/fdaoutlier.svg?token=is9BrWwNvqBGoneFkbEL&
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 [![Codecov test
-coverage](https://codecov.io/gh/otsegun/fdaoutlier/branch/master/graph/badge.svg)](https://codecov.io/gh/otsegun/fdaoutlier?branch=master)
-<!-- badges: end --> `fdaoutlier` is a collection of outlier detection
-tools for functional data analysis. `fdaoutlier` is still at an early
-experimental stage.
+coverage](https://codecov.io/gh/otsegun/fdaoutlier/branch/master/graph/badge.svg)](https://codecov.io/gh/otsegun/fdaoutlier?branch=master&token=0c40801f-206f-4bb4-9b3b-5f493a3130c9)
+
+<!-- badges: end -->
+
+`fdaoutlier` is a collection of outlier detection tools for functional
+data analysis. `fdaoutlier` is still at an early experimental stage.
 
 ## Installation
 
