@@ -2,7 +2,7 @@
 % Please edit documentation in R/linfinity_depth.R
 \name{linfinity_depth}
 \alias{linfinity_depth}
-\title{Compute the L-infinity depth a sample of curves/functions.}
+\title{Compute the L-infinity depth of a sample of curves/functions.}
 \usage{
 linfinity_depth(dt)
 }
@@ -14,7 +14,8 @@ A numeric vector of size \code{nrow(dt)} containing the band depth values of eac
 }
 \description{
 The L-infinity depth is a simple generalization of the \eqn{L^p} multivariate depth to
-functional data proposed in Long and Huang (2015) \href{https://arxiv.org/abs/1506.01332}{<arxiv:arXiv:1506.01332}.
+functional data proposed in Long and Huang (2015) \href{https://arxiv.org/abs/1506.01332}{<arxiv:arXiv:1506.01332} and also
+used in Dai et al. (2020)\href{https://doi.org/10.1016/j.csda.2020.106960}{<doi:10.1016/j.csda.2020.106960>}.
 }
 \examples{
 linf <- linfinity_depth(sim_data1$data)
@@ -22,4 +23,7 @@ linf <- linfinity_depth(sim_data1$data)
 }
 \references{
 Long, J. P., & Huang, J. Z. (2015). A study of functional depths. \emph{arXiv preprint arXiv}:1506.01332.
+
+Dai, W., Mrkvička, T., Sun, Y., & Genton, M. G. (2020). Functional outlier detection and taxonomy by
+sequential transformations. \emph{Computational Statistics & Data Analysis}, 106960.
 }

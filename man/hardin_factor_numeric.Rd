@@ -2,15 +2,14 @@
 % Please edit documentation in R/hardin_rocke_f_factors.R
 \name{hardin_factor_numeric}
 \alias{hardin_factor_numeric}
-\title{Computes asymptotically, the factors for F approximation cutoff for (MCD) robust
-mahalanobis distances according to \href{https://doi.org/10.1198/106186005X77685}{Hardin and Rocke (2005)}.}
+\title{Compute F distribution factors for approximating the tail of the distribution of robust MCD distance.}
 \usage{
 hardin_factor_numeric(n, dimension)
 }
 \arguments{
-\item{n}{A numeric value indicating the number of observations of the data}
+\item{n}{A numeric value indicating the number of observations of the data.}
 
-\item{dimension}{A numeric value indicating the number of columns or variables.}
+\item{dimension}{A numeric value indicating the number of variables of the data.}
 }
 \value{
 Returns a list containing: \item{factor1}{ then estimated value of
@@ -19,19 +18,17 @@ Returns a list containing: \item{factor1}{ then estimated value of
 }
 \description{
 Computes asymptotically, the factors for F approximation cutoff for (MCD) robust
-mahalanobis distances according to \href{https://doi.org/10.1198/106186005X77685}{Hardin and Rocke (2005)}.
+mahalanobis distances according to Hardin and Rocke (2005)
+\href{https://doi.org/10.1198/106186005X77685}{<doi:10.1198/106186005X77685>}.
 }
 \details{
-This function computes two factors needed for the determining an appropriate
+This function computes the two factors needed for the determining an appropriate
 cutoff for robust mahalanobis distances computed using the MCD method.
 
 The F approximation according to Hardin and Rocke (2005)\href{https://doi.org/10.1198/106186005X77685}{<doi:10.1198/106186005X77685>}
 is given by: \deqn{c(m-p+1)/(pm) * RMD^2 ~ F_{p, m-p+1}} where \eqn{m} is a parameter for finding the degree of freedom of the
 \eqn{F} distribution, \eqn{c} is a scaling constant and \eqn{p} is the dimension. The first factor
 returned by this function (\code{factor1}) is \eqn{c(m-p+1)/(pm)} and the second factor (\code{factor2}) is \eqn{F_{p, m-p+1}}.
-}
-\examples{
-h_factor <- hardin_factor_numeric(50, 5)
 }
 \references{
 Hardin, J., and Rocke, D. M. (2005). The distribution of robust distances.

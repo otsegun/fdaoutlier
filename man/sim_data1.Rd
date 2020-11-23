@@ -24,9 +24,9 @@ Data was simulated from a simple magnitude outlier model with main model :
 \deqn{X(t) = 4t + e(t)}
 and contimation model:
 \deqn{X(t) = 4t + 8k + e(t)}
-where \eqn{t\in [0,1]}, and  \eqn{e(t)} is a Gaussian process with zero mean and covariance function
-\deqn{\gamma(s,t) = \exp\{-|t-s|\}}
-and \eqn{k \in [-1, 1]} with \eqn{P(k = -1) = P(k=1) = 0.5}.
+where \eqn{t \in [0,1]}, and  \eqn{e(t)} is a Gaussian process with zero mean and covariance function
+\deqn{\gamma(s,t) = exp{-|t-s|}}
+and \eqn{k \in [-1, 1]} with \eqn{P(k = -1) = P(k = 1) = 0.5}.
 
 There are 90 non-outliers and 10 magnitude outliers.
 }

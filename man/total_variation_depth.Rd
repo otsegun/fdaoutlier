@@ -2,7 +2,7 @@
 % Please edit documentation in R/total_variation_depth.R
 \name{total_variation_depth}
 \alias{total_variation_depth}
-\title{Compute the Total Variation Depth and Modified Shape Similarity Index}
+\title{Total Variation Depth and Modified Shape Similarity Index}
 \usage{
 total_variation_depth(data)
 }
@@ -12,13 +12,12 @@ points.}
 }
 \value{
 Returns a list contaning the following
-\describe{
   \item{\code{tvd}}{the total variation depths of the observations of \code{data}}
   \item{\code{mss}}{the modified shape similarity index of the observations of \code{data}}
-  }
 }
 \description{
-Compute the Total Variation Depth and Modified Shape Similarity Index
+This function computes the total variation depth (tvd) and the modified shape similarity index (mss)
+proposed in Huang and Sun (2019) \href{https://doi.org/10.1080/00401706.2019.1574241}{<doi:10.1080/00401706.2019.1574241>}.
 }
 \details{
 This function computes the total variation depth (TVD) and modified shape similarity (MSS) index of a univariate

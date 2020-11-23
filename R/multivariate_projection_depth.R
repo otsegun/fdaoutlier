@@ -12,7 +12,7 @@
 #'   500 random directions for projection are generated from a scaled uniform distribution between -1 and 1.
 #' @param seed The random seed to set when generating the random directions. Defaults to NULL.
 #'
-#' @return A vector contaning the depth values \code{dts} with respect to \code{dt}.
+#' @return A vector contaning the depth values of \code{dts} with respect to \code{dt}.
 #' @author Oluwasegun Taiwo Ojo
 #' @export
 #' @importFrom stats runif

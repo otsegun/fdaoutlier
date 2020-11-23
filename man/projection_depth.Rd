@@ -19,7 +19,7 @@ Contains the observation(s) whose depth is to be computed.}
 \item{seed}{The random seed to set when generating the random directions. Defaults to NULL.}
 }
 \value{
-A vector contaning the depth values \code{dts} with respect to \code{dt}.
+A vector contaning the depth values of \code{dts} with respect to \code{dt}.
 }
 \description{
 Helper function to compute the random projection depth of multivariate point(s) with respect

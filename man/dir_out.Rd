@@ -7,14 +7,14 @@
 dir_out(
   data,
   data_depth = "random_projections",
-  n_projections = 200,
+  n_projections = 200L,
   seed = NULL,
   return_distance = TRUE,
   return_dir_matrix = FALSE
 )
 }
 \arguments{
-\item{data}{A matrix for univariate functional data (of size \code{n} observations by \code{p} domain
+\item{data}{A matrix (or data frame) for univariate functional data (of size \code{n} observations by \code{p} domain
 points) or a 3-dimensional array for multivariate functional data (of size \code{n}
 observations by \code{p} domain points by \code{d} dimension).}
 
@@ -24,19 +24,19 @@ always used as suggested in Dai and Genton (2018) \href{https://doi.org/10.1080/
 \item{n_projections}{The number of directions for computing random projection depth. By default,
 200 random directions are generated from a scaled uniform distribution between -1 and 1.}
 
-\item{seed}{The random seed to set when generating the random directions. Defaults to NULL
+\item{seed}{An integer indicating the seed to set when generating the random directions. Defaults to NULL
 in which case a seed is not set.}
 
-\item{return_distance}{A logical scalar. If TRUE, returns: a matrix whose columns are
+\item{return_distance}{A logical value. If TRUE, returns: a matrix whose columns are
 the mean and variation of directional outlyingness, the mahalanobis distance of the
 observations of this matrix, and the robust estimate of the mean and covariance of
 this matrix (computed using the minimum covariance determinant method).}
 
-\item{return_dir_matrix}{A logical scalar. If TRUE, returns the directional outlyingness
+\item{return_dir_matrix}{A logical value. If TRUE, returns the directional outlyingness
 matrix (or array for multivariate functional data). Computed from the chosen \code{depth_depth}.}
 }
 \value{
-Returns a list containing: \item{mean_outlyingness}{ an \code{n x d} matrix of the mean
+Returns a list containing: \item{mean_outlyingness}{an \code{n x d} matrix of the mean
  of directional outlyingness.} \item{var_outlyingness}{ a vector of length n containing
  the variation of directional outlyingness.} \item{ms_matrix}{ if
  \code{return_distance} = T, an \code{n x (d+1)} matrix whose columns are the mean and
@@ -45,20 +45,20 @@ Returns a list containing: \item{mean_outlyingness}{ an \code{n x d} matrix of t
  the mean and covariance matrix.} \item{mcd_obj}{ if \code{return_distance} = T, a list
  containing the robust (minimum covariance determinant) estimate of the mean and
  covariance of the \code{ms_matrix}.} \item{dirout_matrix}{ if \code{return_dir_matrix}
- = T, an n x p (x d) matrix (array) containing the directional outlyingness values for
- the univariate (multivariate) functional \code{data}.}
+ = T, an n x p (or n x p x d) matrix (or array) containing the directional outlyingness values for
+ the univariate (or multivariate) functional \code{data}.}
 }
 \description{
 Compute the directional outlyingness of a univariate or multivariate functional data
-based on Dai and Genton (2018) \href{https://doi.org/10.1080/10618600.2018.1473781}{<doi:10.1080/10618600.2018.1473781>} and
-Dai and Genton (2019) \href{https://doi.org/10.1016/j.csda.2018.03.017}{<doi:10.1016/j.csda.2018.03.017>}.
+based on Dai and Genton (2019) \href{https://doi.org/10.1016/j.csda.2018.03.017}{<doi:10.1016/j.csda.2018.03.017>}
+and Dai and Genton (2018) \href{https://doi.org/10.1080/10618600.2018.1473781}{<doi:10.1080/10618600.2018.1473781>}.
 }
 \details{
-The directional outlyingness, as defined by Dai and Genton (2018) \href{https://doi.org/10.1080/10618600.2018.1473781}{<doi:10.1080/10618600.2018.1473781>} is
+The directional outlyingness, as defined in Dai and Genton (2019) \href{https://doi.org/10.1016/j.csda.2018.03.017}{<doi:10.1016/j.csda.2018.03.017>} is
 \deqn{O(Y, F_Y) = (1/d(Y, F_Y) - 1).v} where \eqn{d} is a depth notion, and \eqn{v} is
 the unit vector pointing from the median of \eqn{F_Y} to \eqn{Y}. For univariate and
 multivariate functional data, the projection depth is always used as suggested by
-Dai and Genton (2018).
+\href{https://doi.org/10.1016/j.csda.2018.03.017}{Dai and Genton (2019)}.
 }
 \examples{
 # univariate magnitude model in Dai and Genton (2018).

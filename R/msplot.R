@@ -5,16 +5,16 @@
 #' method described in Dai and Genton (2018)\href{https://doi.org/10.1080/10618600.2018.1473781}{<doi:10.1080/10618600.2018.1473781>}.
 #' Indices of observations flagged as outliers are returned. Despite the name, this function does not produce a plot.
 #' However, the mean and variation of directional outlyingness (\eqn{MO} and \eqn{VO}) can be requested and a subsesequent
-#' plot of \eqn{MO} against \eqn{VO} can be easily generated using your preferred plotting method.
+#' plot of \eqn{MO} against \eqn{VO} can be easily generated using any preferred plotting tool.
 #'
-#' @param data A matrix for univariate functional data (of size \eqn{n} observations by \eqn{p} domain
+#' @param data A matrix/data frame for univariate functional data (of size \eqn{n} observations by \eqn{p} domain
 #'   points) or a \eqn{3-}dimensional array for multivariate functional data (of size \eqn{n}
 #'   observations by \eqn{p} domain points by \eqn{d} dimension).
 #' @param data_depth The depth used in the computation of the directional outlyingness of
 #'   \code{data}. The projection depth is always used. Support for other depth methods will be added.
 #' @param n_projections The number of random directions to generate for computing the random projection
 #'   depth. By default 200 directions are generated.
-#' @param seed The seed to set when generating random directions for computing the random projection depth.
+#' @param seed An integer indicating the seed to set when generating random directions for computing the random projection depth.
 #'   NULL by default in which case no seed is set.
 #'
 #' @param return_mvdir A logical scalar indicating whether to return the mean and variation of directional
@@ -40,10 +40,11 @@
 #'   \item{median_curve}{the index of the median function (which is the
 #'   function with the smallest robust mahalanobis distance computed from the matrix whose
 #'   columns are made up of \eqn{MO} and \eqn{VO}).}
-#'   \item{mean_outlyingness}{if \code{return_mvdir} = TRUE, an \eqn{n x d} matrix of the mean of
-#'   directional outlyingness.}
-#'   \item{var_outlyingness}{if \code{return_mvdir} = TRUE, a vector of length \eqn{n} containing
-#'   the variation of directional outlyingness.}
+#'   \item{mean_outlyingness}{if \code{return_mvdir} = TRUE, a numeric vector of the mean of directional
+#'   outlylingness for univariate functional data or an \eqn{n x d} matrix of the mean of
+#'   directional outlyingness for multivariate functional data.}
+#'   \item{var_outlyingness}{if \code{return_mvdir} = TRUE, a numeric vector of length \eqn{n} observations
+#'    containing the variation of directional outlyingness.}
 #'
 #'
 #' @author Oluwasegun Taiwo Ojo.

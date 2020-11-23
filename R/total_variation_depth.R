@@ -1,5 +1,7 @@
-#' Compute the Total Variation Depth and Modified Shape Similarity Index
+#' Total Variation Depth and Modified Shape Similarity Index
 #'
+#'This function computes the total variation depth (tvd) and the modified shape similarity index (mss)
+#'proposed in Huang and Sun (2019) \href{https://doi.org/10.1080/00401706.2019.1574241}{<doi:10.1080/00401706.2019.1574241>}.
 #'
 #' @param data A matrix or dataframe of size \eqn{n} observations/curves by \eqn{p} domain/evaluation
 #'   points.
@@ -9,10 +11,8 @@
 #' functional data. The definition of the estimates of TVD and MSS can be found in Huang and Sun (2019)
 #' \href{https://doi.org/10.1080/00401706.2019.1574241}{<doi:10.1080/00401706.2019.1574241>}.
 #' @return Returns a list contaning the following
-#' \describe{
 #'   \item{\code{tvd}}{the total variation depths of the observations of \code{data}}
 #'   \item{\code{mss}}{the modified shape similarity index of the observations of \code{data}}
-#'   }
 #'
 #' @author Oluwasegun Ojo
 #'

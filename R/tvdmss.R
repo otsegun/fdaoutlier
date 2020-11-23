@@ -1,5 +1,7 @@
-#' Find shape and magnitude outliers  using the Total Variation Depth
-#'  and Modified Shape Similarity Index
+#' Outlier detection using the total variation depth and modified shape similarity index.
+#'
+#' Find shape and magnitude outliers  using the Total Variation Depth and Modified
+#' Shape Similarity Index proposed in Huang and Sun (2019) \href{https://doi.org/10.1080/00401706.2019.1574241}{<doi:10.1080/00401706.2019.1574241>}.
 #'
 #' @param data A matrix or dataframe of size \eqn{n} observations/curves by \eqn{p} domain/evaluation
 #'   points.
@@ -8,7 +10,7 @@
 #' @param emp_factor_tvd The empirical factor of the functional boxplot used on the TVD of observations.
 #'   Defaults to 1.5.
 #' @param central_region_tvd A number between 0 and 1 indicating the central region probability of
-#'   the functional boxplot used on the TVD of the observations. Defaults to 0.5. See also details
+#'   the functional boxplot used on the TVD of the observations. Defaults to 0.5. See also details.
 #'
 #'@details
 #' This method uses a combination of total variation depth (TVD) and modified shape similarity (MSS) index
@@ -23,13 +25,11 @@
 #'
 #'
 #' @returns Returns a list contaning the following
-#' \describe{
 #'   \item{\code{outliers}}{the indices of the (shape and magnitude) outliers}
 #'   \item{\code{shape_outliers}}{the indices of the shape outliers}
 #'   \item{\code{magnitude_outliers}}{the indices of the magnitude outliers}
 #'   \item{\code{tvd}}{the total variation depths of the observations of \code{data}}
 #'   \item{\code{mss}}{the modified shape similarity index of the observations of \code{data}}
-#'   }
 #' @author Oluwasegun Ojo
 #' @references
 #' Huang, H., & Sun, Y. (2019). A decomposition of total variation depth for

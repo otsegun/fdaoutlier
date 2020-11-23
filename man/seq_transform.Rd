@@ -8,7 +8,7 @@ seq_transform(
   dt,
   sequence = c("T0", "T1", "T2"),
   depth_method = c("mbd", "tvd", "extremal", "dirout", "linfinity", "bd", "erld", "dq"),
-  save_data = F,
+  save_data = FALSE,
   emp_factor = 1.5,
   central_region = 0.5,
   erld_type = NULL,
@@ -20,16 +20,16 @@ seq_transform(
 \arguments{
 \item{dt}{A matrix for univariate functional data (of size \code{n} observations by \code{p} domain
 points) or a 3-dimensional array for multivariate functional data (of size \code{n}
-observations by \code{p} domain points by \code{d} dimension). Only the outlyingness transformation ("O")
-supports multivariate functional data so the sequence of transformation must always start with outlyingness
+observations by \code{p} domain points by \code{d} dimension). Only the outlyingness transformation ("O(X)(t)")
+supports multivariate functional data so the sequence of transformation must always start with outlyingness ("O(X)(t)")
 whenever a multivariate functional data is parsed to \code{dt}.}
 
-\item{sequence}{A character vector usually of length between 1 and 6 containing any of the strings: \code{"T0", "T1", "T2",
-"D1", "D2"} and \code{"O"} (in any order). These sequence of strings specifies the sequence of transformation to be applied
+\item{sequence}{A character vector usually of length between 1 and 6 containing any of the strings: \code{"T0", "D0", "T1", "T2",
+"D1", "D2"} and \code{"O"} (in any order). These sequence of strings specifies the sequence of transformations to be applied
  on the data and their meanings are described as follows:
  \describe{
-  \item{\code{"T0"} and \code{"D0"}}{Functional boxplot applied on raw data (no transformation is applied)}.
-   \item{\code{"T1"}}{Apply vartical alignment on data, i.e. subtract from each curve its expectation over the domain of evaluation}.
+  \item{\code{"T0"} and \code{"D0"}}{Functional boxplot applied on raw data (no transformation is applied).}
+   \item{\code{"T1"}}{Apply vartical alignment on data, i.e. subtract from each curve its expectation over the domain of evaluation.}
    \item{\code{"T2"}}{Apply normalization on data, i.e. divide each curve by its L-2 norm.}
    \item{\code{"D1"} and \code{"D2" }}{Apply one order of differencing on data.}
    \item{\code{"O"}}{Find the pointwise outlyingness of data. For multivariate functional data, this transformation replaces the multivariate
@@ -65,7 +65,8 @@ are currently supported:
 \item{erld_type}{If \code{depth_method = "erld"}, the type of ordering to use in computing the extreme rank length depth (ERLD).
 Can be one of \code{"two_sided"}, \code{"one_sided_left"} or \code{"one_sided_right"}. A \code{"two_sided"} ordering is used by
 default if \code{erld_type} is not specified and \code{depth_method = "erld"}. The \code{"one_sided_right"} ERLD is especially useful for
-ordering functions of outlyingness (the output of the \code{"O"} transformation) since it considers only large values as extreme.}
+ordering functions of outlyingness (the output of the \code{"O"} transformation) since it considers only large values as extreme.
+See \link{extreme_rank_length} for details.}
 
 \item{dq_quantiles}{If \code{depth_method = "dq"}, a numeric vector of length 2 specifying the probabilites
 of upper and lower quantiles. Defaults to \code{c(0.025, 0.975)} for the upper and lower 2.5\% quantiles.
@@ -84,8 +85,8 @@ A list containing two lists are returned. The contents of the returned list are:
 transformation. The names of the elements of this list are the sequence strings supplied to \code{sequence} and the
  outliers found after each stage of transformation are not necessarily mutually exclusive. }
 \item{transformed_data}{If \code{save_data = TRUE} a named list of length \code{length(sequence)} containing the transformed matrix after each
-transformation. The names of the elements of this list are the sequence strings supplied to \code{sequence}. \code{NULL} otherwise if
- \code{save_data = FALSE}.}
+transformation. The names of the elements of this list are the sequence strings supplied to \code{sequence}. \code{NULL} otherwise (if
+ \code{save_data = FALSE}).}
 }
 \description{
 This method finds and classify outliers using sequential transformations proposed in Algorithm 1 of
@@ -93,8 +94,8 @@ Dai et al. (2020)\href{https://doi.org/10.1016/j.csda.2020.106960}{<doi:10.1016/
 A sequence of transformations are applied to the functional data and after each transformation, a functional
 boxplot is applied on the transformed data and outliers flagged by the functional data are noted. A number of
 transformations mentioned in Dai et al. (2020)\href{https://doi.org/10.1016/j.csda.2020.106960}{<doi:10.1016/j.csda.2020.106960>}
-are supported including vertical alighnment ("T1(X)(t)"), normalization ("T2"),
-one order of differencing ("D1" and "D2") and point-wise outlyingness data ("O"). The feature alignment
+are supported including vertical alighnment ("T1(X)(t)"), normalization ("T2(X)(t)"),
+one order of differencing ("D1(X)(t)" and "D2(X)(t)") and point-wise outlyingness data ("O(X)(t)"). The feature alignment
 transformation based on warping/curve registration is not yet supported.
 }
 \details{
@@ -105,23 +106,28 @@ each transformation. The following example sequences (and their meanining) sugge
 Dai et al. (2020) \href{https://doi.org/10.1016/j.csda.2020.106960}{<doi:10.1016/j.csda.2020.106960>} can be parsed to
 argument \code{sequence}.
 \describe{
-  \item{\code{"T0"}}{Apply functional boxplot on raw data (no transformation is applied)}.
+  \item{\code{"T0"}}{Apply functional boxplot on raw data (no transformation is applied).}
    \item{\code{c("T0", "T1", "D1")}}{Apply functional boxplot on raw data, then apply vartical alignment on data followed by applying
    functional boxplot again. Finally apply one order of differencing on the vertically aligned data and apply functional boxplot again.}
    \item{\code{c("T0", "T1", "T2")}}{Apply functional boxplot on raw data, then apply vartical alignment on data followed by applying
-   functional boxplot again. Finally apply normalization using L-2 norm on the vertically aligned data and apply functional boxplot for again.}
-   \item{\code{"T0", "D1", "D2"}}{Apply functional boxplot on raw data, then applyone order of difference on data followed by applying
-   functional boxplot again. Finally apply another one order of differencing on the differenced data apply functional boxplot for again.
-   Note that this sequence of transformation can also be specified by \code{"T0", "D1", "D1"}, \code{"T0", "D2", "D2"}, and
-    \code{"T0", "D2", "D1"} since \code{"D1"} and \code{"D2" } do the same thing which is to apply lag-1 difference on the data.}
+   functional boxplot again. Finally apply normalization using L-2 norm on the vertically aligned data and apply functional boxplot again.}
+   \item{\code{c("T0", "D1", "D2")}}{Apply functional boxplot on raw data, then apply one order of difference on data followed by applying
+   functional boxplot again. Finally apply another one order of differencing on the differenced data and apply functional boxplot again.
+   Note that this sequence of transformation can also be (alternatively) specified by \code{c("T0", "D1", "D1")}, \code{c("T0", "D2", "D2")}, and
+    \code{c("T0", "D2", "D1")} since \code{"D1"} and \code{"D2" } do the same thing which is to apply one order lag-1 difference on the data.}
    \item{\code{"O"}}{Find the pointwise outlyingness of the multivariate or univariate functional data and then apply functional boxplot
-   on the resulting univariate functional data of pointwise outlyingness. Care must be taken to specify a one sided ordering function (e.g.
-   e.g "one_sided_right" extreme rank length depth) in the functional boxplot used on the data of piont-wise outlyingness. This is because only
+   on the resulting univariate functional data of pointwise outlyingness. Care must be taken to specify a one sided ordering function (i.e.
+   "one_sided_right" extreme rank length depth) in the functional boxplot used on the data of piont-wise outlyingness. This is because only
    large values should be considered extreme in the data of the piont-wise outlyingness.}
  }
 For multivariate functional data (when a 3-d array is supplied to \code{dt}), the sequence of transformation must always begin with \code{"O"}
-so that the multivariate data can be replaced with the univariate data of point-wise outlyingness which the functional boxplot can subsequently process.
-(The \code{\link{functional_boxplot}} function anly supports univariate functional data).
+so that the multivariate data can be replaced with the univariate data of point-wise outlyingness which the functional boxplot can subsequently process
+because the \code{\link{functional_boxplot}} function only supports univariate functional data.
+
+If repeated transformations are used in the sequence (e.g. when \code{sequence = c("T0", "D1", "D1")}), a warning message is thrown
+and the labels of the output list are changed (e.g. for \code{sequence = c("T0", "D1", "D1")}, the labels of the output lists
+become \code{"T0", "D1_1", "D1_2"}, so that outliers are accessed with \code{output$outlier$D1_1} and \code{output$outlier$D1_2}).
+See examples for more.
 }
 \examples{
 # same as running a functional boxplot
@@ -145,11 +151,13 @@ head(seqobj$transformed_data$D2) # the 2nd order differenced data
 
 # double transforms e.g. c("T0", "D1", "D1")
 seqobj <- seq_transform(sim_data1$data, sequence = c("T0", "D1", "D1"),
- depth_method = "mbd", save_data = TRUE)
+ depth_method = "mbd", save_data = TRUE) # throws warning
 seqobj$outliers$T0 # outliers found in raw data
+seqobj$outliers$D1_1 #found after differencing data the first time
+seqobj$outliers$D1_2 #found after differencing data the second time
 head(seqobj$transformed_data$T0)  # the raw data
 head(seqobj$transformed_data$D1_1) # the first order differenced data
-head(seqobj$transformed_data$D1_1) # the 2nd order differenced data
+head(seqobj$transformed_data$D1_2) # the 2nd order differenced data
 
 # multivariate data
 dtm <- array(0, dim = c(100, 50, 2))
@@ -159,7 +167,5 @@ seqobj <- seq_transform(dtm, sequence = "O", depth_method = "erld",
  erld_type = "one_sided_right", save_data = TRUE)
 seqobj$outliers$O # multivariate outliers
 head(seqobj$transformed_data$O) # univariate outlyingness data
-
-
 
 }

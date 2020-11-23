@@ -6,7 +6,7 @@
 #   return(list(factor1 = factors, factor2 = cutoff))
 # }
 
-hardin_factor_asymptotic <- function(n, dimension){
+croux_hesbroeck_asymptotic <- function(n, dimension){
   h <- floor((n+dimension+1)/2)
   alpha <- (n-h)/n
   q_alpha <- qchisq(1-alpha, dimension)
@@ -31,13 +31,16 @@ hardin_factor_asymptotic <- function(n, dimension){
   list(factor1 = factors, factor2 = cutoff)
 }
 
+#' Compute F distribution factors for approximating the tail of the distribution of robust MCD distance.
+#'
 #' Computes asymptotically, the factors for F approximation cutoff for (MCD) robust
-#' mahalanobis distances according to \href{https://doi.org/10.1198/106186005X77685}{Hardin and Rocke (2005)}.
+#' mahalanobis distances according to Hardin and Rocke (2005)
+#' \href{https://doi.org/10.1198/106186005X77685}{<doi:10.1198/106186005X77685>}.
 #'
-#' @param n A numeric value indicating the number of observations of the data
-#' @param dimension A numeric value indicating the number of columns or variables.
+#' @param n A numeric value indicating the number of observations of the data.
+#' @param dimension A numeric value indicating the number of variables of the data.
 #'
-#' @details This function computes two factors needed for the determining an appropriate
+#' @details This function computes the two factors needed for the determining an appropriate
 #' cutoff for robust mahalanobis distances computed using the MCD method.
 #'
 #' The F approximation according to Hardin and Rocke (2005)\href{https://doi.org/10.1198/106186005X77685}{<doi:10.1198/106186005X77685>}
@@ -52,10 +55,9 @@ hardin_factor_asymptotic <- function(n, dimension){
 #' @references Hardin, J., and Rocke, D. M. (2005). The distribution of robust distances.
 #'   \emph{Journal of Computational and Graphical Statistics}, 14(4), 928-946.
 #'
-#' @export
+#'
 #' @importFrom stats pchisq qchisq qf rchisq
-#' @examples
-#' h_factor <- hardin_factor_numeric(50, 5)
+#'
 hardin_factor_numeric <- function(n, dimension){
   if (dimension == 2){
     if(n < 1000){
@@ -64,7 +66,7 @@ hardin_factor_numeric <- function(n, dimension){
       factor2 = hardin_factor_numeric_dimen_2$factor2[k]
     }
     if (n >= 1000){
-      asymp_result <- hardin_factor_asymptotic(n = n, dimension = dimension)
+      asymp_result <- croux_hesbroeck_asymptotic(n = n, dimension = dimension)
       factor1  <- asymp_result$factor1
       factor2 = asymp_result$factor2
     }
@@ -76,12 +78,12 @@ hardin_factor_numeric <- function(n, dimension){
       factor2  <- hardin_factor_numeric_dimen_3$factor2[k]
     }
     if (n >= 1000){
-      asymp_result  <- hardin_factor_asymptotic(n = n, dimension = dimension)
+      asymp_result  <- croux_hesbroeck_asymptotic(n = n, dimension = dimension)
       factor1 <- asymp_result$factor1
       factor2 <- asymp_result$factor2
     }
   } else if (dimension > 3){
-    asymp_result  <- hardin_factor_asymptotic(n = n, dimension = dimension)
+    asymp_result  <- croux_hesbroeck_asymptotic(n = n, dimension = dimension)
     factor1 <- asymp_result$factor1
     factor2 <- asymp_result$factor2
   } else{

@@ -1,8 +1,9 @@
 
-#' Compute the L-infinity depth a sample of curves/functions.
+#' Compute the L-infinity depth of a sample of curves/functions.
 #'
 #' The L-infinity depth is a simple generalization of the \eqn{L^p} multivariate depth to
-#' functional data proposed in Long and Huang (2015) \href{https://arxiv.org/abs/1506.01332}{<arxiv:arXiv:1506.01332}.
+#' functional data proposed in Long and Huang (2015) \href{https://arxiv.org/abs/1506.01332}{<arxiv:arXiv:1506.01332} and also
+#' used in Dai et al. (2020)\href{https://doi.org/10.1016/j.csda.2020.106960}{<doi:10.1016/j.csda.2020.106960>}.
 #'
 #' @param dt A matrix or data frame of size \eqn{n} functions/curves by \eqn{p} domain/evaluation points.
 #'
@@ -10,6 +11,9 @@
 #'
 #' @references
 #' Long, J. P., & Huang, J. Z. (2015). A study of functional depths. \emph{arXiv preprint arXiv}:1506.01332.
+#'
+#' Dai, W., Mrkvička, T., Sun, Y., & Genton, M. G. (2020). Functional outlier detection and taxonomy by
+#' sequential transformations. \emph{Computational Statistics & Data Analysis}, 106960.
 #'
 #' @export
 #'

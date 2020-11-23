@@ -12,7 +12,7 @@ extreme_rank_length(
 \arguments{
 \item{dt}{A matrix or data frame of size \eqn{n} observations/curves by \eqn{p} domain/evaluation points.}
 
-\item{type}{A character vector. Can be one of \code{"two_sided"}, \code{"one_sided_left"} or \code{"one_sided_right"}.
+\item{type}{A character value. Can be one of \code{"two_sided"}, \code{"one_sided_left"} or \code{"one_sided_right"}.
 If \code{"two_sided"} is specified, small and large values in \code{dt} will be considered extreme. If \code{"one_sided_left"} is specified,
 then only small values in \code{dt} are considered to be extreme while for \code{"one_sided_right"}, only large values  in
 \code{dt} are considered to be extreme. \code{"two_sided"} is the default. See \code{Details} for more details.}
@@ -21,7 +21,7 @@ then only small values in \code{dt} are considered to be extreme while for \code
 A numeric vector containing the depth of each curve
 }
 \description{
-#'This function computes the extreme rank length depth (ERLD) of a sample of curves or functions.
+This function computes the extreme rank length depth (ERLD) of a sample of curves or functions.
 Functions have to be discretely observed on common domain points. In principle, the ERLD of a funciton \eqn{X_i}
 is the proportion of functions in the sample that is considered to be more extreme than \eqn{X_i}, an idea similar to \link{extremal_depth}.
 To determine which functions are more extreme, pointwise ranks of the functions are computed and compared pairwise.

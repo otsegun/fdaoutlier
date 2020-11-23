@@ -12,7 +12,7 @@ Authors@R:
            role = c("aut"),
            email = "lillo@est-econ.uc3m.es"),
       person(given = "Antonio",
-           family = "Fern\'andez Anta",
+           family = "Fernández Anta",
            role = c("aut", "fnd"),
            email = "antonio.fernandez@imdea.org"))
 Description: fdaoutlier is a collection of functions for outlier detection in functional data analysis.
