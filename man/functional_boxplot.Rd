@@ -24,9 +24,9 @@ functional_boxplot(
   Uses the algorithm of Sun et al. (2012)\href{https://doi.org/10.1002/sta4.8}{<doi:10.1002/sta4.8>}.}
   \item{"tvd"}{The total variation depth of Huang and Sun (2019) \href{https://doi.org/10.1080/00401706.2019.1574241}{<doi:10.1080/00401706.2019.1574241>}.}
   \item{"extremal"}{The extremal depth of Narisetty and Nair (2016) \href{https://doi.org/10.1080/01621459.2015.1110033}{<doi:10.1080/01621459.2015.1110033>}.}
-  \item{"dirout"}{Uses the robust distance of the mean and variation of directional outlyingess (\code{\link{dir_out}})
+  \item{"dirout"}{Uses the robust distance of the mean and variation of directional outlyingness (\code{\link{dir_out}})
   defined in Dai and Genton (2019) \href{https://doi.org/10.1016/j.csda.2018.03.017}{<doi:10.1016/j.csda.2018.03.017>}.
-  Since this method is a measure of outlyingess of a function the negative of the computed robust distance is used in ordering the functions.}
+  Since this method is a measure of outlyingness of a function the negative of the computed robust distance is used in ordering the functions.}
   \item{"linfinity"}{The L-infinity depth defined in Long and Huang (2015) \href{https://arxiv.org/abs/1506.01332}{<arxiv:arXiv:1506.01332} is used in ordering functions.}
   \item{"bd"}{Uses the band depth with bands defined by 2 functions according to the algorithm of Sun et al. (2012) \href{https://doi.org/10.1002/sta4.8}{<doi:10.1002/sta4.8>}.}
   \item{erld}{Uses the extreme rank length depth used in Dai et al. (2020) \href{https://doi.org/10.1016/j.csda.2020.106960}{<doi:10.1016/j.csda.2020.106960>}.}
@@ -40,16 +40,16 @@ the depths are not computed and \code{depth_method} is ignored.}
 \code{length(depth_values)} must be equal to number of rows of \code{dt}. If \code{depth_values} is specified, the depth is not
  computed and any method specified in \code{depth_method} is ignored.}
 
-\item{emp_factor}{A numeric value specifying the emperical factor for the boxplot. Defaults to 1.5.}
+\item{emp_factor}{A numeric value specifying the empirical factor for the boxplot. Defaults to 1.5.}
 
-\item{central_region}{A numeric value between 0 and 1 indicating the probabilty of central region. Defaults to 0.5.}
+\item{central_region}{A numeric value between 0 and 1 indicating the probability of central region. Defaults to 0.5.}
 
 \item{erld_type}{If \code{depth_method = "erld"}, the type of ordering to use in computing the extreme rank length depth.
 Can be one of \code{"two_sided"}, \code{"one_sided_left"} or \code{"one_sided_right"}. A \code{"two_sided"} ordering is used by
 default if \code{erld_type} is not specified.
 See \link{extreme_rank_length} for more details.}
 
-\item{dq_quantiles}{If \code{depth_method = "dq"}, a numeric vector of length 2 specifying the probabilites
+\item{dq_quantiles}{If \code{depth_method = "dq"}, a numeric vector of length 2 specifying the probabilities
 of upper and lower quantiles. Defaults to \code{c(0.025, 0.975)} for the upper and lower 2.5\% quantiles.
 See \link{directional_quantile} for details.}
 }

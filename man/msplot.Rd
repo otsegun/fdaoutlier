@@ -2,7 +2,7 @@
 % Please edit documentation in R/msplot.R
 \name{msplot}
 \alias{msplot}
-\title{Outlier Detection using Magniude-Shape Plot (MS-Plot) based on the directional outlyingness for functional
+\title{Outlier Detection using Magnitude-Shape Plot (MS-Plot) based on the directional outlyingness for functional
 data.}
 \usage{
 msplot(
@@ -39,7 +39,7 @@ Returns a list containing:
   function with the smallest robust mahalanobis distance computed from the matrix whose
   columns are made up of \eqn{MO} and \eqn{VO}).}
   \item{mean_outlyingness}{if \code{return_mvdir} = TRUE, a numeric vector of the mean of directional
-  outlylingness for univariate functional data or an \eqn{n x d} matrix of the mean of
+  outlyingness for univariate functional data or an \eqn{n x d} matrix of the mean of
   directional outlyingness for multivariate functional data.}
   \item{var_outlyingness}{if \code{return_mvdir} = TRUE, a numeric vector of length \eqn{n} observations
    containing the variation of directional outlyingness.}
@@ -48,7 +48,7 @@ Returns a list containing:
 This function finds outliers in univariate and multivariate functional data using the MS-Plot
 method described in Dai and Genton (2018)\href{https://doi.org/10.1080/10618600.2018.1473781}{<doi:10.1080/10618600.2018.1473781>}.
 Indices of observations flagged as outliers are returned. Despite the name, this function does not produce a plot.
-However, the mean and variation of directional outlyingness (\eqn{MO} and \eqn{VO}) can be requested and a subsesequent
+However, the mean and variation of directional outlyingness (\eqn{MO} and \eqn{VO}) can be requested and a subsequent
 plot of \eqn{MO} against \eqn{VO} can be easily generated using any preferred plotting tool.
 }
 \details{
@@ -60,7 +60,7 @@ the robust mahalanobis distance(s) of the rows of this matrix are computed
 (using the minimum covariate determinant estimate of the location and scatter). The tail
 of the distribution of these distances is approximated using the \eqn{F} distribution
 according to Hardin and Rocke (2005)\href{https://doi.org/10.1198/106186005X77685}{<doi:10.1198/106186005X77685>} to get the cutoff. The projection depth is always used
-for computing the directional outlyingess (as suggested by Dai and Genton (2019)\href{https://doi.org/10.1016/j.csda.2018.03.017}{<doi:10.1016/j.csda.2018.03.017>}).
+for computing the directional outlyingness (as suggested by Dai and Genton (2019)\href{https://doi.org/10.1016/j.csda.2018.03.017}{<doi:10.1016/j.csda.2018.03.017>}).
 }
 \examples{
 # Univariate magnitude model in Dai and Genton (2018).

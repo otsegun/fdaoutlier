@@ -10,7 +10,7 @@
 #' This function computes the total variation depth (TVD) and modified shape similarity (MSS) index of a univariate
 #' functional data. The definition of the estimates of TVD and MSS can be found in Huang and Sun (2019)
 #' \href{https://doi.org/10.1080/00401706.2019.1574241}{<doi:10.1080/00401706.2019.1574241>}.
-#' @return Returns a list contaning the following
+#' @return Returns a list containing the following
 #'   \item{\code{tvd}}{the total variation depths of the observations of \code{data}}
 #'   \item{\code{mss}}{the modified shape similarity index of the observations of \code{data}}
 #'

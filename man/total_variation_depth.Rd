@@ -11,7 +11,7 @@ total_variation_depth(data)
 points.}
 }
 \value{
-Returns a list contaning the following
+Returns a list containing the following
   \item{\code{tvd}}{the total variation depths of the observations of \code{data}}
   \item{\code{mss}}{the modified shape similarity index of the observations of \code{data}}
 }

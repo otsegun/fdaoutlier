@@ -19,7 +19,7 @@ Contains the observation(s) whose depth is to be computed.}
 \item{seed}{The random seed to set when generating the random directions. Defaults to NULL.}
 }
 \value{
-A vector contaning the depth values of \code{dts} with respect to \code{dt}.
+A vector containing the depth values of \code{dts} with respect to \code{dt}.
 }
 \description{
 Helper function to compute the random projection depth of multivariate point(s) with respect
@@ -31,7 +31,7 @@ projection_depth(dts = iris[1:5, -5], dt = iris[1:10, -5], n_projection = 7, see
 }
 \seealso{
 \code{\link{msplot}} for outlier detection using msplot and \code{\link{dir_out}}
- for directional outlyingess.
+ for directional outlyingness.
 }
 \author{
 Oluwasegun Taiwo Ojo

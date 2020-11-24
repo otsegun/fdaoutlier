@@ -7,7 +7,7 @@
 \format{
 A list containing 2 elements:
 \itemize{
-  \item \code{data:}  A matrix of 100 by 50 contanining 100 functional observed on 50 domain points.
+  \item \code{data:}  A matrix of 100 by 50 containing 100 functional observed on 50 domain points.
    \item \code{true_outlier:} An integer vector containing indices which indicate observations in \code{sim_data1$data}
    that are magnitude outliers.
  }
@@ -22,7 +22,7 @@ sim_data1
 A simulated dataset containing 100 functional observation observed on 50 domain points.
 Data was simulated from a simple magnitude outlier model with main model :
 \deqn{X(t) = 4t + e(t)}
-and contimation model:
+and contamination model:
 \deqn{X(t) = 4t + 8k + e(t)}
 where \eqn{t \in [0,1]}, and  \eqn{e(t)} is a Gaussian process with zero mean and covariance function
 \deqn{\gamma(s,t) = exp{-|t-s|}}

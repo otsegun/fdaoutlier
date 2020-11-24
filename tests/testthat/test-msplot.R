@@ -15,14 +15,19 @@ test_that("msplot works", {
   #univariate mean of outlyingness
   # tmp_msplot_univ <- "tests/reference_files/ref_msplot_meanout_univ.rda"
   # expect_known_value(ms_univ$mean_outlyingness, tmp_msplot_univ, update = T, print = T)
-  expect_known_value(ms_univ$mean_outlyingness, "../reference_files/ref_msplot_meanout_univ.rda",
-                     update = F, print = T)
+  # expect_known_value(ms_univ$mean_outlyingness, "../reference_files/ref_msplot_meanout_univ.rda",
+  #                    update = F, print = T)
+  expect_equal(ms_univ$mean_outlyingness, c(-3.914187996322071, 0.799832282094095,
+                                            -0.656101785795584, 3.985668697844344,
+                                            0.061413333960102))
 
   #multivariate variation of outlyingness
   # tmp_msplot_multiv <- "tests/reference_files/ref_msplot_varout_multiv.rda"
   # expect_known_value(ms_multiv$var_outlyingness, tmp_msplot_multiv, update = T, print = T)
-  expect_known_value(ms_multiv$var_outlyingness, "../reference_files/rref_msplot_varout_multiv.rda",
-                     update = F, print = T)
+  # expect_known_value( "../reference_files/ref_msplot_varout_multiv.rda",
+  #                    update = F, print = T)
+  expect_equal(ms_multiv$var_outlyingness, c(283.159734194725274, 6.614769686570630, 0.222222222222222,
+                                             17.322766085413605, 13.382474792869186))
 
 
 })

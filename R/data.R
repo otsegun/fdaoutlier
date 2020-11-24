@@ -1,6 +1,6 @@
 #' Spanish Weather Data
 #'
-#' A dataset containing daily teperature, log precipitation and wind speed of 73 spanish weather stations
+#' A dataset containing daily temperature, log precipitation and wind speed of 73 spanish weather stations
 #' in Spain between 1980 - 2009.
 #' @name spanish_weather
 #'
@@ -27,7 +27,7 @@
 #'    with UTF-8 string). Leap years temperatures for February 28 and 29 were averaged.}
 #'
 #'    \item{\code{$wind_speed:}}{A matrix of size 73 (stations) by 365 (days) containing
-#'    average daily windspeed for the period 1980-2009 (in m/s).}
+#'    average daily wind speed for the period 1980-2009 (in m/s).}
 #'
 #'   \item{\code{$logprec:}}{A matrix of size 73 (stations) by 365 (days) containing average daily log precipitation
 #'   for the period 1980-2009 (in log mm). Negligible precipitation (less than 1 tenth of mm)
@@ -60,7 +60,7 @@
 #' @description A simulated dataset containing 100 functional observation observed on 50 domain points.
 #' Data was simulated from a simple magnitude outlier model with main model :
 #'\deqn{X(t) = 4t + e(t)}
-#'and contimation model:
+#'and contamination model:
 #'\deqn{X(t) = 4t + 8k + e(t)}
 #'where \eqn{t \in [0,1]}, and  \eqn{e(t)} is a Gaussian process with zero mean and covariance function
 #' \deqn{\gamma(s,t) = exp{-|t-s|}}
@@ -74,7 +74,7 @@
 #'
 #' @format A list containing 2 elements:
 #' \itemize{
-#'   \item \code{data:}  A matrix of 100 by 50 contanining 100 functional observed on 50 domain points.
+#'   \item \code{data:}  A matrix of 100 by 50 containing 100 functional observed on 50 domain points.
 #'    \item \code{true_outlier:} An integer vector containing indices which indicate observations in \code{sim_data1$data}
 #'    that are magnitude outliers.
 #'  }

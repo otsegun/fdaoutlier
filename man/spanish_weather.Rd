@@ -26,7 +26,7 @@ A list containing :
    with UTF-8 string). Leap years temperatures for February 28 and 29 were averaged.}
 
    \item{\code{$wind_speed:}}{A matrix of size 73 (stations) by 365 (days) containing
-   average daily windspeed for the period 1980-2009 (in m/s).}
+   average daily wind speed for the period 1980-2009 (in m/s).}
 
   \item{\code{$logprec:}}{A matrix of size 73 (stations) by 365 (days) containing average daily log precipitation
   for the period 1980-2009 (in log mm). Negligible precipitation (less than 1 tenth of mm)
@@ -41,7 +41,7 @@ Data obtained from the \code{fda.usc}\href{http://dx.doi.org/10.18637/jss.v051.i
 spanish_weather
 }
 \description{
-A dataset containing daily teperature, log precipitation and wind speed of 73 spanish weather stations
+A dataset containing daily temperature, log precipitation and wind speed of 73 spanish weather stations
 in Spain between 1980 - 2009.
 }
 \details{

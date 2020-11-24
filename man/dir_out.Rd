@@ -2,7 +2,7 @@
 % Please edit documentation in R/directional_outlyingness.R
 \name{dir_out}
 \alias{dir_out}
-\title{Dai & Genton's directional outlyingness for univariate or multivariate functional data.}
+\title{Dai & Genton (2019) Directional outlyingness for univariate or multivariate functional data.}
 \usage{
 dir_out(
   data,
@@ -40,7 +40,7 @@ Returns a list containing: \item{mean_outlyingness}{an \code{n x d} matrix of th
  of directional outlyingness.} \item{var_outlyingness}{ a vector of length n containing
  the variation of directional outlyingness.} \item{ms_matrix}{ if
  \code{return_distance} = T, an \code{n x (d+1)} matrix whose columns are the mean and
- variation of directional outlyiness.} \item{distance}{ if \code{return_distance} = T,
+ variation of directional outlyingness.} \item{distance}{ if \code{return_distance} = T,
  a vector of distance computed from the \code{ms_matrix} using a robust estimate of
  the mean and covariance matrix.} \item{mcd_obj}{ if \code{return_distance} = T, a list
  containing the robust (minimum covariance determinant) estimate of the mean and

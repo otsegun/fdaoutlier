@@ -12,13 +12,13 @@
 #'   500 random directions for projection are generated from a scaled uniform distribution between -1 and 1.
 #' @param seed The random seed to set when generating the random directions. Defaults to NULL.
 #'
-#' @return A vector contaning the depth values of \code{dts} with respect to \code{dt}.
+#' @return A vector containing the depth values of \code{dts} with respect to \code{dt}.
 #' @author Oluwasegun Taiwo Ojo
 #' @export
 #' @importFrom stats runif
 #' @useDynLib fdaoutlier, .registration = TRUE, .fixes = "C_"
 #' @seealso \code{\link{msplot}} for outlier detection using msplot and \code{\link{dir_out}}
-#'  for directional outlyingess.
+#'  for directional outlyingness.
 #' @examples
 #' projection_depth(dts = iris[1:5, -5], dt = iris[1:10, -5], n_projection = 7, seed = 20)
 #'

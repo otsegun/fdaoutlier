@@ -22,16 +22,16 @@ A numeric vector containing the depth of each curve
 }
 \description{
 This function computes the extreme rank length depth (ERLD) of a sample of curves or functions.
-Functions have to be discretely observed on common domain points. In principle, the ERLD of a funciton \eqn{X_i}
+Functions have to be discretely observed on common domain points. In principle, the ERLD of a function \eqn{X_i}
 is the proportion of functions in the sample that is considered to be more extreme than \eqn{X_i}, an idea similar to \link{extremal_depth}.
 To determine which functions are more extreme, pointwise ranks of the functions are computed and compared pairwise.
 }
 \details{
 There are three possibilities in the (pairwise) comparison of the pointwise ranks of the functions.
-First possiblity is to consider only small values as extreme (when \code{type = "one_sided_left"}) in which case the raw pointwise ranks
+First possibility is to consider only small values as extreme (when \code{type = "one_sided_left"}) in which case the raw pointwise ranks
 \eqn{r_{ij}} are used. The second possibility is to consider only large values as extreme (when \code{type = "one_sided_right"}) in which
 case the pointwise ranks used are computed as \eqn{R_{ij} = n + 1 - r_{ij} } where \eqn{r_{ij}} is the raw pointwise rank of the function
-\eqn{i} at design point \eqn{j} and \eqn{n} is the number of functions in the sample. Third possiblity is to consider both small and
+\eqn{i} at design point \eqn{j} and \eqn{n} is the number of functions in the sample. Third possibility is to consider both small and
 large values as extreme (when \code{type = "two_sided"}) in which case the pointwise ranks used is computed as
 \eqn{R_{ij} = min(r_ij, n + 1 - r_{ij})}. In the computation of the raw pointwise ranks \eqn{r_{ij}}, ties are broken using
 an average. See Dai et al. (2020)\href{https://doi.org/10.1016/j.csda.2020.106960}{<doi:10.1016/j.csda.2020.106960>} and

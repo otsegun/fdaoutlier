@@ -1,10 +1,10 @@
 Package: fdaoutlier
 Title: Outlier Detection Tools for Functional Data Analysis
-Version: 0.0.0.9000
+Version: 0.1.0
 Authors@R: 
     c(person(given = "Oluwasegun Taiwo",
            family = "Ojo",
-           role = c("aut", "cre"),
+           role = c("aut", "cre", "cph"),
            email = "seguntaiwoojo@gmail.com", 
            comment = c(ORCID = "0000-0001-9629-6990")),
       person(given = "Rosa Elvira",
@@ -15,15 +15,18 @@ Authors@R:
            family = "Fernández Anta",
            role = c("aut", "fnd"),
            email = "antonio.fernandez@imdea.org"))
-Description: fdaoutlier is a collection of functions for outlier detection in functional data analysis.
+Description: A collection of functions for outlier detection in functional data analysis. Methods implemented include directional outlyingness, MS-plot, total variation depth, and sequential transformations among others. 
 License: GPL-3
+URL: https://github.com/otsegun/fdaoutlier
 Encoding: UTF-8
 LazyData: true
 Suggests: 
     testthat (>= 2.1.0),
-    covr
+    covr,
+    spelling
 RoxygenNote: 7.1.1
 Imports: 
     MASS
 Depends:
     R (>= 2.10)
+Language: en-US

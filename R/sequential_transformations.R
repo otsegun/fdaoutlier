@@ -5,7 +5,7 @@
 #' A sequence of transformations are applied to the functional data and after each transformation, a functional
 #' boxplot is applied on the transformed data and outliers flagged by the functional data are noted. A number of
 #' transformations mentioned in Dai et al. (2020)\href{https://doi.org/10.1016/j.csda.2020.106960}{<doi:10.1016/j.csda.2020.106960>}
-#' are supported including vertical alighnment ("T1(X)(t)"), normalization ("T2(X)(t)"),
+#' are supported including vertical alignment ("T1(X)(t)"), normalization ("T2(X)(t)"),
 #' one order of differencing ("D1(X)(t)" and "D2(X)(t)") and point-wise outlyingness data ("O(X)(t)"). The feature alignment
 #' transformation based on warping/curve registration is not yet supported.
 #'
@@ -20,7 +20,7 @@
 #'  on the data and their meanings are described as follows:
 #'  \describe{
 #'   \item{\code{"T0"} and \code{"D0"}}{Functional boxplot applied on raw data (no transformation is applied).}
-#'    \item{\code{"T1"}}{Apply vartical alignment on data, i.e. subtract from each curve its expectation over the domain of evaluation.}
+#'    \item{\code{"T1"}}{Apply vertical alignment on data, i.e. subtract from each curve its expectation over the domain of evaluation.}
 #'    \item{\code{"T2"}}{Apply normalization on data, i.e. divide each curve by its L-2 norm.}
 #'    \item{\code{"D1"} and \code{"D2" }}{Apply one order of differencing on data.}
 #'    \item{\code{"O"}}{Find the pointwise outlyingness of data. For multivariate functional data, this transformation replaces the multivariate
@@ -30,15 +30,15 @@
 #'   \code{c("T0", "D1", "D2")} and \code{c("T0", "T1", "T2", "D1", "D2")}. See Details for their meaning.
 #'
 #' @param depth_method A character value specifying depth/outlyingness method to use in the functional boxplot applied after each stage of transformation.
-#' Note that the same depth/outlyingness method is used in the functional boxplot applied after each trasformation in the sequence. The following methods
+#' Note that the same depth/outlyingness method is used in the functional boxplot applied after each transformation in the sequence. The following methods
 #' are currently supported:
 #' \describe{
 #'   \item{"mbd":}{The modified band depth with bands defined by 2 functions.
 #'   Uses the algorithm of Sun et al. (2012).}
 #'   \item{"tvd"}{The total variation depth of Huang and Sun (2019).}
 #'   \item{"extremal"}{The extremal depth of Narisetty and Nair (2016).}
-#'   \item{"dirout"}{Uses the robust distance of the mean and variation of directional outlyingess (\code{\link{dir_out}})
-#'   defined in Dai and Genton (2018). Since this method is a measure of outlyingess of a function the negative of the
+#'   \item{"dirout"}{Uses the robust distance of the mean and variation of directional outlyingness (\code{\link{dir_out}})
+#'   defined in Dai and Genton (2018). Since this method is a measure of outlyingness of a function the negative of the
 #'   computed robust distance is used in ordering the functions.}
 #'   \item{"linfinity"}{The L-infinity depth defined in Long and Huang (2015) is used in ordering functions.}
 #'   \item{"bd"}{Uses the band depth with bands defined by 2 functions according to the algorithm of Sun et al. (2012)}
@@ -55,11 +55,11 @@
 #' default if \code{erld_type} is not specified and \code{depth_method = "erld"}. The \code{"one_sided_right"} ERLD is especially useful for
 #' ordering functions of outlyingness (the output of the \code{"O"} transformation) since it considers only large values as extreme.
 #' See \link{extreme_rank_length} for details.
-#' @param dq_quantiles If \code{depth_method = "dq"}, a numeric vector of length 2 specifying the probabilites
+#' @param dq_quantiles If \code{depth_method = "dq"}, a numeric vector of length 2 specifying the probabilities
 #'  of upper and lower quantiles. Defaults to \code{c(0.025, 0.975)} for the upper and lower 2.5\% quantiles.
 #'  See \link{directional_quantile} for details.
 #' @param n_projections An integer indicating the number of random projections to use in computing the point-wise outlyingness if a 3-d array
-#'  is specified in \code{dt} i.e. (mutivariate functional data), and the transformation \code{"O"} is part of the sequence of transformations
+#'  is specified in \code{dt} i.e. (multivariate functional data), and the transformation \code{"O"} is part of the sequence of transformations
 #'  parsed to \code{sequence}. Defaults to 200L.
 #' @param seed The random seed to set when generating the random directions in the computation of the point-wise outlyingness. Defaults to NULL.
 #' in which case a seed is not set.
@@ -72,17 +72,17 @@
 #'  \code{save_data = FALSE}).}
 #'
 #' @details
-#'This function implements outlier detection using sequential transformations described in Algorihm 1 of
+#'This function implements outlier detection using sequential transformations described in Algorithm 1 of
 #'Dai et al. (2020) \href{https://doi.org/10.1016/j.csda.2020.106960}{<doi:10.1016/j.csda.2020.106960>}.
 #'A sequence of transformations are applied consecutively with the functional boxplot applied on the transformed data after
-#'each transformation. The following example sequences (and their meanining) suggested in
+#'each transformation. The following example sequences (and their meaning) suggested in
 #'Dai et al. (2020) \href{https://doi.org/10.1016/j.csda.2020.106960}{<doi:10.1016/j.csda.2020.106960>} can be parsed to
 #'argument \code{sequence}.
 #'\describe{
 #'   \item{\code{"T0"}}{Apply functional boxplot on raw data (no transformation is applied).}
-#'    \item{\code{c("T0", "T1", "D1")}}{Apply functional boxplot on raw data, then apply vartical alignment on data followed by applying
+#'    \item{\code{c("T0", "T1", "D1")}}{Apply functional boxplot on raw data, then apply vertical alignment on data followed by applying
 #'    functional boxplot again. Finally apply one order of differencing on the vertically aligned data and apply functional boxplot again.}
-#'    \item{\code{c("T0", "T1", "T2")}}{Apply functional boxplot on raw data, then apply vartical alignment on data followed by applying
+#'    \item{\code{c("T0", "T1", "T2")}}{Apply functional boxplot on raw data, then apply vertical alignment on data followed by applying
 #'    functional boxplot again. Finally apply normalization using L-2 norm on the vertically aligned data and apply functional boxplot again.}
 #'    \item{\code{c("T0", "D1", "D2")}}{Apply functional boxplot on raw data, then apply one order of difference on data followed by applying
 #'    functional boxplot again. Finally apply another one order of differencing on the differenced data and apply functional boxplot again.
@@ -90,7 +90,7 @@
 #'     \code{c("T0", "D2", "D1")} since \code{"D1"} and \code{"D2" } do the same thing which is to apply one order lag-1 difference on the data.}
 #'    \item{\code{"O"}}{Find the pointwise outlyingness of the multivariate or univariate functional data and then apply functional boxplot
 #'    on the resulting univariate functional data of pointwise outlyingness. Care must be taken to specify a one sided ordering function (i.e.
-#'    "one_sided_right" extreme rank length depth) in the functional boxplot used on the data of piont-wise outlyingness. This is because only
+#'    "one_sided_right" extreme rank length depth) in the functional boxplot used on the data of point-wise outlyingness. This is because only
 #'    large values should be considered extreme in the data of the piont-wise outlyingness.}
 #'  }
 #' For multivariate functional data (when a 3-d array is supplied to \code{dt}), the sequence of transformation must always begin with \code{"O"}

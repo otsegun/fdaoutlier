@@ -21,10 +21,10 @@
 #'  remaining observations are used in a functional boxplot to detect magnitude outliers.  The central region
 #'  of this functional boxplot (\code{central_region_tvd}) is w.r.t. to the original number of curves. Thus if
 #'  8 shape outliers are found out of 100 curves, specifying \code{central_region_tvd} = 0.5 will ensure that
-#'  50 observations are used as the central region in the functional boxplot on the ramining 92 observations.
+#'  50 observations are used as the central region in the functional boxplot on the remaining 92 observations.
 #'
 #'
-#' @returns Returns a list contaning the following
+#' @returns Returns a list containing the following
 #'   \item{\code{outliers}}{the indices of the (shape and magnitude) outliers}
 #'   \item{\code{shape_outliers}}{the indices of the shape outliers}
 #'   \item{\code{magnitude_outliers}}{the indices of the magnitude outliers}
