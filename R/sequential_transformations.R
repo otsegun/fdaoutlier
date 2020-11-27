@@ -91,7 +91,7 @@
 #'    \item{\code{"O"}}{Find the pointwise outlyingness of the multivariate or univariate functional data and then apply functional boxplot
 #'    on the resulting univariate functional data of pointwise outlyingness. Care must be taken to specify a one sided ordering function (i.e.
 #'    "one_sided_right" extreme rank length depth) in the functional boxplot used on the data of point-wise outlyingness. This is because only
-#'    large values should be considered extreme in the data of the piont-wise outlyingness.}
+#'    large values should be considered extreme in the data of the point-wise outlyingness.}
 #'  }
 #' For multivariate functional data (when a 3-d array is supplied to \code{dt}), the sequence of transformation must always begin with \code{"O"}
 #' so that the multivariate data can be replaced with the univariate data of point-wise outlyingness which the functional boxplot can subsequently process
