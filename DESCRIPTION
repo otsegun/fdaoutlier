@@ -12,12 +12,13 @@ Authors@R:
            role = c("aut"),
            email = "lillo@est-econ.uc3m.es"),
       person(given = "Antonio",
-           family = "Fernández Anta",
+           family = "Fernandez Anta",
            role = c("aut", "fnd"),
            email = "antonio.fernandez@imdea.org"))
 Description: A collection of functions for outlier detection in functional data analysis. Methods implemented include directional outlyingness, MS-plot, total variation depth, and sequential transformations among others. 
 License: GPL-3
 URL: https://github.com/otsegun/fdaoutlier
+BugReports: https://github.com/otsegun/fdaoutlier/issues
 Encoding: UTF-8
 LazyData: true
 Suggests: 

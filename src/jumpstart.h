@@ -4,6 +4,7 @@
 #include <vector>
 #include <algorithm>
 #include <numeric>
+#include <cmath>
 
 
 void customMedian(std::vector<double> &rowVector, double &median, const int len);
