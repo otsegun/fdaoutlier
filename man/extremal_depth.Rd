@@ -17,7 +17,7 @@ A vector containing the extremal depths of the rows of \code{dt}.
 Compute extremal depth for functional data
 }
 \details{
-This function computes the extremal depth a univariate functional data. The extremal depth of a function
+This function computes the extremal depth of a univariate functional data. The extremal depth of a function
 \eqn{g} with respect to a set of function \eqn{S} denoted by \eqn{ED(g, S)} is the proportion
 of functions in \eqn{S} that is more extreme than \eqn{g}. The functions are ordered using depths cumulative
 distribution functions (d-CDFs). Extremal depth like the name implies is based on extreme outlyingness and it

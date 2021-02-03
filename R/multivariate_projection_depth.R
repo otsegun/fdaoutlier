@@ -55,8 +55,15 @@ projection_depth <- function(dts, dt = dts, n_projections = 500L, seed = NULL){
   u_matrix <- matrix(runif(d*n_projections,-1,1), n_projections, d)
   u_matrix <- u_matrix/sqrt(rowSums(u_matrix*u_matrix))
 
+  # u_matrix <- matrix(runif(d*n_projections,-1,1), d, n_projections)
+  # u_matrix <- u_matrix/rep(sqrt(rowSums(u_matrix*u_matrix)), rep(d,n))
+  # # d by n / n
+
   result = .Call(C_projectionDepth,
-                 as.double(t(dts)), as.double(t(dt)), as.double(t(u_matrix)),
+                 as.double(t(dts)),
+                 as.double(t(dt)),
+                 as.double(t(u_matrix)),
+                 #as.double(u_matrix),
                  m, n, d, n_projections,
                  PACKAGE = "fdaoutlier")
   return(result)

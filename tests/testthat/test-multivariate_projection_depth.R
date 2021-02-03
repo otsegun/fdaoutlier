@@ -1,4 +1,3 @@
-# tested with fda.usc::mdepth.RP on 09-09-20 by Segun
 test_that("projection_depth handles unconventional inputs, non-matrices,  and non-dataframe objects", {
   expect_error(projection_depth(dts = list()) )
 })

@@ -6,7 +6,7 @@
 #'   points.
 #'
 #' @details
-#' This function computes the extremal depth a univariate functional data. The extremal depth of a function
+#' This function computes the extremal depth of a univariate functional data. The extremal depth of a function
 #' \eqn{g} with respect to a set of function \eqn{S} denoted by \eqn{ED(g, S)} is the proportion
 #' of functions in \eqn{S} that is more extreme than \eqn{g}. The functions are ordered using depths cumulative
 #' distribution functions (d-CDFs). Extremal depth like the name implies is based on extreme outlyingness and it
@@ -53,8 +53,10 @@ extremal_depth <- function(dt){
 
   depth_levels <- pmfs[1,]
   masses <- pmfs[2, ]
-  # order functions accordint to depth_levels and mass
-  ordered_functions <- sapply(unique(sort(depth_levels)), function(x){
+  # order functions according to depth_levels and mass
+  ordered_functions <- sapply(sort(unique(depth_levels),
+                                   method = "quick"),
+                              function(x){
     fns_depth_level <- which(depth_levels == x)
     if(length(fns_depth_level) > 1){
       fns_depth_level[order(masses[fns_depth_level], decreasing = T)]
@@ -68,7 +70,7 @@ extremal_depth <- function(dt){
 
 pwise_depth <- function(dt, n) {
   pdepth <- apply(dt, 2, function(i){
-    (1 - abs(2*rank(i)-n -1)/n)
+    (1 - abs(2*rank(i) - n -1)/n) # for rank r, d = ((r - 1) + (n - r))/n
   })
   return(pdepth)
 }
