@@ -2,7 +2,7 @@
 % Please edit documentation in R/muod.R
 \name{muod}
 \alias{muod}
-\title{Massic Unspervised Outlier Detection}
+\title{Massive Unspervised Outlier Detection (MUOD)}
 \usage{
 muod(data, cut_method = c("boxplot", "tangent"))
 }
@@ -18,5 +18,5 @@ Returns a list containing the following
   \item{\code{indices}}{a dataframe containing the shape, magnitude and amplitude indices}
 }
 \description{
-Massic Unspervised Outlier Detection
+Massive Unspervised Outlier Detection (MUOD)
 }

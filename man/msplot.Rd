@@ -10,7 +10,13 @@ msplot(
   data_depth = c("random_projections"),
   n_projections = 200,
   seed = NULL,
-  return_mvdir = TRUE
+  return_mvdir = TRUE,
+  plot = TRUE,
+  plot_title = "Magnitude Shape Plot",
+  title_cex = 1.5,
+  show_legend = T,
+  ylabel = "VO",
+  xlabel
 )
 }
 \arguments{
@@ -31,6 +37,22 @@ NULL by default in which case no seed is set.}
 outlyingness (\eqn{MO} and \eqn{VO}). For univariate functional data, \eqn{MO} and \eqn{VO} are vectors.
 For multivariate functional data, \eqn{VO} is a vector while \eqn{MO} is a matrix of size
  \eqn{n x d}.}
+
+\item{plot}{A logical indicating whether to make the msplot of \eqn{VO} against \eqn{MO}. In the case
+of multivariate functional data, a plot of  \eqn{VO} against \eqn{||MO||} is made.}
+
+\item{plot_title}{The title of the plot. Set to "Magnitude Shape Plot" by default. Ignored if
+\code{plot = FALSE}.}
+
+\item{title_cex}{Numerical value indicating the size of the plot title relative to the device default.
+Set to 1.5 by default. Ignored if \code{plot = FALSE}.}
+
+\item{show_legend}{A logical indicating whether to add legend to plot if \code{plot = TRUE}.}
+
+\item{ylabel}{The label of the y-axis. Set to "VO" by default.}
+
+\item{xlabel}{The label of the x-axis if \code{plot = TRUE}. If not specified (default), set to "MO"
+for univariate functional data and "||MO||" for multivariate functional data.}
 }
 \value{
 Returns a list containing:
@@ -47,9 +69,8 @@ Returns a list containing:
 \description{
 This function finds outliers in univariate and multivariate functional data using the MS-Plot
 method described in Dai and Genton (2018)\href{https://doi.org/10.1080/10618600.2018.1473781}{<doi:10.1080/10618600.2018.1473781>}.
-Indices of observations flagged as outliers are returned. Despite the name, this function does not produce a plot.
-However, the mean and variation of directional outlyingness (\eqn{MO} and \eqn{VO}) can be requested and a subsequent
-plot of \eqn{MO} against \eqn{VO} can be easily generated using any preferred plotting tool.
+Indices of observations flagged as outliers are returned. In addition, the scatter plot of \eqn{VO} against \eqn{MO} (||MO||)
+can be requested for univariate (multivariate) functional data.
 }
 \details{
 MS-Plot finds outliers by computing

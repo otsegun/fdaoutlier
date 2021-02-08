@@ -3,9 +3,9 @@
 #'
 #' This function finds outliers in univariate and multivariate functional data using the MS-Plot
 #' method described in Dai and Genton (2018)\href{https://doi.org/10.1080/10618600.2018.1473781}{<doi:10.1080/10618600.2018.1473781>}.
-#' Indices of observations flagged as outliers are returned. Despite the name, this function does not produce a plot.
-#' However, the mean and variation of directional outlyingness (\eqn{MO} and \eqn{VO}) can be requested and a subsequent
-#' plot of \eqn{MO} against \eqn{VO} can be easily generated using any preferred plotting tool.
+#' Indices of observations flagged as outliers are returned. In addition, the scatter plot of \eqn{VO} against \eqn{MO} (||MO||)
+#' can be requested for univariate (multivariate) functional data.
+#'
 #'
 #' @param data A matrix/data frame for univariate functional data (of size \eqn{n} observations by \eqn{p} domain
 #'   points) or a \eqn{3-}dimensional array for multivariate functional data (of size \eqn{n}
@@ -21,6 +21,18 @@
 #'  outlyingness (\eqn{MO} and \eqn{VO}). For univariate functional data, \eqn{MO} and \eqn{VO} are vectors.
 #'  For multivariate functional data, \eqn{VO} is a vector while \eqn{MO} is a matrix of size
 #'   \eqn{n x d}.
+#' @param plot A logical indicating whether to make the msplot of \eqn{VO} against \eqn{MO}. In the case
+#'  of multivariate functional data, a plot of  \eqn{VO} against \eqn{||MO||} is made.
+#' @param plot_title The title of the plot. Set to "Magnitude Shape Plot" by default. Ignored if
+#' \code{plot = FALSE}.
+#' @param title_cex Numerical value indicating the size of the plot title relative to the device default.
+#' Set to 1.5 by default. Ignored if \code{plot = FALSE}.
+#' @param show_legend A logical indicating whether to add legend to plot if \code{plot = TRUE}.
+#' @param xlabel The label of the x-axis if \code{plot = TRUE}. If not specified (default), set to "MO"
+#'  for univariate functional data and "||MO||" for multivariate functional data.
+#' @param ylabel The label of the y-axis. Set to "VO" by default.
+#'
+#'
 #'
 #' @details
 #'
@@ -72,19 +84,26 @@
 #'
 #' @export
 #' @importFrom grDevices rgb
+#' @importFrom graphics axis legend mtext par points
 msplot <- function(data,
                    data_depth = c("random_projections"),
                    n_projections = 200, seed = NULL,
-                   return_mvdir = TRUE) {
+                   return_mvdir = TRUE,
+                   plot = TRUE,
+                   plot_title = "Magnitude Shape Plot",
+                   title_cex = 1.5,
+                   show_legend = T,
+                   ylabel = "VO",
+                   xlabel) {
   ### pairwise plots of variation of outlyingness (VO) against mean outlyingness (MO)###
   data_dim  <- dim(data)
   #data_depth <- match.arg(data_depth)
   #if(plot) plot_type <- match.arg(plot_type)
   n <- data_dim[1]
-  dir_result <- dir_out(data, data_depth = data_depth, n_projections = n_projections, seed = seed)
+  dir_result <- dir_out(data, data_depth = data_depth,
+                        n_projections = n_projections, seed = seed)
 
-  # univariate
-  if (length(data_dim) == 2){
+  if (length(data_dim) == 2){ # univariate
     dist <- dir_result$distance
     rocke_factors <- hardin_factor_numeric(n, 2)
     rocke_factor1 <- rocke_factors$factor1
@@ -92,19 +111,14 @@ msplot <- function(data,
     cutoff_value <- rocke_cutoff/rocke_factor1 #rocke_cutoff/rocke_factor1
     outliers_index <- which(dist > cutoff_value)
     median_curve <- which.min(dist)
-    if (return_mvdir){
-      return(list(outliers_index = outliers_index,
-                  median_curve = median_curve,
-                  mean_outlyingness = dir_result$mean_outlyingness,
-                  var_outlyingness = dir_result$var_outlyingness))
-
-
-    } else{
-      return(list(outliers_index = outliers_index,
-                  median_curve = median_curve))
+    if (plot){
+      # mo and vo
+      myx <- dir_result$mean_outlyingness
+      myy <- dir_result$var_outlyingness
+      if(missing(xlabel)) xlabel <- "MO"
     }
 
-  } else if (length(data_dim) == 3){
+  } else if (length(data_dim) == 3){ # multivariate
     d <- data_dim[3]
     rocke_factors  <- hardin_factor_numeric(n = n, dimension = d + 1)
     rocke_factor1 <- rocke_factors$factor1
@@ -114,13 +128,54 @@ msplot <- function(data,
     outliers_index <- which(dir_result$distance > cutoff_value)
     median_curve <- which.min(dir_result$distance)
 
-    if (return_mvdir){
-      return(list(outliers_index = outliers_index,
-                  median_curve = median_curve,
-                  mean_outlyingness = dir_result$mean_outlyingness,
-                  var_outlyingness = dir_result$var_outlyingness))
-    }else{
-      return(list(outliers_index = outliers_index,
-                  median_curve = median_curve))
+    if (plot){
+      # mo and vo
+      myx <- sqrt(rowSums(dir_result$mean_outlyingness^2, na.rm = T))
+      myy <- dir_result$var_outlyingness
+      if(missing(xlabel)) xlabel <- "||MO||"
     }
-  }}
+
+  }
+  if(plot){
+    # plot area
+    plot(myx, myy, type = "n", xlab = xlabel,
+         ylab = ylabel, xlim = range(myx) + c(-sd(myx), 1.5*sd(myx) ),
+         ylim = range(myy) + c(-.2*sd(myy), 1*sd(myy) ), axes = F,
+         col.lab = "gray20")
+    #add axis
+    axis(1, col = "white", col.ticks = "grey51", lwd.ticks = 0.2, tck = 1,
+         cex.axis = 0.9, col.axis = "gray30")
+    axis(2, col = "white", col.ticks = "grey51", lwd.ticks = 0.2, tck = 1,
+         cex.axis = 0.9, col.axis = "gray30")
+    if(length(outliers_index > 0)){
+      points(myx[-outliers_index], myy[-outliers_index], bg = "gray60", pch = 21)
+      points(myx[outliers_index], myy[outliers_index], pch = 3)
+    } else{
+      points(myx, myy, bg = "gray60", pch = 21)
+    }
+    mtext(plot_title,3, adj = 0.5, line = 0, cex = title_cex)
+    # mtext(paste0(length(outliers_index), " outliers detected"),
+    #       1, adj = 1, line = 3, cex =.8, font = 3, col = "gray41")
+    if(show_legend){
+      legend("topright", legend = c("normal", "outlier"),
+             pch = c(21, 3), cex = 0.9,
+             pt.bg = "gray60", col = "gray0",
+             text.col = "gray30", bty = "o",
+             box.lwd = .1, xjust = 0, inset = .03)
+    }
+  }
+
+
+  if (return_mvdir){
+    return(list(outliers_index = outliers_index,
+                median_curve = median_curve,
+                mean_outlyingness = dir_result$mean_outlyingness,
+                var_outlyingness = dir_result$var_outlyingness))
+
+
+  } else{
+    return(list(outliers_index = outliers_index,
+                median_curve = median_curve))
+  }
+
+}
