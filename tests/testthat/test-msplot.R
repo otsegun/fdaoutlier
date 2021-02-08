@@ -9,10 +9,10 @@ test_that("msplot works", {
   multiv_data <- array(multiv_data, dim = c(5, 3, 2))
   univ_data <- multiv_data[,,1]
 
-  ms_multiv <- msplot(data = multiv_data, n_projections = 7, seed = 20,
-                      plot = F, return_mvdir = TRUE)
-  ms_univ <- msplot(data = univ_data, n_projections = 7, seed = 20,
-                    plot = F,return_mvdir = TRUE, show_legend = F,
+  ms_multiv <- msplot(dts = multiv_data, n_projections = 7, seed = 20,
+                      plot = T, return_mvdir = TRUE)
+  ms_univ <- msplot(dts = univ_data, n_projections = 7, seed = 20,
+                    plot = T,return_mvdir = TRUE, show_legend = F,
                     plot_title = "msplot", title_cex = 2.5)
 
   #univariate mean of outlyingness

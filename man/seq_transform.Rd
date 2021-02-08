@@ -5,7 +5,7 @@
 \title{Find and classify outliers functional outliers using Sequential Transformation}
 \usage{
 seq_transform(
-  dt,
+  dts,
   sequence = c("T0", "T1", "T2"),
   depth_method = c("mbd", "tvd", "extremal", "dirout", "linfinity", "bd", "erld", "dq"),
   save_data = FALSE,
@@ -18,11 +18,11 @@ seq_transform(
 )
 }
 \arguments{
-\item{dt}{A matrix for univariate functional data (of size \code{n} observations by \code{p} domain
+\item{dts}{A matrix for univariate functional data (of size \code{n} observations by \code{p} domain
 points) or a 3-dimensional array for multivariate functional data (of size \code{n}
 observations by \code{p} domain points by \code{d} dimension). Only the outlyingness transformation ("O(X)(t)")
 supports multivariate functional data so the sequence of transformation must always start with outlyingness ("O(X)(t)")
-whenever a multivariate functional data is parsed to \code{dt}.}
+whenever a multivariate functional data is parsed to \code{dts}.}
 
 \item{sequence}{A character vector usually of length between 1 and 6 containing any of the strings: \code{"T0", "D0", "T1", "T2",
 "D1", "D2"} and \code{"O"} (in any order). These sequence of strings specifies the sequence of transformations to be applied
@@ -73,7 +73,7 @@ of upper and lower quantiles. Defaults to \code{c(0.025, 0.975)} for the upper a
 See \link{directional_quantile} for details.}
 
 \item{n_projections}{An integer indicating the number of random projections to use in computing the point-wise outlyingness if a 3-d array
-is specified in \code{dt} i.e. (multivariate functional data), and the transformation \code{"O"} is part of the sequence of transformations
+is specified in \code{dts} i.e. (multivariate functional data), and the transformation \code{"O"} is part of the sequence of transformations
 parsed to \code{sequence}. Defaults to 200L.}
 
 \item{seed}{The random seed to set when generating the random directions in the computation of the point-wise outlyingness. Defaults to NULL.
@@ -120,7 +120,7 @@ argument \code{sequence}.
    "one_sided_right" extreme rank length depth) in the functional boxplot used on the data of point-wise outlyingness. This is because only
    large values should be considered extreme in the data of the point-wise outlyingness.}
  }
-For multivariate functional data (when a 3-d array is supplied to \code{dt}), the sequence of transformation must always begin with \code{"O"}
+For multivariate functional data (when a 3-d array is supplied to \code{dts}), the sequence of transformation must always begin with \code{"O"}
 so that the multivariate data can be replaced with the univariate data of point-wise outlyingness which the functional boxplot can subsequently process
 because the \code{\link{functional_boxplot}} function only supports univariate functional data.
 

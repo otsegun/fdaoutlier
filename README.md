@@ -31,8 +31,8 @@ You can install the current version of fdaoutliers from CRAN with:
 install.packages("fdaoutlier")
 ```
 
-or the lastest the development version from
-[GitHub](https://github.com/) with:
+or the latest the development version from [GitHub](https://github.com/)
+with:
 
 ``` r
 devtools::install_github("otsegun/fdaoutlier")
@@ -45,10 +45,13 @@ library(fdaoutlier)
 data(sim_data1)
 # MSPLOT Dai & Genton (2018)
 msplot(sim_data1$data, data_depth = "random_projection")$outliers_index
-#>  [1]  4 12 17 23 40 59 70 79 82 83 84 93
-sim_data1$true_outliers
-#>  [1]  4 12 17 23 40 59 79 82 83 84
 ```
+
+<img src="man/figures/README-unnamed-chunk-4-1.png" width="100%" />
+
+    #> NULL
+    sim_data1$true_outliers
+    #>  [1]  4 12 17 23 40 59 79 82 83 84
 
 ## Methods Implemented
 

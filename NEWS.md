@@ -1,4 +1,6 @@
 # fdaoutlier 0.1.1.9000
+* Add msplot plotting function
+* Deprecated `tvd_mss()` for `tvdmss()`
 
 # fdaoutlier 0.1.1
 * patch for error on CRAN checks

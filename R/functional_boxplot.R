@@ -6,7 +6,7 @@
 #' finding outliers in other functions. Different depth and outlyingness methods are supported for ordering
 #' functions. Alternatively, the depth values of the functions can be supplied directly.
 #'
-#' @param dt A matrix or data frame of size \eqn{n} observations/curves by \eqn{p} domain/evaluation points for univariate functional data.
+#' @param dts A matrix or data frame of size \eqn{n} observations/curves by \eqn{p} domain/evaluation points for univariate functional data.
 #' @param depth_method A character value specifying the method to use for computing the depth values (if \code{depth_values} is not supplied)
 #'  used in ordering the functions. The following methods are are supported:
 #'  \describe{
@@ -25,8 +25,8 @@
 #'    }
 #'   The default method is \code{"mbd"}. Alternatively, the \code{depth_values} of the functions can be supplied in which case
 #' the depths are not computed and \code{depth_method} is ignored.
-#' @param depth_values A numeric vector containing the depth values of the functions in \code{dt} to use for ordering functions.
-#'    \code{length(depth_values)} must be equal to number of rows of \code{dt}. If \code{depth_values} is specified, the depth is not
+#' @param depth_values A numeric vector containing the depth values of the functions in \code{dts} to use for ordering functions.
+#'    \code{length(depth_values)} must be equal to number of rows of \code{dts}. If \code{depth_values} is specified, the depth is not
 #'     computed and any method specified in \code{depth_method} is ignored.
 #' @param emp_factor A numeric value specifying the empirical factor for the boxplot. Defaults to 1.5.
 #' @param central_region A numeric value between 0 and 1 indicating the probability of central region. Defaults to 0.5.
@@ -41,7 +41,7 @@
 #'
 #'
 #' @return A list containing: \item{outliers}{The indices of the functions/curves flagged as outliers.}
-#' \item{depth_values}{The depths of the functions/curves in \code{dt}.}
+#' \item{depth_values}{The depths of the functions/curves in \code{dts}.}
 #' \item{median_curve}{The index of the median curve, which is the curve with the largest depth value (or smallest outlyingness value).}
 #'
 #' @references
@@ -54,7 +54,7 @@
 #' @examples
 #' fbplot_obj <- functional_boxplot(sim_data1$data, depth_method = "mbd")
 #' fbplot_obj$outliers
-functional_boxplot <- function(dt,
+functional_boxplot <- function(dts,
                                depth_method = c("mbd", "tvd", "extremal", "dirout",
                                                  "linfinity", "bd", "erld", "dq"),
                                depth_values = NULL,
@@ -62,57 +62,57 @@ functional_boxplot <- function(dt,
                                central_region = 0.5,
                                erld_type = NULL,
                                dq_quantiles = NULL){
-  dm <- dim(dt)
+  dm <- dim(dts)
   n <- dm[1]
   p <- dm[2]
 
-  if (is.data.frame(dt)) {
-    dt <- as.matrix(dt)
+  if (is.data.frame(dts)) {
+    dt <- as.matrix(dts)
   }
-  if (any(!is.finite(dt))) {
-    stop("Missing or infinite values are not allowed in argument \"dt\"")
+  if (any(!is.finite(dts))) {
+    stop("Missing or infinite values are not allowed in argument \"dts\"")
   }
 
-  if (!is.array(dt) || !is.numeric(dt))
-    stop("Argument \"dt\" must be a numeric matrix or dataframe.")
+  if (!is.array(dts) || !is.numeric(dts))
+    stop("Argument \"dts\" must be a numeric matrix or dataframe.")
 
 
 
-  if (length(dm) != 2) stop("Dimension of 'dt' must be 2. Only univariate functional data is supported.")
+  if (length(dm) != 2) stop("Dimension of 'dts' must be of length 2. Only univariate functional data is supported.")
 
   if(is.null(depth_values)){
     depth_method <- match.arg(depth_method)
     if(depth_method == "mbd"){
-      depth_values <- modified_band_depth(dt)
+      depth_values <- modified_band_depth(dts)
     }else if( depth_method == "tvd"){
-      depth_values <- total_variation_depth(dt)$tvd
+      depth_values <- total_variation_depth(dts)$tvd
     }else if(depth_method == "extremal"){
-      depth_values <- extremal_depth(dt)
+      depth_values <- extremal_depth(dts)
     }else if(depth_method == "dirout"){
-      depth_values <- -dir_out(dt, return_distance = T)$distance
+      depth_values <- -dir_out(dts, return_distance = T)$distance
     }else if(depth_method == "linfinity"){
-      depth_values <- linfinity_depth(dt)
+      depth_values <- linfinity_depth(dts)
     }else if(depth_method == "bd"){
-      depth_values <- band_depth(dt)
+      depth_values <- band_depth(dts)
     } else if(depth_method == "erld"){
       if(is.null(erld_type)){
         warning("The 'type' argument for extreme rank length depth not specified. Using the default type of 'two_sided'. ")
-        depth_values <- extreme_rank_length(dt)
+        depth_values <- extreme_rank_length(dts)
       }else{
-        depth_values <- extreme_rank_length(dt, type = erld_type)
+        depth_values <- extreme_rank_length(dts, type = erld_type)
       }
 
     }else if(depth_method == "dq"){
       if(is.null(dq_quantiles)){
         warning("Using the default quantile probabilites of 0.025 and 0.975 for directional quantile.")
-        depth_values <- -directional_quantile(dt)
+        depth_values <- -directional_quantile(dts)
       }else{
-        depth_values <- -directional_quantile(dt, quantiles = dq_quantiles)
+        depth_values <- -directional_quantile(dts, quantiles = dq_quantiles)
       }
     }
   } else{
     if(length(depth_values) != n){
-      stop("Length of argument 'depth_values' must be equal to the number of rows in 'dt'.")
+      stop("Length of argument 'depth_values' must be equal to the number of rows in 'dts'.")
     }
   }
 
@@ -130,15 +130,15 @@ functional_boxplot <- function(dt,
   #repnp <- rep(n, p)
 
   n_obs_central <- ceiling(n*central_region) # at least 50%
-  center <- dt[index_sorted_depth[1:n_obs_central], ]
+  center <- dts[index_sorted_depth[1:n_obs_central], ]
 
   inf <- apply(center,2,min)
   sup <- apply(center,2,max)
   distt <- emp_factor*(sup-inf)
   upper <- sup + distt
   lower <- inf - distt
-  dt <- t(dt)
-  outlier_test <- (dt <= lower) + (dt >= upper)
+  dts <- t(dts)
+  outlier_test <- (dts <= lower) + (dts >= upper)
   outliers <- which(colSums(outlier_test) > 0)
   return(list(outliers = unname(outliers),
               depth_values = depth_values,

@@ -1,6 +1,6 @@
 test_that("dir_out handles unconventional inputs, non-matrices,  and non-array objects", {
-  expect_error(dir_out(data = list()) )
-  expect_error(dir_out(data = data.frame()) )
+  expect_error(dir_out(dts = list()) )
+  expect_error(dir_out(dts = data.frame()) )
 })
 
 multiv_data <- c(-1.00699287, -0.53823436, -0.55879513, -0.18606117, -0.52050693,
@@ -16,18 +16,18 @@ univ_data <- multiv_data[,,1]
 test_that("dir_out produces correct results", {
 
 
-  multiv_result <- dir_out(data = multiv_data, return_dir_matrix = T,
+  multiv_result <- dir_out(dts = multiv_data, return_dir_matrix = T,
                            data_depth = "random_projections",
                            n_projections = 500,
                            seed = 20,
                            return_distance = T)
-  multiv_result2 <- dir_out(data = multiv_data, return_dir_matrix = T,
+  multiv_result2 <- dir_out(dts = multiv_data, return_dir_matrix = T,
                             data_depth = "random_projections2",
                             n_projections = 500,
                             seed = 20,
                             return_distance = T)
 
-  univ_result <- dir_out(data = univ_data, return_dir_matrix = T, data_depth = "random_projections", return_distance = T)
+  univ_result <- dir_out(dts = univ_data, return_dir_matrix = T, data_depth = "random_projections", return_distance = T)
 
   # that a list a returned
   expect_is(multiv_result,  "list")
@@ -96,14 +96,14 @@ test_that("dir_out produces correct results", {
 
 test_that("dir_out arguments return_dir_matrix and return_distance works well", {
 
-    multiv_result_test3 <- dir_out(data = multiv_data, return_dir_matrix = F,
+    multiv_result_test3 <- dir_out(dts = multiv_data, return_dir_matrix = F,
                            data_depth = "random_projections",
                            n_projections = 3,
                            seed = NULL,
                            return_distance = T)
     expect_null(multiv_result_test3$dirout_matrix)
 
-    multiv_result_test4 <- dir_out(data = multiv_data, return_dir_matrix = F,
+    multiv_result_test4 <- dir_out(dts = multiv_data, return_dir_matrix = F,
                                    data_depth = "random_projections",
                                    n_projections = 3,
                                    seed = NULL,

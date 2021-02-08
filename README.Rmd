@@ -33,7 +33,7 @@ You can install the current version of fdaoutliers from CRAN with:
 install.packages("fdaoutlier")
 ```
 
-or the lastest the development version from [GitHub](https://github.com/) with:
+or the latest the development version from [GitHub](https://github.com/) with:
 
 ```{r echo = T, eval = F}
 devtools::install_github("otsegun/fdaoutlier")

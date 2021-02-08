@@ -4,16 +4,16 @@
 \alias{total_variation_depth}
 \title{Total Variation Depth and Modified Shape Similarity Index}
 \usage{
-total_variation_depth(data)
+total_variation_depth(dts)
 }
 \arguments{
-\item{data}{A matrix or dataframe of size \eqn{n} observations/curves by \eqn{p} domain/evaluation
+\item{dts}{A matrix or dataframe of size \eqn{n} observations/curves by \eqn{p} domain/evaluation
 points.}
 }
 \value{
 Returns a list containing the following
-  \item{\code{tvd}}{the total variation depths of the observations of \code{data}}
-  \item{\code{mss}}{the modified shape similarity index of the observations of \code{data}}
+  \item{\code{tvd}}{the total variation depths of the observations of \code{dts}}
+  \item{\code{mss}}{the modified shape similarity index of the observations of \code{dts}}
 }
 \description{
 This function computes the total variation depth (tvd) and the modified shape similarity index (mss)

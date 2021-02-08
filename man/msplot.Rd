@@ -6,7 +6,7 @@
 data.}
 \usage{
 msplot(
-  data,
+  dts,
   data_depth = c("random_projections"),
   n_projections = 200,
   seed = NULL,
@@ -20,12 +20,12 @@ msplot(
 )
 }
 \arguments{
-\item{data}{A matrix/data frame for univariate functional data (of size \eqn{n} observations by \eqn{p} domain
+\item{dts}{A matrix/data frame for univariate functional data (of size \eqn{n} observations by \eqn{p} domain
 points) or a \eqn{3-}dimensional array for multivariate functional data (of size \eqn{n}
 observations by \eqn{p} domain points by \eqn{d} dimension).}
 
 \item{data_depth}{The depth used in the computation of the directional outlyingness of
-\code{data}. The projection depth is always used. Support for other depth methods will be added.}
+\code{dts}. The projection depth is always used. Support for other depth methods will be added.}
 
 \item{n_projections}{The number of random directions to generate for computing the random projection
 depth. By default 200 directions are generated.}
@@ -86,7 +86,7 @@ for computing the directional outlyingness (as suggested by Dai and Genton (2019
 \examples{
 # Univariate magnitude model in Dai and Genton (2018).
 data(sim_data1)
-msplot_object <- msplot(data = sim_data1$data)
+msplot_object <- msplot(dts = sim_data1$data)
 msplot_object$outliers_index
 msplot_object$mean_outlyingness
 msplot_object$var_outlyingness

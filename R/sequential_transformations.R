@@ -10,11 +10,12 @@
 #' transformation based on warping/curve registration is not yet supported.
 #'
 #'
-#' @param dt A matrix for univariate functional data (of size \code{n} observations by \code{p} domain
+#' @param dts A matrix for univariate functional data (of size \code{n} observations by \code{p} domain
 #'  points) or a 3-dimensional array for multivariate functional data (of size \code{n}
 #'  observations by \code{p} domain points by \code{d} dimension). Only the outlyingness transformation ("O(X)(t)")
 #'  supports multivariate functional data so the sequence of transformation must always start with outlyingness ("O(X)(t)")
-#'  whenever a multivariate functional data is parsed to \code{dt}.
+#'  whenever a multivariate functional data is parsed to \code{dts}.
+#'
 #' @param sequence A character vector usually of length between 1 and 6 containing any of the strings: \code{"T0", "D0", "T1", "T2",
 #' "D1", "D2"} and \code{"O"} (in any order). These sequence of strings specifies the sequence of transformations to be applied
 #'  on the data and their meanings are described as follows:
@@ -59,7 +60,7 @@
 #'  of upper and lower quantiles. Defaults to \code{c(0.025, 0.975)} for the upper and lower 2.5\% quantiles.
 #'  See \link{directional_quantile} for details.
 #' @param n_projections An integer indicating the number of random projections to use in computing the point-wise outlyingness if a 3-d array
-#'  is specified in \code{dt} i.e. (multivariate functional data), and the transformation \code{"O"} is part of the sequence of transformations
+#'  is specified in \code{dts} i.e. (multivariate functional data), and the transformation \code{"O"} is part of the sequence of transformations
 #'  parsed to \code{sequence}. Defaults to 200L.
 #' @param seed The random seed to set when generating the random directions in the computation of the point-wise outlyingness. Defaults to NULL.
 #' in which case a seed is not set.
@@ -93,7 +94,7 @@
 #'    "one_sided_right" extreme rank length depth) in the functional boxplot used on the data of point-wise outlyingness. This is because only
 #'    large values should be considered extreme in the data of the point-wise outlyingness.}
 #'  }
-#' For multivariate functional data (when a 3-d array is supplied to \code{dt}), the sequence of transformation must always begin with \code{"O"}
+#' For multivariate functional data (when a 3-d array is supplied to \code{dts}), the sequence of transformation must always begin with \code{"O"}
 #' so that the multivariate data can be replaced with the univariate data of point-wise outlyingness which the functional boxplot can subsequently process
 #' because the \code{\link{functional_boxplot}} function only supports univariate functional data.
 #'
@@ -144,7 +145,7 @@
 #' head(seqobj$transformed_data$O) # univariate outlyingness data
 #'
 
-seq_transform <- function(dt, sequence = c("T0", "T1", "T2"),
+seq_transform <- function(dts, sequence = c("T0", "T1", "T2"),
                           depth_method = c("mbd", "tvd", "extremal", "dirout",
                                     "linfinity", "bd", "erld", "dq"),
                           save_data = FALSE,
@@ -154,6 +155,7 @@ seq_transform <- function(dt, sequence = c("T0", "T1", "T2"),
                           dq_quantiles = NULL,
                           n_projections = 200L,
                           seed = NULL){
+
   outliers <- list()
   if(save_data){
     transformed_data <- list()
@@ -164,50 +166,50 @@ seq_transform <- function(dt, sequence = c("T0", "T1", "T2"),
     transformation = sequence[i]
     if (transformation == "T0" || transformation == "D0"){
       ## apply functional boxplot here
-      t0_outliers <- functional_boxplot(dt, depth_method = depth_method,
+      t0_outliers <- functional_boxplot(dts, depth_method = depth_method,
                                         central_region = central_region,
                                         emp_factor = emp_factor,
                                         erld_type = erld_type,
                                         dq_quantiles = dq_quantiles)$outliers
       outliers[[i]] <- t0_outliers
-      if(save_data) transformed_data[[i]] <- dt
+      if(save_data) transformed_data[[i]] <- dts
     }else if(transformation == "T1"){
-      dt <- center_curves(dt)
-      t1_outliers <- functional_boxplot(dt, depth_method = depth_method,
+      dts <- center_curves(dts)
+      t1_outliers <- functional_boxplot(dts, depth_method = depth_method,
                                         emp_factor = emp_factor,
                                         central_region = central_region,
                                         erld_type = erld_type,
                                         dq_quantiles = dq_quantiles)$outliers
       outliers[[i]] <- t1_outliers
-      if(save_data) transformed_data[[i]] <- dt
+      if(save_data) transformed_data[[i]] <- dts
     } else if(transformation == "T2"){
-      dt <- normalize_curves(dt)
-      t2_outliers <- functional_boxplot(dt, depth_method = depth_method,
+      dts <- normalize_curves(dts)
+      t2_outliers <- functional_boxplot(dts, depth_method = depth_method,
                                         emp_factor = emp_factor,
                                         central_region = central_region,
                                         erld_type = erld_type,
                                         dq_quantiles = dq_quantiles)$outliers
       outliers[[i]] <- t2_outliers
-      if(save_data) transformed_data[[i]] <- dt
+      if(save_data) transformed_data[[i]] <- dts
     } else if(transformation == "D1"|| transformation == "D2"){
-      dt <- difference_curves(dt)
-      d1_outliers <- functional_boxplot(dt, depth_method = depth_method,
+      dts <- difference_curves(dts)
+      d1_outliers <- functional_boxplot(dts, depth_method = depth_method,
                                         emp_factor = emp_factor,
                                         central_region = central_region,
                                         erld_type = erld_type,
                                         dq_quantiles = dq_quantiles)$outliers
       outliers[[i]] <- d1_outliers
-      if(save_data) transformed_data[[i]] <- dt
+      if(save_data) transformed_data[[i]] <- dts
     } else if(transformation == "O"){
       # implement directional quantile!
-      dt <- outlyingness_curves(dt,  n_projections = n_projections, seed = seed)
-      o_outliers <- functional_boxplot(dt, depth_method = depth_method,
+      dts <- outlyingness_curves(dts,  n_projections = n_projections, seed = seed)
+      o_outliers <- functional_boxplot(dts, depth_method = depth_method,
                                        emp_factor = emp_factor,
                                        central_region = central_region,
                                        erld_type = erld_type,
                                        dq_quantiles = dq_quantiles)$outliers
       outliers[[i]] <- o_outliers
-      if(save_data) transformed_data[[i]] <- dt
+      if(save_data) transformed_data[[i]] <- dts
 
     }else {
       stop("Transformation ", transformation, ' not supported. \n')

@@ -5,7 +5,7 @@
 \title{Functional Boxplot for a sample of functions.}
 \usage{
 functional_boxplot(
-  dt,
+  dts,
   depth_method = c("mbd", "tvd", "extremal", "dirout", "linfinity", "bd", "erld", "dq"),
   depth_values = NULL,
   emp_factor = 1.5,
@@ -15,7 +15,7 @@ functional_boxplot(
 )
 }
 \arguments{
-\item{dt}{A matrix or data frame of size \eqn{n} observations/curves by \eqn{p} domain/evaluation points for univariate functional data.}
+\item{dts}{A matrix or data frame of size \eqn{n} observations/curves by \eqn{p} domain/evaluation points for univariate functional data.}
 
 \item{depth_method}{A character value specifying the method to use for computing the depth values (if \code{depth_values} is not supplied)
  used in ordering the functions. The following methods are are supported:
@@ -36,8 +36,8 @@ functional_boxplot(
   The default method is \code{"mbd"}. Alternatively, the \code{depth_values} of the functions can be supplied in which case
 the depths are not computed and \code{depth_method} is ignored.}
 
-\item{depth_values}{A numeric vector containing the depth values of the functions in \code{dt} to use for ordering functions.
-\code{length(depth_values)} must be equal to number of rows of \code{dt}. If \code{depth_values} is specified, the depth is not
+\item{depth_values}{A numeric vector containing the depth values of the functions in \code{dts} to use for ordering functions.
+\code{length(depth_values)} must be equal to number of rows of \code{dts}. If \code{depth_values} is specified, the depth is not
  computed and any method specified in \code{depth_method} is ignored.}
 
 \item{emp_factor}{A numeric value specifying the empirical factor for the boxplot. Defaults to 1.5.}
@@ -55,7 +55,7 @@ See \link{directional_quantile} for details.}
 }
 \value{
 A list containing: \item{outliers}{The indices of the functions/curves flagged as outliers.}
-\item{depth_values}{The depths of the functions/curves in \code{dt}.}
+\item{depth_values}{The depths of the functions/curves in \code{dts}.}
 \item{median_curve}{The index of the median curve, which is the curve with the largest depth value (or smallest outlyingness value).}
 }
 \description{

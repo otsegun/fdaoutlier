@@ -5,17 +5,17 @@
 \title{Compute the Extreme Rank Length Depth.}
 \usage{
 extreme_rank_length(
-  dt,
+  dts,
   type = c("two_sided", "one_sided_left", "one_sided_right")
 )
 }
 \arguments{
-\item{dt}{A matrix or data frame of size \eqn{n} observations/curves by \eqn{p} domain/evaluation points.}
+\item{dts}{A matrix or data frame of size \eqn{n} observations/curves by \eqn{p} domain/evaluation points.}
 
 \item{type}{A character value. Can be one of \code{"two_sided"}, \code{"one_sided_left"} or \code{"one_sided_right"}.
-If \code{"two_sided"} is specified, small and large values in \code{dt} will be considered extreme. If \code{"one_sided_left"} is specified,
-then only small values in \code{dt} are considered to be extreme while for \code{"one_sided_right"}, only large values  in
-\code{dt} are considered to be extreme. \code{"two_sided"} is the default. See \code{Details} for more details.}
+If \code{"two_sided"} is specified, small and large values in \code{dts} will be considered extreme. If \code{"one_sided_left"} is specified,
+then only small values in \code{dts} are considered to be extreme while for \code{"one_sided_right"}, only large values  in
+\code{dts} are considered to be extreme. \code{"two_sided"} is the default. See \code{Details} for more details.}
 }
 \value{
 A numeric vector containing the depth of each curve

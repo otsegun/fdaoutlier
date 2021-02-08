@@ -4,14 +4,14 @@
 \alias{extremal_depth}
 \title{Compute extremal depth for functional data}
 \usage{
-extremal_depth(dt)
+extremal_depth(dts)
 }
 \arguments{
-\item{dt}{A numeric matrix or dataframe of size \eqn{n} observations/curves by \eqn{p} domain/evaluation
+\item{dts}{A numeric matrix or dataframe of size \eqn{n} observations/curves by \eqn{p} domain/evaluation
 points.}
 }
 \value{
-A vector containing the extremal depths of the rows of \code{dt}.
+A vector containing the extremal depths of the rows of \code{dts}.
 }
 \description{
 Compute extremal depth for functional data

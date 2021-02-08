@@ -5,7 +5,7 @@
 \title{Dai & Genton (2019) Directional outlyingness for univariate or multivariate functional data.}
 \usage{
 dir_out(
-  data,
+  dts,
   data_depth = "random_projections",
   n_projections = 200L,
   seed = NULL,
@@ -14,7 +14,7 @@ dir_out(
 )
 }
 \arguments{
-\item{data}{A matrix (or data frame) for univariate functional data (of size \code{n} observations by \code{p} domain
+\item{dts}{A matrix (or data frame) for univariate functional data (of size \code{n} observations by \code{p} domain
 points) or a 3-dimensional array for multivariate functional data (of size \code{n}
 observations by \code{p} domain points by \code{d} dimension).}
 
@@ -46,7 +46,7 @@ Returns a list containing: \item{mean_outlyingness}{an \code{n x d} matrix of th
  containing the robust (minimum covariance determinant) estimate of the mean and
  covariance of the \code{ms_matrix}.} \item{dirout_matrix}{ if \code{return_dir_matrix}
  = T, an n x p (or n x p x d) matrix (or array) containing the directional outlyingness values for
- the univariate (or multivariate) functional \code{data}.}
+ the univariate (or multivariate) functional \code{dts}.}
 }
 \description{
 Compute the directional outlyingness of a univariate or multivariate functional data
@@ -63,7 +63,7 @@ multivariate functional data, the projection depth is always used as suggested b
 \examples{
 # univariate magnitude model in Dai and Genton (2018).
 data(sim_data1)
-dirout_object <- dir_out(data = sim_data1$data, return_distance = TRUE)
+dirout_object <- dir_out(dts = sim_data1$data, return_distance = TRUE)
 }
 \references{
 Dai, W., and Genton, M. G. (2018). Multivariate functional data

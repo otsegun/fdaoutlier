@@ -7,11 +7,11 @@
 #' can be requested for univariate (multivariate) functional data.
 #'
 #'
-#' @param data A matrix/data frame for univariate functional data (of size \eqn{n} observations by \eqn{p} domain
+#' @param dts A matrix/data frame for univariate functional data (of size \eqn{n} observations by \eqn{p} domain
 #'   points) or a \eqn{3-}dimensional array for multivariate functional data (of size \eqn{n}
 #'   observations by \eqn{p} domain points by \eqn{d} dimension).
 #' @param data_depth The depth used in the computation of the directional outlyingness of
-#'   \code{data}. The projection depth is always used. Support for other depth methods will be added.
+#'   \code{dts}. The projection depth is always used. Support for other depth methods will be added.
 #' @param n_projections The number of random directions to generate for computing the random projection
 #'   depth. By default 200 directions are generated.
 #' @param seed An integer indicating the seed to set when generating random directions for computing the random projection depth.
@@ -77,7 +77,7 @@
 #' @examples
 #' # Univariate magnitude model in Dai and Genton (2018).
 #' data(sim_data1)
-#' msplot_object <- msplot(data = sim_data1$data)
+#' msplot_object <- msplot(dts = sim_data1$data)
 #' msplot_object$outliers_index
 #' msplot_object$mean_outlyingness
 #' msplot_object$var_outlyingness
@@ -85,7 +85,7 @@
 #' @export
 #' @importFrom grDevices rgb
 #' @importFrom graphics axis legend mtext par points
-msplot <- function(data,
+msplot <- function(dts,
                    data_depth = c("random_projections"),
                    n_projections = 200, seed = NULL,
                    return_mvdir = TRUE,
@@ -96,11 +96,10 @@ msplot <- function(data,
                    ylabel = "VO",
                    xlabel) {
   ### pairwise plots of variation of outlyingness (VO) against mean outlyingness (MO)###
-  data_dim  <- dim(data)
+  data_dim  <- dim(dts)
   #data_depth <- match.arg(data_depth)
-  #if(plot) plot_type <- match.arg(plot_type)
   n <- data_dim[1]
-  dir_result <- dir_out(data, data_depth = data_depth,
+  dir_result <- dir_out(dts, data_depth = data_depth,
                         n_projections = n_projections, seed = seed)
 
   if (length(data_dim) == 2){ # univariate
@@ -167,14 +166,14 @@ msplot <- function(data,
 
 
   if (return_mvdir){
-    return(list(outliers_index = outliers_index,
+    return(list(outliers = outliers_index,
                 median_curve = median_curve,
                 mean_outlyingness = dir_result$mean_outlyingness,
                 var_outlyingness = dir_result$var_outlyingness))
 
 
   } else{
-    return(list(outliers_index = outliers_index,
+    return(list(outliers = outliers_index,
                 median_curve = median_curve))
   }
 

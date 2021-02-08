@@ -1,24 +1,24 @@
 test_that("sequential transformation handles unconventional data", {
-  expect_error(seq_transform(dt = list()))
-  expect_error(seq_transform(dt = data.frame()) )
-  expect_error(seq_transform(dt = matrix(0, nrow = 1, ncol = 3)))
-  expect_error(seq_transform(dt = matrix(NA, nrow = 1, ncol = 3)))
-  expect_error(seq_transform(dt = matrix(c(1:2, NA), nrow = 1, ncol = 3)))
+  expect_error(seq_transform(dts = list()))
+  expect_error(seq_transform(dts = data.frame()) )
+  expect_error(seq_transform(dts = matrix(0, nrow = 1, ncol = 3)))
+  expect_error(seq_transform(dts = matrix(NA, nrow = 1, ncol = 3)))
+  expect_error(seq_transform(dts = matrix(c(1:2, NA), nrow = 1, ncol = 3)))
 })
 
 test_that("sequential transformation fails gracefully when transformation is unknown", {
 
-  expect_error(seq_transform(dt = sim_data1$data, sequence = "TO"),
+  expect_error(seq_transform(dts = sim_data1$data, sequence = "TO"),
                "Transformation TO not supported")
 })
 
 
 test_that("sequential transformation T0 and D0 works", {
   res1 <- functional_boxplot(dt = sim_data1$data, depth_method = "dirout")
-  res1q <- seq_transform(dt = sim_data1$data,
+  res1q <- seq_transform(dts = sim_data1$data,
                          sequence = "T0", depth_method = "dirout",
                          save_data = T)
-  res2q <- seq_transform(dt = sim_data1$data,
+  res2q <- seq_transform(dts = sim_data1$data,
                          sequence = "D0", depth_method = "dirout",
                          save_data = F)
   expect_identical(res1$outliers, res2q$outliers$D0)
@@ -29,7 +29,7 @@ test_that("sequential transformation T1 works", {
   akin <- sim_data1$data - rowMeans(sim_data1$data)
   res1 <- functional_boxplot(dt = akin,
                                       depth_method = "mbd")
-  res1q <- seq_transform(dt = sim_data1$data,
+  res1q <- seq_transform(dts = sim_data1$data,
                          sequence = "T1",
                          depth_method = "mbd",
                          save_data = T)
@@ -41,7 +41,7 @@ test_that("sequential transformation T2 works", {
   akin <- sim_data1$data/sqrt(rowSums(sim_data1$data^2))
   res1 <- functional_boxplot(dt = akin,
                                       depth_method = "mbd")
-  res1q <- seq_transform(dt = sim_data1$data,
+  res1q <- seq_transform(dts = sim_data1$data,
                          sequence = "T2",
                          depth_method = "mbd",
                          save_data = T)
@@ -54,11 +54,11 @@ test_that("sequential transformation D1 and D2 works independently", {
   akin <-   sim_data1$data[,2:p] - sim_data1$data[, 1:(p-1)]
   res1 <- functional_boxplot(dt = akin,
                                       depth_method = "mbd")
-  res1q <- seq_transform(dt = sim_data1$data,
+  res1q <- seq_transform(dts = sim_data1$data,
                          sequence = "D1",
                          depth_method = "mbd",
                          save_data = T)
-  res2q <- seq_transform(dt = sim_data1$data,
+  res2q <- seq_transform(dts = sim_data1$data,
                          sequence = "D2",
                          depth_method = "mbd",
                          save_data = T)
@@ -75,11 +75,11 @@ test_that("sequential transformation D1 and D2 works combined", {
   akin2 <- akin[,2:p2] - akin[, 1:(p2-1)]
   res1 <- functional_boxplot(dt = akin2,
                                       depth_method = "mbd")
-  res1q <- seq_transform(dt = sim_data1$data,
+  res1q <- seq_transform(dts = sim_data1$data,
                          sequence = c("D1", "D2"),
                          depth_method = "mbd",
                          save_data = T)
-  expect_warning(res2q <- seq_transform(dt = sim_data1$data,
+  expect_warning(res2q <- seq_transform(dts = sim_data1$data,
                          sequence = c("D1","D1"),
                          depth_method = "mbd",
                          save_data = T))

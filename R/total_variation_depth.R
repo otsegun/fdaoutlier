@@ -3,7 +3,7 @@
 #'This function computes the total variation depth (tvd) and the modified shape similarity index (mss)
 #'proposed in Huang and Sun (2019) \href{https://doi.org/10.1080/00401706.2019.1574241}{<doi:10.1080/00401706.2019.1574241>}.
 #'
-#' @param data A matrix or dataframe of size \eqn{n} observations/curves by \eqn{p} domain/evaluation
+#' @param dts A matrix or dataframe of size \eqn{n} observations/curves by \eqn{p} domain/evaluation
 #'   points.
 #'
 #' @details
@@ -11,8 +11,8 @@
 #' functional data. The definition of the estimates of TVD and MSS can be found in Huang and Sun (2019)
 #' \href{https://doi.org/10.1080/00401706.2019.1574241}{<doi:10.1080/00401706.2019.1574241>}.
 #' @return Returns a list containing the following
-#'   \item{\code{tvd}}{the total variation depths of the observations of \code{data}}
-#'   \item{\code{mss}}{the modified shape similarity index of the observations of \code{data}}
+#'   \item{\code{tvd}}{the total variation depths of the observations of \code{dts}}
+#'   \item{\code{mss}}{the modified shape similarity index of the observations of \code{dts}}
 #'
 #' @author Oluwasegun Ojo
 #'
@@ -28,30 +28,31 @@
 #' data(sim_data1)
 #' tvd_object <- total_variation_depth(sim_data1$data)
 #' @importFrom graphics boxplot
-total_variation_depth <- function(data){
-  if(is.data.frame(data)){
-    data <- as.matrix(data)
+total_variation_depth <- function(dts){
+  if(is.data.frame(dts)){
+    dts <- as.matrix(dts)
   }
 
   #i
 
-  if(!is.array(data) || !is.numeric(data))
-    stop("Argument \"data\" must be a numeric matrix or dataframe.")
+  if(!is.array(dts) || !is.numeric(dts))
+    stop("Argument \"dts\" must be a numeric matrix or dataframe.")
 
-  if (any(!is.finite(data))){
-    stop("Missing or infinite values are not allowed in argument \"data\"")
+  if (any(!is.finite(dts))){
+    stop("Missing or infinite values are not allowed in argument \"dts\"")
   }
 
-  if(nrow(data) < 3) stop("The number of curves must be greater than 2")
+  if(nrow(dts) < 3) stop("The number of curves must be greater than 2")
 
-  n_curves = nrow(data)
-  n_points = ncol(data)
+  ddim <- dim(dts)
+  n_curves  <- ddim[1]
+  n_points = ddim[2]
 
-  data_t <- t(data)
-  pointwise_ranks <- t(apply(data_t,1,rank))/n_curves
+  dtst <- t(dts)
+  pointwise_ranks <- t(apply(dtst,1,rank))/n_curves
   total_variation <- pointwise_ranks * (1 - pointwise_ranks)
   tempres <- .Call(C_totalVariationDepth,
-                          as.double(data), as.double(data_t),
+                          as.double(dts), as.double(dtst),
                           n_curves, n_points,
                           PACKAGE = "fdaoutlier")
   shape_variation <- matrix(tempres$shape_variation, n_points - 1, n_curves, byrow = T)

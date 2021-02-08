@@ -2,7 +2,7 @@
 #'
 #'
 #'
-#' @param dt A numeric matrix or dataframe of size \eqn{n} observations/curves by \eqn{p} domain/evaluation
+#' @param dts A numeric matrix or dataframe of size \eqn{n} observations/curves by \eqn{p} domain/evaluation
 #'   points.
 #'
 #' @details
@@ -13,7 +13,7 @@
 #' penalizes functions that are outliers even for a small part of the domain. Proposed/mentioned in
 #' Narisetty and Nair (2016)\href{https://doi.org/10.1080/01621459.2015.1110033}{<doi:10.1080/01621459.2015.1110033>}.
 #'
-#' @return A vector containing the extremal depths of the rows of \code{dt}.
+#' @return A vector containing the extremal depths of the rows of \code{dts}.
 #'
 #' @author Oluwasegun Ojo
 #' @references
@@ -29,22 +29,23 @@
 #' ex_depths <- extremal_depth(sim_data1$data)
 #' # order functions from deepest to most outlying
 #' order(ex_depths, decreasing = TRUE)
-extremal_depth <- function(dt){
-  if(is.data.frame(dt)){
-    dt <- as.matrix(dt)
+extremal_depth <- function(dts){
+  if(is.data.frame(dts)){
+    dts <- as.matrix(dts)
   }
 
-  if(!is.array(dt) || !is.numeric(dt))
-    stop("Argument \"dt\" must be a numeric matrix or dataframe.")
+  if(!is.array(dts) || !is.numeric(dts))
+    stop("Argument \"dts\" must be a numeric matrix or dataframe.")
 
-  if (any(!is.finite(dt))){
+  if (any(!is.finite(dts))){
     stop("Missing or infinite values are not allowed in argument \"data\"")
   }
-  if(nrow(dt) < 3) stop("The number of curves must be greater than 2")
+  if(nrow(dts) < 3) stop("The number of curves must be greater than 2")
 
-  n <- nrow(dt)
-  p <- ncol(dt)
-  pwdepth <- pwise_depth(dt = dt, n = n) # matrix of n by p
+  ddim <- dim(dts)
+  n <- ddim[1]
+  p <- ddim[2]
+  pwdepth <- pwise_depth(dt = dts, n = n) # matrix of n by p
   pmfs <- apply(pwdepth, 1, function(x){
     pmf <- table(x)/p
     return(c(as.numeric(names(pmf[1])), # depth level and mass

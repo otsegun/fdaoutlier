@@ -4,10 +4,10 @@
 \alias{muod}
 \title{Massive Unspervised Outlier Detection (MUOD)}
 \usage{
-muod(data, cut_method = c("boxplot", "tangent"))
+muod(dts, cut_method = c("boxplot", "tangent"))
 }
 \arguments{
-\item{data}{a matrix or dataframe of size \code{n} observation by \code{p} domain points.}
+\item{dts}{a matrix or dataframe of size \code{n} observation by \code{p} domain points.}
 
 \item{cut_method}{a character value indicating method to use for finding indices cutoff.
 Must be either \code{"boxplot"} or \code{"tangent"}.}

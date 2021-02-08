@@ -6,12 +6,12 @@
 #'To determine which functions are more extreme, pointwise ranks of the functions are computed and compared pairwise.
 #'
 #'
-#'@param dt A matrix or data frame of size \eqn{n} observations/curves by \eqn{p} domain/evaluation points.
+#'@param dts A matrix or data frame of size \eqn{n} observations/curves by \eqn{p} domain/evaluation points.
 #'
 #'@param type A character value. Can be one of \code{"two_sided"}, \code{"one_sided_left"} or \code{"one_sided_right"}.
-#'  If \code{"two_sided"} is specified, small and large values in \code{dt} will be considered extreme. If \code{"one_sided_left"} is specified,
-#'  then only small values in \code{dt} are considered to be extreme while for \code{"one_sided_right"}, only large values  in
-#'  \code{dt} are considered to be extreme. \code{"two_sided"} is the default. See \code{Details} for more details.
+#'  If \code{"two_sided"} is specified, small and large values in \code{dts} will be considered extreme. If \code{"one_sided_left"} is specified,
+#'  then only small values in \code{dts} are considered to be extreme while for \code{"one_sided_right"}, only large values  in
+#'  \code{dts} are considered to be extreme. \code{"two_sided"} is the default. See \code{Details} for more details.
 #'
 #'@details
 #'
@@ -43,28 +43,28 @@
 #' erld <- extreme_rank_length(sim_data1$data)
 #'
 extreme_rank_length <-
-  function(dt,
+  function(dts,
            type = c("two_sided", "one_sided_left", "one_sided_right")) {
-    if (is.data.frame(dt)) {
-      dt <- as.matrix(dt)
+    if (is.data.frame(dts)) {
+      dts <- as.matrix(dts)
     }
 
-    if (!is.array(dt) || !is.numeric(dt))
-      stop("Argument \"dt\" must be a numeric matrix or dataframe.")
+    if (!is.array(dts) || !is.numeric(dts))
+      stop("Argument \"dts\" must be a numeric matrix or dataframe.")
 
-    if (any(!is.finite(dt))) {
-      stop("Missing or infinite values are not allowed in argument \"dt\"")
+    if (any(!is.finite(dts))) {
+      stop("Missing or infinite values are not allowed in argument \"dts\"")
     }
 
-    if (nrow(dt) < 2)
+    if (nrow(dts) < 2)
       stop("The number of curves must be greater than 1")
 
     type <- match.arg(type)
-    dm <- dim(dt)
+    dm <- dim(dts)
     n <- dm[1]
     p <- dm[2]
     rank_matrix_forward <-
-      apply(dt, 2L, rank, ties.method = "average") # low values have low ranks
+      apply(dts, 2L, rank, ties.method = "average") # low values have low ranks
 
     if (type == "one_sided_left") {
       #low values considered extreme

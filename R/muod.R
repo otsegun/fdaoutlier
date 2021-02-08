@@ -1,6 +1,6 @@
 #' Massive Unspervised Outlier Detection (MUOD)
 #'
-#' @param data a matrix or dataframe of size \code{n} observation by \code{p} domain points.
+#' @param dts a matrix or dataframe of size \code{n} observation by \code{p} domain points.
 #' @param cut_method a character value indicating method to use for finding indices cutoff.
 #'  Must be either \code{"boxplot"} or \code{"tangent"}.
 #'
@@ -10,22 +10,22 @@
 #' @export
 #' @importFrom  stats predict rbinom rnorm sd smooth.spline
 #' @importFrom grDevices boxplot.stats
-muod <- function(data,
+muod <- function(dts,
                  cut_method = c("boxplot", "tangent")){
-  if(is.data.frame(data)){
-    data <- as.matrix(data)
+  if(is.data.frame(dts)){
+    dts <- as.matrix(dts)
   }
-  if(!is.array(data) || !is.numeric(data))
-    stop("Argument \"data\" must be a numeric matrix or dataframe.")
-  if (any(!is.finite(data))){
-    stop("Missing or infinite values are not allowed in argument \"data\"")
+  if(!is.array(dts) || !is.numeric(dts))
+    stop("Argument \"dts\" must be a numeric matrix or dataframe.")
+  if (any(!is.finite(dts))){
+    stop("Missing or infinite values are not allowed in argument \"dts\"")
   }
-  if((dm <- dim(data))[1] < 3) stop("The number of curves must be greater than 2")
+  if((dm <- dim(dts))[1] < 3) stop("The number of curves must be greater than 2")
   n <- dm[1]
   p <- dm[2]
 
-    cut_method <- match.arg(cut_method)
-  indices <- muod_indices(dt = data, n = n, p = p)
+  cut_method <- match.arg(cut_method)
+  indices <- muod_indices(dt = dts, n = n, p = p)
   outliers <- indices_outliers(indices, cut_method)
   return(list(outliers = outliers,
               indices = indices))
