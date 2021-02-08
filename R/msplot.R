@@ -143,9 +143,9 @@ msplot <- function(data,
          ylim = range(myy) + c(-.2*sd(myy), 1*sd(myy) ), axes = F,
          col.lab = "gray20")
     #add axis
-    axis(1, col = "white", col.ticks = "grey51", lwd.ticks = 0.2, tck = 1,
+    axis(1, col = "white", col.ticks = "grey75", lwd.ticks = 0.2, tck = 1,
          cex.axis = 0.9, col.axis = "gray30")
-    axis(2, col = "white", col.ticks = "grey51", lwd.ticks = 0.2, tck = 1,
+    axis(2, col = "white", col.ticks = "grey75", lwd.ticks = 0.2, tck = 1,
          cex.axis = 0.9, col.axis = "gray30")
     if(length(outliers_index > 0)){
       points(myx[-outliers_index], myy[-outliers_index], bg = "gray60", pch = 21)
