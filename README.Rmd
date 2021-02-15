@@ -40,14 +40,23 @@ devtools::install_github("otsegun/fdaoutlier")
 ```
 
 ## Example
+Generate some functional data with magnitude outliers:
 
-```{r}
+```{r, fig.align='center', fig.width = 10, fig.height=8}
 library(fdaoutlier)
-data(sim_data1)
-# MSPLOT Dai & Genton (2018)
-msplot(sim_data1$data, data_depth = "random_projection")$outliers_index
-sim_data1$true_outliers
+simdata <- simulation_model1(plot = T, seed = 1)
+dim(simdata$data)
 ```
+
+Next apply the msplot of Dai & Genton (2018)
+
+```{r, fig.align='center', fig.width = 10, fig.height=8}
+ms <- msplot(simdata$data)
+ms$outliers
+simdata$true_outliers
+```
+
+
 
 ## Methods Implemented
 1. MS-Plot (Dai & Genton, 2018)
