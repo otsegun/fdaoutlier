@@ -1,13 +1,34 @@
 #' Massive Unspervised Outlier Detection (MUOD)
 #'
+#' MUOD finds outliers by computing for each functional data, a magnitude, amplitude and shape index. Outliers
+#' are then detected in each set of index and outliers found are classified as either a magnitude, shape or amplitude
+#' outlier.
+#'
 #' @param dts a matrix or dataframe of size \code{n} observation by \code{p} domain points.
 #' @param cut_method a character value indicating method to use for finding indices cutoff.
 #'  Must be either \code{"boxplot"} or \code{"tangent"}.
+#'
+#' @details
+#' MUOD was proposed in Azcorra et al. (2020)\href{https://doi.org/10.1038/s41598-018-24874-2}{<doi:10.1038/s41598-018-24874-2>} as a support method for finding influential users in a social network data.
+#' It was also mentioned in Vinue and Epiphano (2020) \href{https://doi.org/10.1007/s11634-020-00412-9}{<doi:10.1007/s11634-020-00412-9>}
+#'  where it was compared with other functional outlier detection methods.
+#'
+#'  MUOD computes for each curve three indices: amplitude, magnitude and shape indices. Then a cutoff is
+#'  determined for each set of indices and outliers are identified in each set of index. Outliers identified in
+#'  the magnitude indices are flagged as magnitude outliers. The same holds true for the amplitude and shape indices.
+#'  Thus, the outliers are not only identified but also classified.
 #'
 #' @return Returns a list containing the following
 #'   \item{\code{outliers}}{a vector containing the indices of outliers identified.}
 #'   \item{\code{indices}}{a dataframe containing the shape, magnitude and amplitude indices}
 #' @export
+#'
+#'
+#' @references
+#' Azcorra, A., Chiroque, L. F., Cuevas, R., Anta, A. F., Laniado, H., Lillo, R. E., Romo, J., & Sguera, C. (2018).
+#'  Unsupervised scalable statistical method for identifying influential users in online social networks.
+#'   Scientific reports, 8(1), 1-7.
+#'
 #' @importFrom  stats predict rbinom rnorm sd smooth.spline
 #' @importFrom grDevices boxplot.stats
 muod <- function(dts,

@@ -1,113 +1,1129 @@
-smodel1 <- function(n = 100, p = 50, out_rate = 0.05,
-                    qcoeff = 8, kprob = 0.5,
-                    deterministic = TRUE,
-                    seed = NULL){
-  t <- (1:p)/p
-  d <- dist(t, upper = T, diag = T)
-  d_matrix <- as.matrix(d)
-  covfun <- exp(-d_matrix)
-  mu <- 4*t
-  L <- chol(covfun)
-  e <- matrix(rnorm(n*p), nrow = p, ncol = n)
+covfunexp <- function(gridpoints, alpha, beta, nu){
+  d_matrix <- as.matrix(dist(gridpoints, upper = T, diag = T))
+  return(alpha*exp(-beta*(d_matrix^nu)))
+}
 
+determine <- function(deterministic, n, outlier_rate){
+  if(deterministic) {
+    true_outliers <- sort(sample(1:n, round(n*outlier_rate)))
+    n_outliers <- length(true_outliers)
+  } else{
+    # find outliers using binomial distribution
+    true_outliers <- which(runif(n) > (1 - outlier_rate))
+    n_outliers <- length(true_outliers)
+  }
+  return(list(n_outliers = n_outliers,
+              true_outliers = true_outliers))
+}
+
+
+#' Plot Simulation models
+#
+#' @param y A matrix of \eqn{n} observations by \eqn{p} domain points
+#' @param grid_points A vector of the evaluation/domain points of \code{y}
+#' @param p A value indicating the number of evaluation/domain points
+#' @param true_outliers An integer vector indicating the indices of the
+#' true outliers
+#' @param show_legend A logical indicating whether to add legend to plot if \code{plot = TRUE}.
+#' @param plot_title Title of plot if \code{plot} is \code{TRUE}
+#' @param title_cex Numerical value indicating the size of the plot title relative to the device default.
+#' Set to 1.5 by default. Ignored if \code{plot = FALSE}.
+#' @param ylabel The label of the y-axis. Set to \code{""} by default.
+#' @param xlabel The label of the x-axis if \code{plot = TRUE}. Set to
+#' \code{"gridpoints"} by default.
+#' @param legend_pos A character value indicating the position of the
+#' legend. Can be one of \code{"bottomright"}, \code{"bottom"},
+#' \code{"bottomleft"}, \code{"left"} \code{"topleft"}, \code{"top"},
+#' \code{"topright"}, \code{"right"}, \code{""center}.
+#'
+#' @importFrom graphics box grid matlines matplot plot
+plot_dtt <- function(y, grid_points, p, true_outliers, show_legend, plot_title,
+                     title_cex, ylabel, xlabel, legend_pos = "bottomright"){
+  if(length(true_outliers) > 0){
+    dttout <- y[,true_outliers, drop = F]
+    dttnorm <- y[,-true_outliers, drop = F]
+    plot(x = grid_points, type = "n", ylab = ylabel, xlab = xlabel,
+         ylim = range(y) + c(-.5*sd(y[p,]), .5*sd(y[p,])),
+         col.lab = "gray20", axes = F)
+    matlines(dttout,
+             col = "#D55E00",
+             lty = "solid",
+             lwd = 1.3)
+    matlines(dttnorm,
+             col = "grey61",
+             lty = "solid",
+             lwd = .4)
+  } else{
+    matplot(y,
+            type = "l",
+            col = "grey61",
+            lty = "solid",
+            lwd = .4,
+            ylim = range(y) + c(-.5*sd(y[p,]), .5*sd(y[p,])),
+            ylab = ylabel,
+            xlab = xlabel,
+            axes = F,
+            col.lab = "gray20")
+  }
+  axis(1, col = "white", col.ticks = "grey61",
+       lwd.ticks = .5, tck = -0.025,
+       cex.axis = 0.9, col.axis = "gray30")
+  axis(2,col = "white", col.ticks = "grey61",
+       lwd.ticks = .5, tck = -0.025,
+       cex.axis = 0.9, col.axis = "gray30")
+  grid(col = "grey75", lwd = .5)
+  box(col = "grey51")
+  if(show_legend){
+    legend(legend_pos, legend = c("normal", "outlier"),
+           lty = c("solid", "solid"),
+           lwd = c(.4, 1.3),
+           col = c("grey61", "#D55E00"),
+           text.col = "gray40", bty = "n",
+           box.lwd = .1, xjust = 0, inset = .01)
+  }
+  mtext(plot_title,3, adj = 0.5, line = 1, cex = title_cex,
+        col = "gray20")
+}
+
+#' Convenience function for generating functional data
+#'
+#' This is a typical magnitude model in which outliers are shifted from the
+#' normal' non-outlying observations. The main model is of the form:
+#' \deqn{X_i(t) = \mu t + e_i(t),} and the contamination model model is of the
+#' form: \deqn{X_i(t) = \mu t + qk_i + e_i(t)}
+#' where \eqn{t\in [0,1]}, \eqn{e_i(t)} is a Gaussian process with zero mean and
+#' covariance function of the form:
+#' \deqn{\gamma(s,t) = \alpha \exp(-\beta|t-s|^\nu),} \eqn{k_i \in \{-1, 1\}}
+#'  (usually with \eqn{P(k_i = -1) = P(k_i=1) = 0.5}),
+#' and \eqn{q} is a constant controlling how far the outliers are from the mean
+#' function of the data, usually, \eqn{q = 6} or \eqn{q = 8}.
+#' The domain of the generated functions is over the interval \eqn{[0, 1]}.
+#'
+#' @param n The number of curves to generate. Set to \eqn{100} by default.
+#' @param p The number of evaluation points of the curves. Curves are usually generated
+#'  over the interval \eqn{[0, 1]}. Set to \eqn{50} by default.
+#' @param outlier_rate A value between \eqn{[0, 1]} indicating the percentage of outliers.
+#'  A value of \eqn{0.06} indicates about \eqn{6\%} of the observations will be outliers
+#'  depending on whether the paramerter \code{deterministic} is \code{TRUE} or not.
+#'  Set to \eqn{0.05} by default.
+#' @param mu The mean value of the functions in the main and contamination model.
+#'  Set to \code{4} by default.
+#' @param q A value indicating the shift of the outliers from the mean function, i.e., the \eqn{q}
+#'  in the contamination model. Used to control how far the outliers are from the mean function.
+#'  Set to \code{8} by default.
+#' @param kprob A value between \eqn{0} and \eqn{1} indicating the probability that an outlier will
+#' be above or below the mean function, i.e., \eqn{P(k_i = 1)} in the contamination model.
+#' Can be used to control the amount of outliers above or below the mean. Set to \eqn{0.5} by default.
+#' @param cov_alpha A value indicating the coefficient of the exponential function
+#' of the covariance matrix, i.e., the \eqn{\alpha} in the covariance function.
+#'  Set to \eqn{1} by default.
+#' @param cov_beta A value indicating the cofficient of the terms inside the exponential
+#' function of the covariance matrix, i.e., the \eqn{\beta} in the covariance function.
+#' Set to \eqn{1} by default.
+#' @param cov_nu A value indicating the power to which to raise the terms inside the exponential
+#' function of the covariance matrix, i.e., the \eqn{\nu} in the covariance function.
+#' Set to \eqn{1} by default.
+#' @param deterministic A logical value. If \code{TRUE}, the function will always return
+#'  \code{round(n*outlier_rate)} outliers and consequently the number of outliers is always constant.
+#'  If \code{FALSE}, the number of outliers are determined using \code{n} Bernoulli trials with
+#'  probability \code{outlier_rate}, and consequently the number of outliers returned is random.
+#'  \code{TRUE} by default.
+#' @param seed A seed to set for reproducibility. \code{NULL} by default in which case a seed
+#'  is not set.
+#' @param plot A logical value indicating whether to plot data.
+#' @param plot_title Title of plot if \code{plot} is \code{TRUE}
+#' @param title_cex Numerical value indicating the size of the plot title relative to the device default.
+#' Set to 1.5 by default. Ignored if \code{plot = FALSE}.
+#' @param show_legend A logical indicating whether to add legend to plot if \code{plot = TRUE}.
+#' @param xlabel The label of the x-axis if \code{plot = TRUE}. Set to
+#' \code{"gridpoints"} by default.
+#' @param ylabel The label of the y-axis. Set to \code{""} by default.
+#'
+#' @return A list containing:
+#' \item{data}{a matrix of size \code{n} by \code{p} containing the simulated data set}
+#' \item{true_outliers}{a vector of integers indicatint the row index of the outliers in the
+#' generated data.}
+#'
+#' @export
+#' @examples
+#' dt <- simulation_model1(n = 50)
+#' dim(dt$data)
+#' dt$true_outliers
+simulation_model1 <- function(n = 100, p = 50, outlier_rate = 0.05,
+                              mu = 4, q = 8, kprob = 0.5,
+                              cov_alpha = 1, cov_beta = 1, cov_nu = 1,
+                              deterministic = TRUE, seed = NULL,
+                              plot = F,
+                              plot_title = "Simulation Model 1",
+                              title_cex = 1.5,
+                              show_legend = T,
+                              ylabel = "",
+                              xlabel = "gridpoints"){
+  tt <- seq(0, 1, length.out = p)
+  covfun <- covfunexp(tt, cov_alpha, cov_beta, cov_nu)
+  muu <- mu*tt
+  L <- chol(covfun)
+  # set seed
+  if(!is.null(seed)){
+    set.seed(seed)
+  }
+  e <- matrix(rnorm(n*p), nrow = p, ncol = n)
   # Generate Data
-  y <- mu+t(L)%*%e
+  y <- muu+t(L)%*%e
+
+  # check deterministic or probabilistic
+  dtt <- determine(deterministic, n, outlier_rate)
+  n_outliers <- dtt$n_outliers
+  true_outliers <- dtt$true_outliers
+
+  # generate outliers
+  if(n_outliers > 0){
+    e <- matrix(rnorm(p*n_outliers), nrow = p)
+    qcoeffk <- rbinom(n_outliers, 1, kprob)
+    qcoeffk[qcoeffk == 0] <- -1
+    qcoeffk <- qcoeffk*q
+    y[, true_outliers] <- (muu + t(L)%*%e) + rep(qcoeffk, rep(p, n_outliers))
+  }
+  if(plot){
+    plot_dtt(y, tt, p, true_outliers, show_legend, plot_title,
+             title_cex, ylabel, xlabel )
+  }
+  return(list(data = t(y), true_outliers = true_outliers))
+}
+
+
+
+#' Convenience function for generating functional data
+#'
+#' This model generates non-persistent magnitude outliers, i.e., the outliers are
+#' magnitude outliers for only a portion of the domain of the functional data. The
+#' main model is of the form: \deqn{X_i(t) = \mu t + e_i(t),} with
+#' contamination model of the form:
+#' \deqn{X_i(t) = \mu t + qk_iI_{T_i \le t\le T_i+l } + e_i(t)}
+#' where: \eqn{t\in [0,1]}, \eqn{e_i(t)} is a Gaussian process with zero mean and
+#' covariance function of the form: \deqn{\gamma(s,t) = \alpha\exp(-\beta|t-s|^\nu),}
+#' \eqn{k_i \in \{-1, 1\}} with \eqn{P(k_i = -1) = P(k_i=1) = 0.5},
+#' \eqn{q} is a constant controlling how far the outliers are from the mass of the
+#' data, \eqn{I} is an indicator function, \eqn{T_i} is a uniform random variable between
+#' an interval \eqn{[a, b] \subset [0,1]}, and \eqn{l} is a constant specifying for how
+#' much of the domain the outliers are away from the mean function.
+#'
+#' @param n The number of curves to generate. Set to \eqn{100} by default.
+#' @param p The number of evaluation points of the curves. Curves are usually generated
+#'  over the interval \eqn{[0, 1]}. Set to \eqn{50} by default.
+#' @param outlier_rate A value between \eqn{[0, 1]} indicating the percentage of outliers.
+#'  A value of \eqn{0.06} indicates about \eqn{6\%} of the observations will be outliers
+#'  depending on whether the paramerter \code{deterministic} is \code{TRUE} or not.
+#'  Set to \eqn{0.05} by default.
+#' @param mu The mean value of the functions. Set to \code{4} by default.
+#' @param q A value indicating the shift of the outliers from the mean function.
+#' Used to control how far the outliers are from the mean function. Set to \code{8} by default.
+#' @param kprob A value between \eqn{0} and \eqn{1} indicating the probability that an outlier will
+#' be above or below the mean function. Can be used to control the amount of outliers above
+#' or below the mean. Set to \eqn{0.5} by default.
+#' @param a,b values values specifying the interval \eqn{[a,b]} for the uniform distribution
+#' from which \eqn{T_i} is drawn in the contamination model.
+#' @param l the value of \eqn{l} in the contamination model
+#' @param cov_alpha A value indicating the coefficient of the exponential function
+#' of the covariance matrix, i.e., the \eqn{\alpha} in the covariance function.
+#'  Set to \eqn{1} by default.
+#' @param cov_beta A value indicating the cofficient of the terms inside the exponential
+#' function of the covariance matrix, i.e., the \eqn{\beta} in the covariance function.
+#' Set to \eqn{1} by default.
+#' @param cov_nu A value indicating the power to which to raise the terms inside the exponential
+#' function of the covariance matrix, i.e., the \eqn{\nu} in the covariance function.
+#' Set to \eqn{1} by default.
+#' @param deterministic A logical value. If \code{TRUE}, the function will always return
+#'  \code{round(n*outlier_rate)} outliers and consequently the number of outliers is always constant.
+#'  If \code{FALSE}, the number of outliers are determined using \code{n} Bernoulli trials with
+#'  probability \code{outlier_rate}, and consequently the number of outliers returned is random.
+#'  \code{TRUE} by default.
+#' @param seed A seed to set for reproducibility. \code{NULL} by default in which case a seed
+#'  is not set.
+#' @param plot A logical value indicating whether to plot data.
+#' @param plot_title Title of plot if \code{plot} is \code{TRUE}
+#' @param title_cex Numerical value indicating the size of the plot title relative to the device default.
+#' Set to 1.5 by default. Ignored if \code{plot = FALSE}.
+#' @param show_legend A logical indicating whether to add legend to plot if \code{plot = TRUE}.
+#' @param xlabel The label of the x-axis if \code{plot = TRUE}. Set to
+#' \code{"gridpoints"} by default.
+#' @param ylabel The label of the y-axis. Set to \code{""} by default.
+#'
+#' @return A list containing:
+#' \item{data}{a matrix of size \code{n} by \code{p} containing the simulated data set}
+#' \item{true_outliers}{a vector of integers indicatint the row index of the outliers in the
+#' generated data.}
+#'
+#' @export
+#'
+#' @examples
+#' dtt <- simulation_model2()
+#' dtt$true_outliers
+#' dim(dtt$data)
+simulation_model2 <- function(n = 100, p = 50, outlier_rate = 0.05,
+                              mu = 4, q = 8, kprob = 0.5, a = 0.1, b = .9, l = 0.05,
+                              cov_alpha = 1, cov_beta = 1, cov_nu = 1,
+                              deterministic = TRUE, seed = NULL,
+                              plot = F,
+                              plot_title = "Simulation Model 2",
+                              title_cex = 1.5,
+                              show_legend = T,
+                              ylabel = "",
+                              xlabel = "gridpoints"){
+  tt <- seq(0, 1, length.out = p)
+  covfun <- covfunexp(tt, cov_alpha, cov_beta, cov_nu)
+  muu <- mu*tt
+  L <- chol(covfun)
+
+  ### Generate Data
+  if(!is.null(seed)){
+    set.seed(seed)
+  }
+  e <- matrix(rnorm(n*p), nrow = p, ncol = n)
+  y <- muu+t(L)%*%e
+  # set seed
+
+  # check deterministic or probabilistic
+  dtt <- determine(deterministic, n, outlier_rate)
+  n_outliers <- dtt$n_outliers
+  true_outliers <- dtt$true_outliers
+
+  # generate outliers
+  if(n_outliers > 0){
+    e <- matrix(rnorm(p*n_outliers), nrow = p)
+    qcoeffk <- rbinom(n_outliers, 1, kprob)
+    qcoeffk[qcoeffk == 0] <- -1
+    qcoeffk <- qcoeffk*q
+    indicator <- sapply(runif(n_outliers, a, b), function(x) (tt >= x)*(tt <= x + l) )
+    y[, true_outliers] <- (muu+ t(L)%*%e) + (indicator*rep(qcoeffk, rep(p, n_outliers)))
+
+  }
+  if(plot){
+    plot_dtt(y, tt, p, true_outliers, show_legend, plot_title,
+             title_cex, ylabel, xlabel )
+  }
+
+  return(list(data = t(y), true_outliers = true_outliers))
+}
+
+#' Convenience function for generating functional data
+#'
+#' This model generates outliers that are magnitude outliers for a part of the
+#' domain. The main model is of the form: \deqn{X_i(t) = \mu t + e_i(t),} with
+#' contamination model of the form:
+#' \deqn{X_i(t) = \mu t + qk_iI_{T_i \le t} + e_i(t)}
+#' where: \eqn{t\in [0,1]}, \eqn{e_i(t)} is a Gaussian process with zero mean and
+#' covariance function of the form: \deqn{\gamma(s,t) = \alpha\exp(-\beta|t-s|^\nu),}
+#' \eqn{k_i \in \{-1, 1\}} with \eqn{P(k_i = -1) = P(k_i=1) = 0.5},
+#' \eqn{q} is a constant controlling how far the outliers are from the mass of the
+#' data, \eqn{I} is an indicator function, and \eqn{T_i} is a uniform random variable between
+#' an interval \eqn{[a, b] \subset [0,1]}.
+#'
+#' @param n The number of curves to generate. Set to \eqn{100} by default.
+#' @param p The number of evaluation points of the curves. Curves are usually generated
+#'  over the interval \eqn{[0, 1]}. Set to \eqn{50} by default.
+#' @param outlier_rate A value between \eqn{[0, 1]} indicating the percentage of outliers.
+#'  A value of \eqn{0.06} indicates about \eqn{6\%} of the observations will be outliers
+#'  depending on whether the paramerter \code{deterministic} is \code{TRUE} or not.
+#'  Set to \eqn{0.05} by default.
+#' @param mu The mean value of the functions. Set to \code{4} by default.
+#' @param q A value indicating the shift of the outliers from the mean function.
+#' Used to control how far the outliers are from the mean function. Set to \code{8} by default.
+#' @param kprob A value between \eqn{0} and \eqn{1} indicating the probability that an outlier will
+#' be above or below the mean function. Can be used to control the amount of outliers above
+#' or below the mean. Set to \eqn{0.5} by default.
+#' @param a,b values values specifying the interval \eqn{[a,b]} for the uniform distribution
+#' from which \eqn{T_i} is drawn in the contamination model.
+#' @param cov_alpha A value indicating the coefficient of the exponential function
+#' of the covariance matrix, i.e., the \eqn{\alpha} in the covariance function.
+#'  Set to \eqn{1} by default.
+#' @param cov_beta A value indicating the cofficient of the terms inside the exponential
+#' function of the covariance matrix, i.e., the \eqn{\beta} in the covariance function.
+#' Set to \eqn{1} by default.
+#' @param cov_nu A value indicating the power to which to raise the terms inside the exponential
+#' function of the covariance matrix, i.e., the \eqn{\nu} in the covariance function.
+#' Set to \eqn{1} by default.
+#' @param deterministic A logical value. If \code{TRUE}, the function will always return
+#'  \code{round(n*outlier_rate)} outliers and consequently the number of outliers is always constant.
+#'  If \code{FALSE}, the number of outliers are determined using \code{n} Bernoulli trials with
+#'  probability \code{outlier_rate}, and consequently the number of outliers returned is random.
+#'  \code{TRUE} by default.
+#' @param seed A seed to set for reproducibility. \code{NULL} by default in which case a seed
+#'  is not set.
+#' @param plot A logical value indicating whether to plot data.
+#' @param plot_title Title of plot if \code{plot} is \code{TRUE}
+#' @param title_cex Numerical value indicating the size of the plot title relative to the device default.
+#' Set to 1.5 by default. Ignored if \code{plot = FALSE}.
+#' @param show_legend A logical indicating whether to add legend to plot if \code{plot = TRUE}.
+#' @param xlabel The label of the x-axis if \code{plot = TRUE}. Set to
+#' \code{"gridpoints"} by default.
+#' @param ylabel The label of the y-axis. Set to \code{""} by default.
+#'
+#'
+#' @return A list containing:
+#' \item{data}{a matrix of size \code{n} by \code{p} containing the simulated data set}
+#' \item{true_outliers}{a vector of integers indicatint the row index of the outliers in the
+#' generated data.}
+#' @export
+#'
+#' @examples
+#' dt <- simulation_model3()
+#' dt$true_outliers
+#' dim(dt$data)
+simulation_model3 <- function(n = 100, p = 50, outlier_rate = 0.05,
+                              mu = 4, q = 6, a = 0.1, b = 0.9, kprob = 0.5,
+                              cov_alpha = 1, cov_beta = 1, cov_nu = 1,
+                              deterministic = TRUE, seed = NULL,
+                              plot = F,
+                              plot_title = "Simulation Model 3",
+                              title_cex = 1.5,
+                              show_legend = T,
+                              ylabel = "",
+                              xlabel = "gridpoints"){
+  tt <- seq(0, 1, length.out = p)
+  covfun <- covfunexp(tt, cov_alpha, cov_beta, cov_nu)
+  muu <- mu*tt
+  L <- chol(covfun)
+
+  ### Generate Data
+  if(!is.null(seed)){
+    set.seed(seed)
+  }
+  e <- matrix(rnorm(n*p), nrow = p, ncol = n)
+  y <- muu+t(L)%*%e
+  # set seed
+
+  # check deterministic or probabilistic
+  dtt <- determine(deterministic, n, outlier_rate)
+  n_outliers <- dtt$n_outliers
+  true_outliers <- dtt$true_outliers
+
+  # generate outliers
+  if(n_outliers > 0){
+    e <- matrix(rnorm(p*n_outliers), nrow = p)
+    qcoeffk <- rbinom(n_outliers, 1, kprob)
+    qcoeffk[qcoeffk == 0] <- -1
+    qcoeffk <- qcoeffk*q
+    indicator <- sapply(runif(n_outliers, a, b),
+                        function(x) (tt >= x) )
+    y[, true_outliers] <- (muu+ t(L)%*%e) + (indicator*rep(qcoeffk, rep(p, n_outliers)))
+  }
+
+  if(plot){
+    plot_dtt(y, tt, p, true_outliers, show_legend, plot_title,
+             title_cex, ylabel, xlabel )
+  }
+  return(list(data = t(y), true_outliers = true_outliers))
+}
+
+#' Convenience function for generating functional data
+#'
+#' This models generates outliers defined on the reversed time interval of the main model.
+#' The main model is of the form: \deqn{X_i(t) = \mu t(1 - t)^m + e_i(t),}
+#' with contamination model of the form: \deqn{X_i(t) = \mu(1 - t)t^m + e_i(t)}
+#'
+#'
+#' @param n The number of curves to generate. Set to \eqn{100} by default.
+#' @param p The number of evaluation points of the curves. Curves are usually generated
+#'  over the interval \eqn{[0, 1]}. Set to \eqn{50} by default.
+#' @param outlier_rate A value between \eqn{[0, 1]} indicating the percentage of outliers.
+#'  A value of \eqn{0.06} indicates about \eqn{6\%} of the observations will be outliers
+#'  depending on whether the paramerter \code{deterministic} is \code{TRUE} or not.
+#'  Set to \eqn{0.05} by default.
+#' @param mu The mean value of the functions. Set to \code{30} by default.
+#' @param m  the constant \eqn{m} in the main and contamination model. Set to \eqn{3/2} by default.
+#' @param cov_alpha A value indicating the coefficient of the exponential function
+#' of the covariance matrix, i.e., the \eqn{\alpha} in the covariance function.
+#'  Set to \eqn{1} by default.
+#' @param cov_beta A value indicating the cofficient of the terms inside the exponential
+#' function of the covariance matrix, i.e., the \eqn{\beta} in the covariance function.
+#' Set to \eqn{1} by default.
+#' @param cov_nu A value indicating the power to which to raise the terms inside the exponential
+#' function of the covariance matrix, i.e., the \eqn{\nu} in the covariance function.
+#' Set to \eqn{1} by default.
+#' @param deterministic A logical value. If \code{TRUE}, the function will always return
+#'  \code{round(n*outlier_rate)} outliers and consequently the number of outliers is always constant.
+#'  If \code{FALSE}, the number of outliers are determined using \code{n} Bernoulli trials with
+#'  probability \code{outlier_rate}, and consequently the number of outliers returned is random.
+#'  \code{TRUE} by default.
+#' @param seed A seed to set for reproducibility. \code{NULL} by default in which case a seed
+#'  is not set.
+#' @param plot A logical value indicating whether to plot data.
+#' @param plot_title Title of plot if \code{plot} is \code{TRUE}
+#' @param title_cex Numerical value indicating the size of the plot title relative to the device default.
+#' Set to 1.5 by default. Ignored if \code{plot = FALSE}.
+#' @param show_legend A logical indicating whether to add legend to plot if \code{plot = TRUE}.
+#' @param xlabel The label of the x-axis if \code{plot = TRUE}. Set to
+#' \code{"gridpoints"} by default.
+#' @param ylabel The label of the y-axis. Set to \code{""} by default.
+#'
+#' @return A list containing:
+#' \item{data}{a matrix of size \code{n} by \code{p} containing the simulated data set}
+#' \item{true_outliers}{a vector of integers indicatint the row index of the outliers in the
+#' generated data.}
+#' @export
+#'
+#' @examples
+#' dt <- simulation_model4()
+#' dt$true_outliers
+#' dim(dt$data)
+simulation_model4 <- function(n = 100, p = 50, outlier_rate = 0.05,
+                              mu = 30, m = 3/2,
+                              cov_alpha = 0.3, cov_beta = (1/0.3), cov_nu = 1,
+                              deterministic = TRUE, seed = NULL,
+                              plot = F,
+                              plot_title = "Simulation Model 4",
+                              title_cex = 1.5,
+                              show_legend = T,
+                              ylabel = "",
+                              xlabel = "gridpoints"){ #ana model 1
+  tt <- seq(0, 1, length.out = p)
+  covfun <- covfunexp(tt, cov_alpha, cov_beta, cov_nu)
+  L <- chol(covfun)
 
   # set seed
   if(!is.null(seed)){
     set.seed(seed)
   }
-  # check deterministic or probabilistic
-  if(deterministic) {
-    true_outliers <- sort(sample(1:n, round(n*out_rate)))
-    n_outliers <- length(true_outliers)
-  } else{
-    # find outliers using binomial distribution
-    true_outliers <- which(runif(n) > (1 - out_rate))
-    n_outliers <- length(true_outliers)
-  }
+  e <- matrix(rnorm(n*p), nrow = p, ncol = n)
+  y <- mu*tt*(1-tt)^(m) + t(L)%*%e
 
-  # generate outliers
-  e <- matrix(rnorm(p*n_outliers), nrow = p)
-  qcoeffk <- rbinom(n_outliers, 1, kprob)
-  qcoeffk[qcoeffk == 0] <- -1
-  qcoeffk <- qcoeffk*qcoeff
-  y[, true_outliers] <- (mu+ t(L)%*%e) + rep(qcoeffk, rep(p, n_outliers))
+  # check deterministic or probabilistic
+  dtt <- determine(deterministic, n, outlier_rate)
+  n_outliers <- dtt$n_outliers
+  true_outliers <- dtt$true_outliers
+
+  # outliers
+  if(n_outliers>0){
+    e <- matrix(rnorm(p*n_outliers), nrow = p)
+    y[, true_outliers] <- (mu*(1-tt)*(tt^m))+t(L)%*%e
+  }
+  if(plot){
+    plot_dtt(y, tt, p, true_outliers, show_legend, plot_title,
+             title_cex, ylabel, xlabel, legend_pos = "topright" )
+  }
 
   return(list(data = t(y), true_outliers = true_outliers) )
 
 }
 
-simulation_model2 <- function(n = 100, p = 50, out_rate = 0.05,
-                              qcoeff = 8, a = 0.1, b = .9, l = 0.05,
+
+#' Convenience function for generating functional data
+#'
+#' This models generates shape outliers with a different covariance structure
+#' from that of the main model. The main model is of the form:
+#' \deqn{X_i(t) = \mu t + e_i(t),} contamination model of the form:
+#' \deqn{X_i(t) = \mu t + \tilde{e}_i(t),} where \eqn{t\in [0,1]}, and \eqn{e_i(t)}
+#' and \eqn{\tilde{e}_i(t)} are Gaussian processes with zero mean and
+#' covariance function of the form: \deqn{\gamma(s,t) = \alpha\exp(-\beta|t-s|^\nu)}
+#'
+#' @param n The number of curves to generate. Set to \eqn{100} by default.
+#' @param p The number of evaluation points of the curves. Curves are usually generated
+#'  over the interval \eqn{[0, 1]}. Set to \eqn{50} by default.
+#' @param outlier_rate A value between \eqn{[0, 1]} indicating the percentage of outliers.
+#'  A value of \eqn{0.06} indicates about \eqn{6\%} of the observations will be outliers
+#'  depending on whether the paramerter \code{deterministic} is \code{TRUE} or not.
+#'  Set to \eqn{0.05} by default.
+#' @param mu The mean value of the functions. Set to \code{4} by default.
+#' @param cov_alpha,cov_alpha2 A value indicating the coefficient of the exponential function
+#' of the covariance matrix, i.e., the \eqn{\alpha} in the covariance function. \code{cov_alpha} is
+#' for the main model while \code{cov_alpha2} is for the covariance function of the contamination model.
+#' \code{cov_alpha} is set to \eqn{1} by default while \code{cov_alpha2} is set to \eqn{5} by default.
+#' @param cov_beta,cov_beta2 A value indicating the cofficient of the terms inside the exponential
+#' function of the covariance matrix, i.e., the \eqn{\beta} in the covariance function. \code{cov_beta}
+#' is for the main model while \code{cov_beta2} is for the covariance function of the contamination model.
+#' \code{cov_beta} is set to \eqn{1} by default while \code{cov_beta2} is set to \eqn{2} by default.
+#' @param cov_nu,cov_nu2 A value indicating the power to which to raise the terms inside the exponential
+#' function of the covariance matrix, i.e., the \eqn{\nu} in the covariance function. \code{cov_nu} is
+#' for the main  model while \code{cov_nu2} is for the covariance function of the contamination model.
+#' \code{cov_nu} is set to \eqn{1} by default while \code{cov_nu2} is set to \eqn{0.5} by default.
+#' @param deterministic A logical value. If \code{TRUE}, the function will always return
+#'  \code{round(n*outlier_rate)} outliers and consequently the number of outliers is always constant.
+#'  If \code{FALSE}, the number of outliers are determined using \code{n} Bernoulli trials with
+#'  probability \code{outlier_rate}, and consequently the number of outliers returned is random.
+#'  \code{TRUE} by default.
+#' @param seed A seed to set for reproducibility. \code{NULL} by default in which case a seed
+#'  is not set.
+#' @param plot A logical value indicating whether to plot data.
+#' @param plot_title Title of plot if \code{plot} is \code{TRUE}
+#' @param title_cex Numerical value indicating the size of the plot title relative to the device default.
+#' Set to 1.5 by default. Ignored if \code{plot = FALSE}.
+#' @param show_legend A logical indicating whether to add legend to plot if \code{plot = TRUE}.
+#' @param xlabel The label of the x-axis if \code{plot = TRUE}. Set to
+#' \code{"gridpoints"} by default.
+#' @param ylabel The label of the y-axis. Set to \code{""} by default.
+#'
+#'
+#' @return A list containing:
+#' \item{data}{a matrix of size \code{n} by \code{p} containing the simulated data set}
+#' \item{true_outliers}{a vector of integers indicatint the row index of the outliers in the
+#' generated data.}
+#'
+#' @export
+#'
+#' @examples
+#' dt <- simulation_model5()
+#' dt$true_outliers
+#' dim(dt$data)
+simulation_model5 <- function(n = 100, p = 50, outlier_rate = 0.05, mu = 4,
+                              cov_alpha = 1, cov_beta = 1, cov_nu = 1,
+                              cov_alpha2 = 5, cov_beta2 = 2, cov_nu2 = 0.5,
                               deterministic = TRUE, seed = NULL,
-                              plotdt = T){
-  t <- (1:p)/p
-  d <- dist(t, upper = T, diag = T)
-  d_matrix <- as.matrix(d)
-  t.cov <- exp(-d_matrix)
-  mu <- 4*t
-  L <- chol(t.cov)
+                              plot = F,
+                              plot_title = "Simulation Model 5",
+                              title_cex = 1.5,
+                              show_legend = T,
+                              ylabel = "",
+                              xlabel = "gridpoints"){
+  tt <- seq(0, 1, length.out = p)
+  d_matrix <- as.matrix(dist(tt, upper = T, diag = T))
+  covfun <- cov_alpha*exp(-cov_beta*(d_matrix^cov_nu))
+  L <- chol(covfun)
+
   ### Generate Data
+  if(!is.null(seed)){
+    set.seed(seed)
+  }
   e <- matrix(rnorm(n*p), nrow = p, ncol = n)
-  y <- mu+t(L)%*%e
+  y <- mu*tt+t(L)%*%e
+
+  # set seed
+
+  # check deterministic or probabilistic
+  dtt <- determine(deterministic, n, outlier_rate)
+  n_outliers <- dtt$n_outliers
+  true_outliers <- dtt$true_outliers
+
+  # outliers
+  if(n_outliers){
+    e <- matrix(rnorm(p*n_outliers), nrow = p)
+    covfunout <- cov_alpha2*exp(-cov_beta2*((d_matrix)^cov_nu2))
+    L <- chol(covfunout) # Cholesky Decomposition
+    y[, true_outliers] <- (mu*tt)+t(L)%*%e
+  }
+  if(plot){
+    plot_dtt(y, tt, p, true_outliers, show_legend, plot_title,
+             title_cex, ylabel, xlabel, legend_pos = "bottomright" )
+  }
+
+  return(list(data = t(y), true_outliers = true_outliers) )
+}
+
+
+
+#' Convenience function for generating functional data
+#'
+#' This models generates shape outliers that have a different shape for a portion of the domain.
+#' The main model is of the form: \deqn{X_i(t) = \mu t + e_i(t),} with
+#' contamination model of the form:
+#' \deqn{X_i(t) = \mu t + (-1)^u q + (-1)^{(1-u)}(\frac{1}{\sqrt{r\pi}})\exp(-z(t-v)^w) + e_i(t)}
+#' where: \eqn{t\in [0,1]}, \eqn{e_i(t)} is a Gaussian process with zero mean
+#' and covariance function of the form:  \deqn{\gamma(s,t) = \alpha\exp(-\beta|t-s|^\nu),}
+#' \eqn{u} follows Bernoulli distribution with probability \eqn{P(u = 1) = 0.5};
+#' \eqn{q}, \eqn{r}, \eqn{z} and \eqn{w} are constants, and \eqn{v} follows
+#' a Uniform distribution between an interval \eqn{[a, b]} and \eqn{m} is a constant.
+#'
+#'
+#' @param n The number of curves to generate. Set to \eqn{100} by default.
+#' @param p The number of evaluation points of the curves. Curves are usually generated
+#'  over the interval \eqn{[0, 1]}. Set to \eqn{50} by default.
+#' @param outlier_rate A value between \eqn{[0, 1]} indicating the percentage of outliers.
+#'  A value of \eqn{0.06} indicates about \eqn{6\%} of the observations will be outliers
+#'  depending on whether the paramerter \code{deterministic} is \code{TRUE} or not.
+#'  Set to \eqn{0.05} by default.
+#' @param mu The mean value of the functions in the main and contamination model.
+#'  Set to \code{4} by default.
+#' @param q The constant term \eqn{q} in the contamination model. Set to \eqn{1.8}
+#' by default.
+#' @param kprob The probability \eqn{P(u = 1)}. Set to \eqn{0.5} by default.
+#' @param a,b  Values specifying the interval of from which \eqn{v} in the
+#'  contamination model is drawn. Set to \eqn{0.25} and \eqn{0.75} respectively.
+#' @param cov_alpha A value indicating the coefficient of the exponential function
+#' of the covariance matrix, i.e., the \eqn{\alpha} in the covariance function.
+#'  Set to \eqn{1} by default.
+#' @param cov_beta A value indicating the cofficient of the terms inside the exponential
+#' function of the covariance matrix, i.e., the \eqn{\beta} in the covariance function.
+#' Set to \eqn{1} by default.
+#' @param cov_nu A value indicating the power to which to raise the terms inside the exponential
+#' function of the covariance matrix, i.e., the \eqn{\nu} in the covariance function.
+#' Set to \eqn{1} by default.
+#' @param pi_coeff The constant \eqn{r} in the contamination model i.e., the coefficient of
+#' of \eqn{pi}. Set to \eqn{0.02} by default.
+#' @param exp_pow The constant \eqn{w} in the contamination model i.e., the power of the term in
+#' the exponential function of the contamination model. Set to \eqn{2}.
+#' @param exp_coeff The constant \eqn{z} in the contamination model i.e., the coefficient term in
+#' the exponential function of the contamination model. Set to \eqn{50} by default.
+#' @param deterministic A logical value. If \code{TRUE}, the function will always return
+#'  \code{round(n*outlier_rate)} outliers and consequently the number of outliers is always constant.
+#'  If \code{FALSE}, the number of outliers are determined using \code{n} Bernoulli trials with
+#'  probability \code{outlier_rate}, and consequently the number of outliers returned is random.
+#'  \code{TRUE} by default.
+#' @param seed A seed to set for reproducibility. \code{NULL} by default in which case a seed
+#'  is not set.
+#' @param plot A logical value indicating whether to plot data.
+#' @param plot_title Title of plot if \code{plot} is \code{TRUE}
+#' @param title_cex Numerical value indicating the size of the plot title relative to the device default.
+#' Set to 1.5 by default. Ignored if \code{plot = FALSE}.
+#' @param show_legend A logical indicating whether to add legend to plot if \code{plot = TRUE}.
+#' @param xlabel The label of the x-axis if \code{plot = TRUE}. Set to
+#' \code{"gridpoints"} by default.
+#' @param ylabel The label of the y-axis. Set to \code{""} by default.
+#'
+#' @return A list containing:
+#' \item{data}{a matrix of size \code{n} by \code{p} containing the simulated data set}
+#' \item{true_outliers}{a vector of integers indicatint the row index of the outliers in the
+#' generated data.}
+#'
+#' @export
+#' @examples
+#' dt <- simulation_model6(n = 50)
+#' dim(dt$data)
+#' dt$true_outliers
+simulation_model6 <- function(n = 100, p = 50, outlier_rate = .1,
+                              mu = 4, q = 1.8, kprob = 0.5,
+                              a = .25, b = .75,
+                              cov_alpha = 1, cov_beta = 1, cov_nu = 1,
+                              pi_coeff = 0.02, exp_pow = 2,
+                              exp_coeff = 50,
+                              deterministic = TRUE, seed = NULL,
+                              plot = F,
+                              plot_title = "Simulation Model 6",
+                              title_cex = 1.5,
+                              show_legend = T,
+                              ylabel = "",
+                              xlabel = "gridpoints"){
+
+  tt <- seq(0, 1, length.out = p)
+  covfun <- covfunexp(tt, cov_alpha, cov_beta, cov_nu)
+  muu <- mu*tt
+  L <- chol(covfun)
+
   # set seed
   if(!is.null(seed)){
     set.seed(seed)
   }
+  e <- matrix(rnorm(n*p), nrow = p, ncol = n)
+  y <- muu+t(L)%*%e
+
+
+
   # check deterministic or probabilistic
-  if(deterministic) {
-    true_outliers <- sort(sample(1:n, round(n*out_rate)))
-    n_outliers <- length(true_outliers)
-  } else{
-    # find outliers using binomial distribution
-    true_outliers <- which(runif(n) > (1 - out_rate))
-    n_outliers <- length(true_outliers)
+  dtt <- determine(deterministic, n, outlier_rate)
+  n_outliers <- dtt$n_outliers
+  true_outliers <- dtt$true_outliers
+
+  if(n_outliers){
+    e <- matrix(rnorm(p*n_outliers), nrow = p)
+    u <- rbinom(n_outliers, 1, kprob)
+    qcoeffk <- (-1)^u
+    qcoeffk <- qcoeffk*q
+    qcoeffk2 <- (-1)^(1-u)
+    unif_values <- rep(runif(n_outliers, a, b), each = p)
+    indicator <- exp(-exp_coeff*((tt-unif_values)^exp_pow))/sqrt(pi_coeff*pi) *
+      rep(qcoeffk2, rep(p, n_outliers))
+    y[, true_outliers] <- (muu+ t(L)%*%e) + indicator + rep(qcoeffk, rep(p, n_outliers))
   }
 
-  # generate outliers
-  e <- matrix(rnorm(p*n_outliers), nrow = p)
-  qcoeffk <- rbinom(n_outliers, 1, 0.5)
-  qcoeffk[qcoeffk == 0] <- -1
-  qcoeffk <- qcoeffk*qcoeff
-  indicator <- sapply(runif(n_outliers, a, b), function(x) (t >= x)*(t <= x + l) )
-  y[, true_outliers] <- (mu+ t(L)%*%e) + (indicator*rep(qcoeffk, rep(p, n_outliers)))
+  if(plot){
+    plot_dtt(y, tt, p, true_outliers, show_legend, plot_title,
+             title_cex, ylabel, xlabel, legend_pos = "bottomright" )
+  }
   return(list(data = t(y), true_outliers = true_outliers))
 }
 
-simulation_model3 <- function(n = 100, p = 50, out_rate = 0.05,
-                              qcoeff = 6, a = 0.1, b = .9,
+
+#' Convenience function for generating functional data
+#'
+#' This model generates pure shape outliers that are periodic.
+#' The main model is of the form: \deqn{X_i(t) = \mu t + e_i(t),}
+#' with contamination model of the form:
+#'  \deqn{X_i(t) = \mu t + k\sin(r\pi(t + \theta)) + e_i(t),} where:
+#'  \eqn{t\in [0,1]}, and \eqn{e_i(t)} is a Gaussian process with
+#'  zero mean and covariance function of the form:
+#'  \deqn{\gamma(s,t) = \alpha\exp{-\beta|t-s|^\nu},}
+#'  \eqn{\theta} is uniformly distributed in an interval \eqn{[a, b]} and
+#'  \eqn{k}, \eqn{r} are constants.
+
+#' @param n The number of curves to generate. Set to \eqn{100} by default.
+#' @param p The number of evaluation points of the curves. Curves are usually generated
+#'  over the interval \eqn{[0, 1]}. Set to \eqn{50} by default.
+#' @param outlier_rate A value between \eqn{[0, 1]} indicating the percentage of outliers.
+#'  A value of \eqn{0.06} indicates about \eqn{6\%} of the observations will be outliers
+#'  depending on whether the paramerter \code{deterministic} is \code{TRUE} or not.
+#'  Set to \eqn{0.05} by default.
+#' @param mu The mean value of the functions in the main and contamination model.
+#'  Set to \code{4} by default.
+#' @param sin_coeff The coefficient \eqn{k} in the contamination model, i.e, the
+#' coefficient of the sine term in the contamination model. Set to \eqn{2}
+#' by default.
+#' @param pi_coeff The coefficient \eqn{r} in the contamination model, i.e.,
+#' the coefficient of \eqn{pi} in the contamination model. Set to \eqn{4}
+#' by default.
+#' @param a,b Values indicating the interval of the uniform distribution from which
+#' \eqn{\theta} should be drawn. Set by default to \eqn{0.25} and \eqn{0.75}
+#' respectively.
+#' @param cov_alpha A value indicating the coefficient of the exponential function
+#' of the covariance matrix, i.e., the \eqn{\alpha} in the covariance function.
+#'  Set to \eqn{1} by default.
+#' @param cov_beta A value indicating the cofficient of the terms inside the exponential
+#' function of the covariance matrix, i.e., the \eqn{\beta} in the covariance function.
+#' Set to \eqn{1} by default.
+#' @param cov_nu A value indicating the power to which to raise the terms inside the exponential
+#' function of the covariance matrix, i.e., the \eqn{\nu} in the covariance function.
+#' Set to \eqn{1} by default.
+#' @param deterministic A logical value. If \code{TRUE}, the function will always return
+#'  \code{round(n*outlier_rate)} outliers and consequently the number of outliers is always constant.
+#'  If \code{FALSE}, the number of outliers are determined using \code{n} Bernoulli trials with
+#'  probability \code{outlier_rate}, and consequently the number of outliers returned is random.
+#'  \code{TRUE} by default.
+#' @param seed A seed to set for reproducibility. \code{NULL} by default in which case a seed
+#'  is not set.
+#' @param plot A logical value indicating whether to plot data.
+#' @param plot_title Title of plot if \code{plot} is \code{TRUE}
+#' @param title_cex Numerical value indicating the size of the plot title relative to the device default.
+#' Set to 1.5 by default. Ignored if \code{plot = FALSE}.
+#' @param show_legend A logical indicating whether to add legend to plot if \code{plot = TRUE}.
+#' @param xlabel The label of the x-axis if \code{plot = TRUE}. Set to
+#' \code{"gridpoints"} by default.
+#' @param ylabel The label of the y-axis. Set to \code{""} by default.
+#'
+#' @return A list containing:
+#' \item{data}{a matrix of size \code{n} by \code{p} containing the simulated data set}
+#' \item{true_outliers}{a vector of integers indicatint the row index of the outliers in the
+#' generated data.}
+#'
+#' @export
+#' @examples
+#' dt <- simulation_model7(n = 50)
+#' dim(dt$data)
+#' dt$true_outliers
+simulation_model7 <- function(n = 100, p = 50, outlier_rate = 0.05,
+                              mu = 4,  sin_coeff = 2, pi_coeff = 4,
+                              a = .25, b = .75,
+                              cov_alpha = 1, cov_beta = 1, cov_nu = 1,
                               deterministic = TRUE, seed = NULL,
-                              plotdt = T){
-  t <- (1:p)/p
-  d <- dist(t, upper = T, diag = T)
-  d_matrix <- as.matrix(d)
-  t.cov <- exp(-d_matrix)
-  mu <- 4*t
-  L <- chol(t.cov)
+                              plot = F,
+                              plot_title = "Simulation Model 7",
+                              title_cex = 1.5,
+                              show_legend = T,
+                              ylabel = "",
+                              xlabel = "gridpoints"){
+  # ana model3
+  tt <- seq(0, 1, length.out = p)
+  covfun <- covfunexp(tt, cov_alpha, cov_beta, cov_nu)
+  muu <- mu*tt
+  L <- chol(covfun)
+
   ### Generate Data
-  e <- matrix(rnorm(n*p), nrow = p, ncol = n)
-  y <- mu+t(L)%*%e
-  # set seed
   if(!is.null(seed)){
     set.seed(seed)
   }
+  e <- matrix(rnorm(n*p), nrow = p, ncol = n)
+  y <- muu+t(L)%*%e
+
+  # set seed
+
+
   # check deterministic or probabilistic
-  if(deterministic) {
-    true_outliers <- sort(sample(1:n, round(n*out_rate)))
-    n_outliers <- length(true_outliers)
-  } else{
-    # find outliers using binomial distribution
-    true_outliers <- which(runif(n) > (1 - out_rate))
-    n_outliers <- length(true_outliers)
+  dtt <- determine(deterministic, n, outlier_rate)
+  n_outliers <- dtt$n_outliers
+  true_outliers <- dtt$true_outliers
+
+  ## Generate outlier
+  if(n_outliers){
+    e <- matrix(rnorm(p*n_outliers), nrow = p)
+    theta <- rep(runif(n_outliers, a, b), each = p)
+    indicator <- sin_coeff * sin(pi_coeff*pi*(tt+ theta))
+    y[, true_outliers] <- (muu+ t(L)%*%e) + indicator
+  }
+  if(plot){
+    plot_dtt(y, tt, p, true_outliers, show_legend, plot_title,
+             title_cex, ylabel, xlabel, legend_pos = "bottomright" )
   }
 
-  # generate outliers
-  e <- matrix(rnorm(p*n_outliers), nrow = p)
-  qcoeffk <- rbinom(n_outliers, 1, 0.5)
-  qcoeffk[qcoeffk == 0] <- -1
-  qcoeffk <- qcoeffk*qcoeff
-  indicator <- sapply(runif(n_outliers, a, b), function(x) (t >= x) )
-  y[, true_outliers] <- (mu+ t(L)%*%e) + (indicator*rep(qcoeffk, rep(p, n_outliers)))
-  return(list(data = t(y), true_outliers = true_outliers))
+  return(list(data = t(y), true_outliers = true_outliers) )
 }
+
+
+#' Convenience function for generating functional data
+#'
+#' This model generates pure shape outliers that are periodic. The
+#' main model is of the form:
+#' \deqn{X_i(t) = k\sin(r\pi t) + e_i(t),}
+#' with contamination model of the form:
+#' \deqn{X_i(t) = k\sin(r\pi t + v) + e_i(t),}
+#'  where \eqn{t\in [0,1]}, and \eqn{e_i(t)} is a Gaussian processes with
+#'  zero mean and covariance function of the form:
+#'  \deqn{\gamma(s,t) = \alpha\exp{-\beta|t-s|^\nu}}
+#'  and \eqn{k, r, v} are constants.
+#'
+#'
+#'
+#' @param n The number of curves to generate. Set to \eqn{100} by default.
+#' @param p The number of evaluation points of the curves. Curves are usually generated
+#'  over the interval \eqn{[0, 1]}. Set to \eqn{50} by default.
+#' @param outlier_rate A value between \eqn{[0, 1]} indicating the percentage of outliers.
+#'  A value of \eqn{0.06} indicates about \eqn{6\%} of the observations will be outliers
+#'  depending on whether the paramerter \code{deterministic} is \code{TRUE} or not.
+#'  Set to \eqn{0.05} by default.
+#' @param pi_coeff The coefficient \eqn{r} in the main and contamination model. Set to
+#' \eqn{15} by default.
+#' @param sin_coeff The coefficient \eqn{k} in the main and contamination model. Set to
+#' \eqn{2} by default.
+#' @param constant The value of the constant \eqn{v} in the contamination model. Set to
+#' \eqn{2} by default.
+#' @param cov_alpha A value indicating the coefficient of the exponential function
+#' of the covariance matrix, i.e., the \eqn{\alpha} in the covariance function.
+#'  Set to \eqn{1} by default.
+#' @param cov_beta A value indicating the cofficient of the terms inside the exponential
+#' function of the covariance matrix, i.e., the \eqn{\beta} in the covariance function.
+#' Set to \eqn{1} by default.
+#' @param cov_nu A value indicating the power to which to raise the terms inside the exponential
+#' function of the covariance matrix, i.e., the \eqn{\nu} in the covariance function.
+#' Set to \eqn{1} by default.
+#' @param deterministic A logical value. If \code{TRUE}, the function will always return
+#'  \code{round(n*outlier_rate)} outliers and consequently the number of outliers is always constant.
+#'  If \code{FALSE}, the number of outliers are determined using \code{n} Bernoulli trials with
+#'  probability \code{outlier_rate}, and consequently the number of outliers returned is random.
+#'  \code{TRUE} by default.
+#' @param seed A seed to set for reproducibility. \code{NULL} by default in which case a seed
+#'  is not set.
+#' @param plot A logical value indicating whether to plot data.
+#' @param plot_title Title of plot if \code{plot} is \code{TRUE}
+#' @param title_cex Numerical value indicating the size of the plot title relative to the device default.
+#' Set to 1.5 by default. Ignored if \code{plot = FALSE}.
+#' @param show_legend A logical indicating whether to add legend to plot if \code{plot = TRUE}.
+#' @param xlabel The label of the x-axis if \code{plot = TRUE}. Set to
+#' \code{"gridpoints"} by default.
+#' @param ylabel The label of the y-axis. Set to \code{""} by default.
+#'
+#' @return A list containing:
+#' \item{data}{a matrix of size \code{n} by \code{p} containing the simulated data set}
+#' \item{true_outliers}{a vector of integers indicatint the row index of the outliers in the
+#' generated data.}
+#'
+#' @export
+#' @examples
+#' dt <- simulation_model8(plot = TRUE)
+#' dim(dt$data)
+#' dt$true_outliers
+simulation_model8 <- function(n = 100, p = 50, outlier_rate = 0.05,
+                              pi_coeff = 15, sin_coeff = 2, constant = 2,
+                              cov_alpha = 1, cov_beta = 1, cov_nu = 1,
+                              deterministic = TRUE,
+                              seed = NULL, plot = F,
+                              plot_title = "Simulation Model 8",
+                              title_cex = 1.5,
+                              show_legend = T,
+                              ylabel = "",
+                              xlabel = "gridpoints"){
+
+  tt <- seq(0, 1, length.out = p)
+  covfun <- covfunexp(tt, cov_alpha, cov_beta, cov_nu)
+  L <- chol(covfun)
+  muu <- sin_coeff*sin(pi_coeff*pi*tt)
+  # Generate Data
+  if(!is.null(seed)){
+    set.seed(seed)
+  }
+  e <- matrix(rnorm(n*p), nrow = p, ncol = n)
+  y <- muu+t(L)%*%e
+
+
+    # check deterministic or probabilistic
+  dtt <- determine(deterministic, n, outlier_rate)
+  n_outliers <- dtt$n_outliers
+  true_outliers <- dtt$true_outliers
+
+  if(n_outliers > 0){
+    e <- matrix(rnorm(p*n_outliers), nrow = p)
+    muu2 <- sin_coeff*sin(pi_coeff*pi*tt+constant)
+    y[, true_outliers] <- (muu2+ t(L)%*%e)
+  }
+  ## Generate outlier
+  if(plot){
+    plot_dtt(y, tt, p, true_outliers, show_legend, plot_title,
+             title_cex, ylabel, xlabel, legend_pos = "topright")
+  }
+
+  return(list(data = t(y), true_outliers = true_outliers) )
+}
+
+# @describeIn simulation_model1 oscillating pure shape outliers
+# simulation_model9 <- function(n = 100, p = 50, outlier_rate = 0.05,
+#                               mu = 4, pi_coeff = 40, sin_coeff = .5,
+#                               cov_alpha = 1, cov_beta = 1, cov_nu = 1,
+#                               deterministic = TRUE, seed = NULL,
+#                               plot = F,
+#                               plot_title = "Simulation Model 9",
+#                               title_cex = 1.5,
+#                               show_legend = T,
+#                               ylabel = "",
+#                               xlabel = "gridpoints"){
+#
+#   tt <- seq(0, 1, length.out = p)
+#   covfun <- covfunexp(tt, cov_alpha, cov_beta, cov_nu)
+#   L <- chol(covfun)
+#   muu <- mu*tt
+#   # Generate Data
+#   if(!is.null(seed)){
+#     set.seed(seed)
+#   }
+#   e <- matrix(rnorm(n*p), nrow = p, ncol = n)
+#   y <- muu+t(L)%*%e
+#
+#
+#   # check deterministic or probabilistic
+#   dtt <- determine(deterministic, n, outlier_rate)
+#   n_outliers <- dtt$n_outliers
+#   true_outliers <- dtt$true_outliers
+#
+#   if(n_outliers > 0){
+#     e <- matrix(rnorm(p*n_outliers), nrow = p)
+#     y[, true_outliers] <- (muu+ sin_coeff*sin(pi_coeff*pi*tt) + t(L)%*%e)
+#   }
+#   ## Generate outlier
+#   if(plot){
+#     plot_dtt(y, tt, p, true_outliers, show_legend, plot_title,
+#              title_cex, ylabel, xlabel, legend_pos = "bottomright")
+#   }
+#
+#   return(list(data = t(y), true_outliers = true_outliers) )
+# }
+
+
+
+#' Convenience function for generating functional data
+#'
+#' Periodic functions with outliers of different amplitude. The
+#' main model is of the form
+#' \deqn{X_i(t) = a_{1i}\sin \pi + a_{2i}\cos\pi + e_i(t),}
+#' with contamination model of the form
+#' \deqn{X_i(t) = (b_{1i}\sin\pi + b_{2i}\cos\pi)(1-u_i) +
+#'  (c_{1i}\sin\pi + c_{2i}\cos\pi)u_i + e_i(t),}
+#' where \eqn{t\in [0,1]}, \eqn{\pi \in [0, 2\pi]}, \eqn{a_{1i}},
+#' \eqn{a_{2i}}  follows uniform distribution in an interval \eqn{[a_1, a_2]}
+#' \eqn{b_{1i}}, \eqn{b_{i1}} follows uniform distribution in an interval
+#' \eqn{[b_1, b_2]}; \eqn{c_{1i}}, \eqn{c_{i1}} follows uniform distribution
+#' in an interval \eqn{[c_1, c_2]}; \eqn{u_i} follows Bernoulli distribution
+#' and \eqn{e_i(t)} is a Gaussian processes with zero mean and covariance
+#' function of the form \deqn{\gamma(s,t) = \alpha\exp{-\beta|t-s|^\nu}}
+
+
+#' @param n The number of curves to generate. Set to \eqn{100} by default.
+#' @param p The number of evaluation points of the curves. Curves are usually generated
+#'  over the interval \eqn{[0, 1]}. Set to \eqn{50} by default.
+#' @param outlier_rate A value between \eqn{[0, 1]} indicating the percentage of outliers.
+#'  A value of \eqn{0.06} indicates about \eqn{6\%} of the observations will be outliers
+#'  depending on whether the paramerter \code{deterministic} is \code{TRUE} or not.
+#'  Set to \eqn{0.05} by default.
+#' @param kprob The probability \eqn{P(u_i = 1)}. Set to \eqn{0.5} by default.
+#' @param ai A vector of two values containing \eqn{a_{1i}} and \eqn{a_{2i}}
+#' in the main model. Set to \code{c(3, 8)} by default.
+#' @param bi A vector of 2 values containing \eqn{b_{1i}} and \eqn{b_{2i}} in the
+#'  contamination model. Set to \code{c(1.5, 2.5)} by default.
+#' @param ci A vector of 2 values containing $c_{1i}$ and $c_{2i}$ in the contamination
+#'  model. Set to \code{c(9, 10.5)} by default.
+#' @param cov_alpha A value indicating the coefficient of the exponential function
+#' of the covariance matrix, i.e., the \eqn{\alpha} in the covariance function.
+#'  Set to \eqn{1} by default.
+#' @param cov_beta A value indicating the cofficient of the terms inside the exponential
+#' function of the covariance matrix, i.e., the \eqn{\beta} in the covariance function.
+#' Set to \eqn{1} by default.
+#' @param cov_nu A value indicating the power to which to raise the terms inside the exponential
+#' function of the covariance matrix, i.e., the \eqn{\nu} in the covariance function.
+#' Set to \eqn{1} by default.
+#' @param deterministic A logical value. If \code{TRUE}, the function will always return
+#'  \code{round(n*outlier_rate)} outliers and consequently the number of outliers is always constant.
+#'  If \code{FALSE}, the number of outliers are determined using \code{n} Bernoulli trials with
+#'  probability \code{outlier_rate}, and consequently the number of outliers returned is random.
+#'  \code{TRUE} by default.
+#' @param seed A seed to set for reproducibility. \code{NULL} by default in which case a seed
+#'  is not set.
+#' @param plot A logical value indicating whether to plot data.
+#' @param plot_title Title of plot if \code{plot} is \code{TRUE}
+#' @param title_cex Numerical value indicating the size of the plot title relative to the device default.
+#' Set to 1.5 by default. Ignored if \code{plot = FALSE}.
+#' @param show_legend A logical indicating whether to add legend to plot if \code{plot = TRUE}.
+#' @param xlabel The label of the x-axis if \code{plot = TRUE}. Set to
+#' \code{"gridpoints"} by default.
+#' @param ylabel The label of the y-axis. Set to \code{""} by default.
+#'
+#' @return A list containing:
+#' \item{data}{a matrix of size \code{n} by \code{p} containing the simulated data set}
+#' \item{true_outliers}{a vector of integers indicatint the row index of the outliers in the
+#' generated data.}
+#'
+#' @export
+#' @examples
+#' dt <- simulation_model9(plot = TRUE)
+#' dim(dt$data)
+#' dt$true_outliers
+simulation_model9 <- function(n = 100, p = 50, outlier_rate = 0.05,
+                              kprob = .5, ai = c(3,8), bi = c(1.5, 2.5),
+                              ci = c(9,10.5),
+                              cov_alpha = 1, cov_beta = 1, cov_nu = 1,
+                              deterministic = TRUE, seed = NULL,
+                              plot = F,
+                              plot_title = "Simulation Model 9",
+                              title_cex = 1.5,
+                              show_legend = T,
+                              ylabel = "",
+                              xlabel = "gridpoints"){
+
+  tt <- seq(0, 1, length.out = p)
+  covfun <- covfunexp(tt, cov_alpha, cov_beta, cov_nu)
+  L <- chol(covfun)
+  tt2 <- seq(0, 2*pi, length.out = p)
+
+  # Generate Data
+  if(!is.null(seed)){
+    set.seed(seed)
+  }
+  e <- matrix(rnorm(n*p), nrow = p, ncol = n)
+  # check deterministic or probabilistic
+  dtt <- determine(deterministic, n, outlier_rate)
+  n_outliers <- dtt$n_outliers
+  true_outliers <- dtt$true_outliers
+
+  pp1 <- matrix(sin(tt2), nrow = p)%*% runif(n,ai[1], ai[2])
+  pp2 <- matrix(cos(tt2), nrow = p)%*% runif(n,ai[1], ai[2])
+
+  muu <- pp1 + pp2
+  y <- muu+t(L)%*%e
+
+
+
+
+  if(n_outliers > 0){
+    qcoeffk <- sample(c(T,F), n_outliers, replace = T,
+                      prob = c(kprob, 1 - kprob))
+
+    e1 <- matrix(rnorm(p*sum(qcoeffk)), nrow = p)
+    e2 <- matrix(rnorm(p*sum(!qcoeffk)), nrow = p)
+
+    kk1 <- matrix(sin(tt2), nrow = p)%*% runif(sum(qcoeffk),ci[1], ci[2])
+    kk2 <- matrix(cos(tt2), nrow = p)%*% runif(sum(qcoeffk),ci[1], ci[2])
+
+    ll1 <- matrix(sin(tt2), nrow = p)%*% runif(sum(!qcoeffk),bi[1], bi[2])
+    ll2 <- matrix(cos(tt2), nrow = p)%*% runif(sum(!qcoeffk),bi[1], bi[2])
+
+    y[, true_outliers[qcoeffk]] <- kk1 + kk2 + t(L)%*%e1
+    y[, true_outliers[!qcoeffk]] <- ll1 + ll2 + t(L)%*%e2
+
+  }
+  ## Generate outlier
+  if(plot){
+    plot_dtt(y, tt, p, true_outliers, show_legend, plot_title,
+             title_cex, ylabel, xlabel, legend_pos = "bottomright")
+  }
+
+  return(list(data = t(y), true_outliers = true_outliers) )
+}
+
+
+
+
+
+
+

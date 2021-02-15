@@ -18,5 +18,22 @@ Returns a list containing the following
   \item{\code{indices}}{a dataframe containing the shape, magnitude and amplitude indices}
 }
 \description{
-Massive Unspervised Outlier Detection (MUOD)
+MUOD finds outliers by computing for each functional data, a magnitude, amplitude and shape index. Outliers
+are then detected in each set of index and outliers found are classified as either a magnitude, shape or amplitude
+outlier.
+}
+\details{
+MUOD was proposed in Azcorra et al. (2020)\href{https://doi.org/10.1038/s41598-018-24874-2}{<doi:10.1038/s41598-018-24874-2>} as a support method for finding influential users in a social network data.
+It was also mentioned in Vinue and Epiphano (2020) \href{https://doi.org/10.1007/s11634-020-00412-9}{<doi:10.1007/s11634-020-00412-9>}
+ where it was compared with other functional outlier detection methods.
+
+ MUOD computes for each curve three indices: amplitude, magnitude and shape indices. Then a cutoff is
+ determined for each set of indices and outliers are identified in each set of index. Outliers identified in
+ the magnitude indices are flagged as magnitude outliers. The same holds true for the amplitude and shape indices.
+ Thus, the outliers are not only identified but also classified.
+}
+\references{
+Azcorra, A., Chiroque, L. F., Cuevas, R., Anta, A. F., Laniado, H., Lillo, R. E., Romo, J., & Sguera, C. (2018).
+ Unsupervised scalable statistical method for identifying influential users in online social networks.
+  Scientific reports, 8(1), 1-7.
 }

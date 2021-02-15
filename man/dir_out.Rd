@@ -36,17 +36,18 @@ this matrix (computed using the minimum covariance determinant method).}
 matrix (or array for multivariate functional data). Computed from the chosen \code{depth_depth}.}
 }
 \value{
-Returns a list containing: \item{mean_outlyingness}{an \code{n x d} matrix of the mean
+Returns a list containing:
+\item{mean_outlyingness}{an \code{n x d} matrix of the mean
  of directional outlyingness.} \item{var_outlyingness}{ a vector of length n containing
- the variation of directional outlyingness.} \item{ms_matrix}{ if
- \code{return_distance} = T, an \code{n x (d+1)} matrix whose columns are the mean and
- variation of directional outlyingness.} \item{distance}{ if \code{return_distance} = T,
- a vector of distance computed from the \code{ms_matrix} using a robust estimate of
- the mean and covariance matrix.} \item{mcd_obj}{ if \code{return_distance} = T, a list
- containing the robust (minimum covariance determinant) estimate of the mean and
- covariance of the \code{ms_matrix}.} \item{dirout_matrix}{ if \code{return_dir_matrix}
- = T, an n x p (or n x p x d) matrix (or array) containing the directional outlyingness values for
- the univariate (or multivariate) functional \code{dts}.}
+ the variation of directional outlyingness.}
+ \item{ms_matrix}{ if\code{return_distance} = T, an \code{n x (d+1)} matrix whose columns are the mean and
+ variation of directional outlyingness.}
+ \item{distance}{ if \code{return_distance} = T, a vector of distance computed from the
+ \code{ms_matrix} using a robust estimate of the mean and covariance matrix.}
+ \item{mcd_obj}{ if \code{return_distance} = T, a list containing the robust
+ (minimum covariance determinant) estimate of the mean and covariance of the \code{ms_matrix}.}
+ \item{dirout_matrix}{ if \code{return_dir_matrix} = T, an n x p (or n x p x d) matrix (or array)
+  containing the directional outlyingness values for the univariate (or multivariate) functional \code{dts}.}
 }
 \description{
 Compute the directional outlyingness of a univariate or multivariate functional data

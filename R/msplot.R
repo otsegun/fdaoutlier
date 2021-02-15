@@ -142,25 +142,28 @@ msplot <- function(dts,
          ylim = range(myy) + c(-.2*sd(myy), 1*sd(myy) ), axes = F,
          col.lab = "gray20")
     #add axis
-    axis(1, col = "white", col.ticks = "grey75", lwd.ticks = 0.2, tck = 1,
+    axis(1, col = "white", col.ticks = "grey61", lwd.ticks = .5, tck = -0.025,
          cex.axis = 0.9, col.axis = "gray30")
-    axis(2, col = "white", col.ticks = "grey75", lwd.ticks = 0.2, tck = 1,
+    axis(2,col = "white", col.ticks = "grey61",  lwd.ticks = .5, tck = -0.025,
          cex.axis = 0.9, col.axis = "gray30")
+    grid(col = "grey75", lwd = .5)
+    box(col = "grey51")
+
     if(length(outliers_index > 0)){
       points(myx[-outliers_index], myy[-outliers_index], bg = "gray60", pch = 21)
       points(myx[outliers_index], myy[outliers_index], pch = 3)
     } else{
       points(myx, myy, bg = "gray60", pch = 21)
     }
-    mtext(plot_title,3, adj = 0.5, line = 0, cex = title_cex)
+    mtext(plot_title,3, adj = 0.5, line = 1, cex = title_cex, col = "gray20")
     # mtext(paste0(length(outliers_index), " outliers detected"),
     #       1, adj = 1, line = 3, cex =.8, font = 3, col = "gray41")
     if(show_legend){
       legend("topright", legend = c("normal", "outlier"),
-             pch = c(21, 3), cex = 0.9,
+             pch = c(21, 3), cex = 1,
              pt.bg = "gray60", col = "gray0",
-             text.col = "gray30", bty = "o",
-             box.lwd = .1, xjust = 0, inset = .03)
+             text.col = "gray30", bty = "n",
+             box.lwd = .1, xjust = 0, inset = .01)
     }
   }
 
