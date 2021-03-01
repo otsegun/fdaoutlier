@@ -17,12 +17,13 @@ Returns a list containing the following
 }
 \description{
 This function computes the total variation depth (tvd) and the modified shape similarity index (mss)
-proposed in Huang and Sun (2019) \href{https://doi.org/10.1080/00401706.2019.1574241}{<doi:10.1080/00401706.2019.1574241>}.
+proposed in Huang and Sun (2019) \doi{10.1080/00401706.2019.1574241}.
 }
 \details{
-This function computes the total variation depth (TVD) and modified shape similarity (MSS) index of a univariate
-functional data. The definition of the estimates of TVD and MSS can be found in Huang and Sun (2019)
-\href{https://doi.org/10.1080/00401706.2019.1574241}{<doi:10.1080/00401706.2019.1574241>}.
+This function computes the total variation depth (TVD) and modified shape
+similarity (MSS) index of a univariate functional data. The definition of the
+estimates of TVD and MSS can be found in Huang and Sun (2019)
+\doi{10.1080/00401706.2019.1574241}.
 }
 \examples{
 dt6 <- simulation_model6()

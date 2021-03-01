@@ -19,7 +19,8 @@ points) or a 3-dimensional array for multivariate functional data (of size \code
 observations by \code{p} domain points by \code{d} dimension).}
 
 \item{data_depth}{The method for computing the depth. The random projection depth is
-always used as suggested in Dai and Genton (2018) \href{https://doi.org/10.1080/10618600.2018.1473781}{<doi:10.1080/10618600.2018.1473781>}. Support more depth methods will be added.}
+always used as suggested in Dai and Genton (2018) \doi{10.1080/10618600.2018.1473781}.
+Support for more depth methods will be added.}
 
 \item{n_projections}{The number of directions for computing random projection depth. By default,
 200 random directions are generated from a scaled uniform distribution between -1 and 1.}
@@ -51,15 +52,16 @@ Returns a list containing:
 }
 \description{
 Compute the directional outlyingness of a univariate or multivariate functional data
-based on Dai and Genton (2019) \href{https://doi.org/10.1016/j.csda.2018.03.017}{<doi:10.1016/j.csda.2018.03.017>}
-and Dai and Genton (2018) \href{https://doi.org/10.1080/10618600.2018.1473781}{<doi:10.1080/10618600.2018.1473781>}.
+based on Dai and Genton (2019) \doi{10.1016/j.csda.2018.03.017}
+and Dai and Genton (2018) \doi{10.1080/10618600.2018.1473781}.
 }
 \details{
-The directional outlyingness, as defined in Dai and Genton (2019) \href{https://doi.org/10.1016/j.csda.2018.03.017}{<doi:10.1016/j.csda.2018.03.017>} is
+The directional outlyingness, as defined in Dai and Genton (2019)
+\doi{10.1016/j.csda.2018.03.017} is
 \deqn{O(Y, F_Y) = (1/d(Y, F_Y) - 1).v} where \eqn{d} is a depth notion, and \eqn{v} is
 the unit vector pointing from the median of \eqn{F_Y} to \eqn{Y}. For univariate and
 multivariate functional data, the projection depth is always used as suggested by
-\href{https://doi.org/10.1016/j.csda.2018.03.017}{Dai and Genton (2019)}.
+Dai and Genton (2019) \doi{10.1016/j.csda.2018.03.017}.
 }
 \examples{
 # univariate magnitude model in Dai and Genton (2018).

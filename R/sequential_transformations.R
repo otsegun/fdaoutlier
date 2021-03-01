@@ -1,13 +1,15 @@
 #' Find and classify outliers functional outliers using Sequential Transformation
 #'
-#' This method finds and classify outliers using sequential transformations proposed in Algorithm 1 of
-#' Dai et al. (2020)\href{https://doi.org/10.1016/j.csda.2020.106960}{<doi:10.1016/j.csda.2020.106960>}.
-#' A sequence of transformations are applied to the functional data and after each transformation, a functional
-#' boxplot is applied on the transformed data and outliers flagged by the functional data are noted. A number of
-#' transformations mentioned in Dai et al. (2020)\href{https://doi.org/10.1016/j.csda.2020.106960}{<doi:10.1016/j.csda.2020.106960>}
-#' are supported including vertical alignment ("T1(X)(t)"), normalization ("T2(X)(t)"),
-#' one order of differencing ("D1(X)(t)" and "D2(X)(t)") and point-wise outlyingness data ("O(X)(t)"). The feature alignment
-#' transformation based on warping/curve registration is not yet supported.
+#' This method finds and classify outliers using sequential transformations
+#' proposed in Algorithm 1 of Dai et al. (2020) \doi{10.1016/j.csda.2020.106960}.
+#' A sequence of transformations are applied to the functional data and after each
+#' transformation, a functional boxplot is applied on the transformed data and outliers
+#' flagged by the functional data are noted. A number of transformations mentioned in
+#' Dai et al. (2020) \doi{10.1016/j.csda.2020.106960} are supported including vertical
+#' alignment ("T1(X)(t)"), normalization ("T2(X)(t)"), one order of differencing
+#' ("D1(X)(t)" and "D2(X)(t)") and point-wise outlyingness data ("O(X)(t)").
+#' The feature alignment transformation based on warping/curve registration is not yet
+#' supported.
 #'
 #'
 #' @param dts A matrix for univariate functional data (of size \code{n} observations by \code{p} domain
@@ -73,12 +75,13 @@
 #'  \code{save_data = FALSE}).}
 #'
 #' @details
-#'This function implements outlier detection using sequential transformations described in Algorithm 1 of
-#'Dai et al. (2020) \href{https://doi.org/10.1016/j.csda.2020.106960}{<doi:10.1016/j.csda.2020.106960>}.
-#'A sequence of transformations are applied consecutively with the functional boxplot applied on the transformed data after
-#'each transformation. The following example sequences (and their meaning) suggested in
-#'Dai et al. (2020) \href{https://doi.org/10.1016/j.csda.2020.106960}{<doi:10.1016/j.csda.2020.106960>} can be parsed to
-#'argument \code{sequence}.
+#'This function implements outlier detection using sequential transformations
+#'described in Algorithm 1 of Dai et al. (2020) \doi{10.1016/j.csda.2020.106960}.
+#'A sequence of transformations are applied consecutively with the functional
+#'boxplot applied on the transformed data after each transformation. The following
+#'example sequences (and their meaning) suggested in Dai et al. (2020)
+#'\doi{10.1016/j.csda.2020.106960} can be parsed to argument \code{sequence}.
+#'
 #'\describe{
 #'   \item{\code{"T0"}}{Apply functional boxplot on raw data (no transformation is applied).}
 #'    \item{\code{c("T0", "T1", "D1")}}{Apply functional boxplot on raw data, then apply vertical alignment on data followed by applying

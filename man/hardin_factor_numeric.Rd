@@ -19,13 +19,13 @@ Returns a list containing: \item{factor1}{ then estimated value of
 \description{
 Computes asymptotically, the factors for F approximation cutoff for (MCD) robust
 mahalanobis distances according to Hardin and Rocke (2005)
-\href{https://doi.org/10.1198/106186005X77685}{<doi:10.1198/106186005X77685>}.
+\doi{10.1198/106186005X77685}.
 }
 \details{
 This function computes the two factors needed for the determining an appropriate
 cutoff for robust mahalanobis distances computed using the MCD method.
 
-The F approximation according to Hardin and Rocke (2005)\href{https://doi.org/10.1198/106186005X77685}{<doi:10.1198/106186005X77685>}
+The F approximation according to Hardin and Rocke (2005) \doi{10.1198/106186005X77685}
 is given by: \deqn{c(m-p+1)/(pm) * RMD^2 ~ F_{p, m-p+1}} where \eqn{m} is a parameter for finding the degree of freedom of the
 \eqn{F} distribution, \eqn{c} is a scaling constant and \eqn{p} is the dimension. The first factor
 returned by this function (\code{factor1}) is \eqn{c(m-p+1)/(pm)} and the second factor (\code{factor2}) is \eqn{F_{p, m-p+1}}.

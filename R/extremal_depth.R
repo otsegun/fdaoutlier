@@ -11,7 +11,7 @@
 #' of functions in \eqn{S} that is more extreme than \eqn{g}. The functions are ordered using depths cumulative
 #' distribution functions (d-CDFs). Extremal depth like the name implies is based on extreme outlyingness and it
 #' penalizes functions that are outliers even for a small part of the domain. Proposed/mentioned in
-#' Narisetty and Nair (2016)\href{https://doi.org/10.1080/01621459.2015.1110033}{<doi:10.1080/01621459.2015.1110033>}.
+#' Narisetty and Nair (2016) \doi{10.1080/01621459.2015.1110033}.
 #'
 #' @return A vector containing the extremal depths of the rows of \code{dts}.
 #'

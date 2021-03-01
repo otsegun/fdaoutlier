@@ -38,11 +38,11 @@
 #'
 #' @details
 #' This is a stripped down version of the popular \code{aemet} spanish weather data available in
-#' the \code{fda.usc}\href{http://dx.doi.org/10.18637/jss.v051.i04}{<doi:10.18637/jss.v051.i04>} package.
+#' the \code{fda.usc} \doi{10.18637/jss.v051.i04} package.
 #' See the documentation of \code{fda.usc} for more details about data.
 #'
 #' @source
-#' Data obtained from the \code{fda.usc}\href{http://dx.doi.org/10.18637/jss.v051.i04}{<doi:10.18637/jss.v051.i04>} package.
+#' Data obtained from the \code{fda.usc} \doi{10.18637/jss.v051.i04} package.
 #'
 #' @keywords datasets
 #' @examples
@@ -57,12 +57,11 @@
 #'
 #'
 #' @description This is the world population data, revision 2010, by countries used in the paper
-#' Nagy et al. (2016) \href{https://doi.org/10.1080/10618600.2017.1336445}{<doi:10.1080/10618600.2017.1336445>}
-#' and Dai et al. (2020) \href{https://doi.org/10.1016/j.csda.2020.106960}{<doi:10.1016/j.csda.2020.106960>}.
-#' It contains population (both sexes) of countries as of July 1 in the years 1950 - 2010.
-#' The data have been preprocessed as described in Nagy et al. (2016) and hence contains only
-#' the 105 countries with population in the range of one million and fifteen million on
-#' July 1, 1980.
+#' Nagy et al. (2016) \doi{10.1080/10618600.2017.1336445} and Dai et al. (2020)
+#' \doi{10.1016/j.csda.2020.106960}. It contains population (both sexes) of countries
+#' as of July 1 in the years 1950 - 2010. The data have been preprocessed as described
+#' in Nagy et al. (2016) and hence contains only the 105 countries with population
+#' in the range of one million and fifteen million on July 1, 1980.
 #'
 #'
 #' @name world_population

@@ -1,7 +1,8 @@
 #' Compute the modified band depth for a sample of curves/functions.
 #'
-#' This function computes the modified band depth of López-Pintado and Romo (2009)\href{https://doi.org/10.1198/jasa.2009.0108}{<doi:10.1198/jasa.2009.0108>}.
-#' Bands of 2 functions are always used and the fast algorithm of Sun et al. (2012)\href{https://doi.org/10.1002/sta4.8}{<doi:10.1002/sta4.8>} is used in computing
+#' This function computes the modified band depth of López-Pintado and Romo (2009)
+#' \doi{10.1198/jasa.2009.0108}. Bands of 2 functions are always used and the
+#' fast algorithm of Sun et al. (2012) \doi{10.1002/sta4.8} is used in computing
 #' the depth values.
 #'
 #' @param dt A matrix or data frame of size \eqn{n} functions/curves by \eqn{p} domain/evaluation points.

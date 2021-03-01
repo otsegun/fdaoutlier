@@ -35,7 +35,7 @@ A list containing :
  }
 }
 \source{
-Data obtained from the \code{fda.usc}\href{http://dx.doi.org/10.18637/jss.v051.i04}{<doi:10.18637/jss.v051.i04>} package.
+Data obtained from the \code{fda.usc} \doi{10.18637/jss.v051.i04} package.
 }
 \usage{
 spanish_weather
@@ -46,7 +46,7 @@ in Spain between 1980 - 2009.
 }
 \details{
 This is a stripped down version of the popular \code{aemet} spanish weather data available in
-the \code{fda.usc}\href{http://dx.doi.org/10.18637/jss.v051.i04}{<doi:10.18637/jss.v051.i04>} package.
+the \code{fda.usc} \doi{10.18637/jss.v051.i04} package.
 See the documentation of \code{fda.usc} for more details about data.
 }
 \examples{

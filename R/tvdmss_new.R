@@ -1,7 +1,7 @@
 #' Outlier detection using the total variation depth and modified shape similarity index.
 #'
 #' Find shape and magnitude outliers  using the Total Variation Depth and Modified
-#' Shape Similarity Index proposed in Huang and Sun (2019) \href{https://doi.org/10.1080/00401706.2019.1574241}{<doi:10.1080/00401706.2019.1574241>}.
+#' Shape Similarity Index proposed in Huang and Sun (2019) \doi{10.1080/00401706.2019.1574241}.
 #'
 #' @param dts,data A matrix or dataframe of size \eqn{n} observations/curves by \eqn{p} domain/evaluation
 #'   points.
@@ -14,11 +14,12 @@
 #'
 #'@details
 #' This method uses a combination of total variation depth (TVD) and modified shape similarity (MSS) index
-#'  defined in Huang and Sun (2019)\href{https://doi.org/10.1080/00401706.2019.1574241}{<doi:10.1080/00401706.2019.1574241>}
+#'  defined in Huang and Sun (2019) \doi{10.1080/00401706.2019.1574241}
 #'  to find magnitude and shape outliers. The TVD and MSS of all the observations are
-#'  first computed and a classical boxplot is then applied on the MSS. Outliers detected by the boxplot of MSS are
-#'  flagged as shape outliers. The shape outliers are then removed from the data and the TVD of the
-#'  remaining observations are used in a functional boxplot to detect magnitude outliers.  The central region
+#'  first computed and a classical boxplot is then applied on the MSS. Outliers detected
+#'  by the boxplot of MSS are flagged as shape outliers. The shape outliers are then removed
+#'  from the data and the TVD of the remaining observations are used in a functional boxplot
+#'  to detect magnitude outliers.  The central region
 #'  of this functional boxplot (\code{central_region_tvd}) is w.r.t. to the original number of curves. Thus if
 #'  8 shape outliers are found out of 100 curves, specifying \code{central_region_tvd} = 0.5 will ensure that
 #'  50 observations are used as the central region in the functional boxplot on the remaining 92 observations.

@@ -20,9 +20,10 @@ msplot(
 )
 }
 \arguments{
-\item{dts}{A matrix/data frame for univariate functional data (of size \eqn{n} observations by \eqn{p} domain
-points) or a \eqn{3-}dimensional array for multivariate functional data (of size \eqn{n}
-observations by \eqn{p} domain points by \eqn{d} dimension).}
+\item{dts}{A matrix/data frame for univariate functional data (of size \eqn{n}
+observations by \eqn{p} domain points) or a \eqn{3-}dimensional array for
+multivariate functional data (of size \eqn{n} observations by \eqn{p}
+domain points by \eqn{d} dimension).}
 
 \item{data_depth}{The depth used in the computation of the directional outlyingness of
 \code{dts}. The projection depth is always used. Support for other depth methods will be added.}
@@ -68,20 +69,22 @@ Returns a list containing:
 }
 \description{
 This function finds outliers in univariate and multivariate functional data using the MS-Plot
-method described in Dai and Genton (2018)\href{https://doi.org/10.1080/10618600.2018.1473781}{<doi:10.1080/10618600.2018.1473781>}.
-Indices of observations flagged as outliers are returned. In addition, the scatter plot of \eqn{VO} against \eqn{MO} (||MO||)
-can be requested for univariate (multivariate) functional data.
+method described in Dai and Genton (2018) \doi{10.1080/10618600.2018.1473781}.
+Indices of observations flagged as outliers are returned. In addition, the
+scatter plot of \eqn{VO} against \eqn{MO} (||MO||) can be requested for univariate
+(multivariate) functional data.
 }
 \details{
 MS-Plot finds outliers by computing
 the mean and variation of directional outlyingness (\eqn{MO} and \eqn{VO}) described
-in Dai and Genton (2019)\href{https://doi.org/10.1016/j.csda.2018.03.017}{<doi:10.1016/j.csda.2018.03.017>}.
+in Dai and Genton (2019) \doi{10.1016/j.csda.2018.03.017}.
 A multivariate data whose columns are the computed \eqn{MO} and \eqn{VO} is then constructed and
 the robust mahalanobis distance(s) of the rows of this matrix are computed
 (using the minimum covariate determinant estimate of the location and scatter). The tail
 of the distribution of these distances is approximated using the \eqn{F} distribution
-according to Hardin and Rocke (2005)\href{https://doi.org/10.1198/106186005X77685}{<doi:10.1198/106186005X77685>} to get the cutoff. The projection depth is always used
-for computing the directional outlyingness (as suggested by Dai and Genton (2019)\href{https://doi.org/10.1016/j.csda.2018.03.017}{<doi:10.1016/j.csda.2018.03.017>}).
+according to Hardin and Rocke (2005) \doi{10.1198/106186005X77685} to get the cutoff.
+The projection depth is always used for computing the directional outlyingness
+(as suggested by Dai and Genton (2019) \doi{10.1016/j.csda.2018.03.017}).
 }
 \examples{
 # Univariate magnitude model in Dai and Genton (2018).

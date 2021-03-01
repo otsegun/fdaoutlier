@@ -1,10 +1,3 @@
-## find the degrees of freedom for F distribution according Hardin and Rocke 2005
-# hardin_factor_sim <- function(n, dimesnion, n_iter = 100){
-#   sims_result <- cm(n, dimension, n_inter, 100) # check this call and function.
-#   factors <- sims_result[1] * (sims_result[2] - dimension + 1)/(dimension * sims_result[2])
-#   cutoff <- qf(.993, dimension, sims_result[2] - dimension +1)
-#   return(list(factor1 = factors, factor2 = cutoff))
-# }
 
 croux_hesbroeck_asymptotic <- function(n, dimension){
   h <- floor((n+dimension+1)/2)
@@ -35,7 +28,7 @@ croux_hesbroeck_asymptotic <- function(n, dimension){
 #'
 #' Computes asymptotically, the factors for F approximation cutoff for (MCD) robust
 #' mahalanobis distances according to Hardin and Rocke (2005)
-#' \href{https://doi.org/10.1198/106186005X77685}{<doi:10.1198/106186005X77685>}.
+#' \doi{10.1198/106186005X77685}.
 #'
 #' @param n A numeric value indicating the number of observations of the data.
 #' @param dimension A numeric value indicating the number of variables of the data.
@@ -43,7 +36,7 @@ croux_hesbroeck_asymptotic <- function(n, dimension){
 #' @details This function computes the two factors needed for the determining an appropriate
 #' cutoff for robust mahalanobis distances computed using the MCD method.
 #'
-#' The F approximation according to Hardin and Rocke (2005)\href{https://doi.org/10.1198/106186005X77685}{<doi:10.1198/106186005X77685>}
+#' The F approximation according to Hardin and Rocke (2005) \doi{10.1198/106186005X77685}
 #' is given by: \deqn{c(m-p+1)/(pm) * RMD^2 ~ F_{p, m-p+1}} where \eqn{m} is a parameter for finding the degree of freedom of the
 #' \eqn{F} distribution, \eqn{c} is a scaling constant and \eqn{p} is the dimension. The first factor
 #' returned by this function (\code{factor1}) is \eqn{c(m-p+1)/(pm)} and the second factor (\code{factor2}) is \eqn{F_{p, m-p+1}}.
