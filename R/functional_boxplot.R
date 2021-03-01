@@ -52,7 +52,8 @@
 #'
 #'@export
 #' @examples
-#' fbplot_obj <- functional_boxplot(sim_data1$data, depth_method = "mbd")
+#' dt1 <- simulation_model1()
+#' fbplot_obj <- functional_boxplot(dt1$data, depth_method = "mbd")
 #' fbplot_obj$outliers
 functional_boxplot <- function(dts,
                                depth_method = c("mbd", "tvd", "extremal", "dirout",

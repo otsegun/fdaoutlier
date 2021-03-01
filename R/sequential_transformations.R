@@ -107,18 +107,20 @@
 #'
 #' @examples
 #' # same as running a functional boxplot
-#' seqobj <- seq_transform(sim_data1$data, sequence = "T0", depth_method = "mbd")
+#' dt1 <- simulation_model1()
+#' seqobj <- seq_transform(dt1$data, sequence = "T0", depth_method = "mbd")
 #' seqobj$outliers$T0
 #' functional_boxplot(sim_data1$data, depth_method = "mbd")$outliers
 #'
 #' # more sequences
-#' seqobj <- seq_transform(sim_data1$data, sequence = c("T0", "D1", "D2"), depth_method = "mbd")
+#' dt4 <- simulation_model4()
+#' seqobj <- seq_transform(dt4$data, sequence = c("T0", "D1", "D2"), depth_method = "mbd")
 #' seqobj$outliers$T0 # outliers found in raw data
 #' seqobj$outliers$D1 # outliers found after differencing data the first time
 #' seqobj$outliers$D2 # outliers found after differencing the data the second time
 #'
 #' # saving transformed data
-#' seqobj <- seq_transform(sim_data1$data, sequence = c("T0", "D1", "D2"),
+#' seqobj <- seq_transform(dt4$data, sequence = c("T0", "D1", "D2"),
 #'  depth_method = "mbd", save_data = TRUE)
 #' seqobj$outliers$T0 # outliers found in raw data
 #' head(seqobj$transformed_data$T0)  # the raw data
@@ -126,7 +128,7 @@
 #' head(seqobj$transformed_data$D2) # the 2nd order differenced data
 #'
 #' # double transforms e.g. c("T0", "D1", "D1")
-#' seqobj <- seq_transform(sim_data1$data, sequence = c("T0", "D1", "D1"),
+#' seqobj <- seq_transform(dt4$data, sequence = c("T0", "D1", "D1"),
 #'  depth_method = "mbd", save_data = TRUE) # throws warning
 #' seqobj$outliers$T0 # outliers found in raw data
 #' seqobj$outliers$D1_1 #found after differencing data the first time
@@ -136,9 +138,9 @@
 #' head(seqobj$transformed_data$D1_2) # the 2nd order differenced data
 #'
 #' # multivariate data
-#' dtm <- array(0, dim = c(100, 50, 2))
-#' dtm[,,1] <- sim_data1$data
-#' dtm[,,2] <- sim_data1$data
+#' dtm <- array(0, dim = c(dim(dt1$data), 2))
+#' dtm[,,1] <- dt1$data
+#' dtm[,,2] <- dt1$data
 #' seqobj <- seq_transform(dtm, sequence = "O", depth_method = "erld",
 #'  erld_type = "one_sided_right", save_data = TRUE)
 #' seqobj$outliers$O # multivariate outliers

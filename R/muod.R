@@ -23,7 +23,11 @@
 #'   \item{\code{indices}}{a dataframe containing the shape, magnitude and amplitude indices}
 #' @export
 #'
-#'
+#' @examples
+#' dt1 <- simulation_model1()
+#' md <- muod(dts = dt1$data)
+#' str(md$outliers)
+#' dim(md$indices)
 #' @references
 #' Azcorra, A., Chiroque, L. F., Cuevas, R., Anta, A. F., Laniado, H., Lillo, R. E., Romo, J., & Sguera, C. (2018).
 #'  Unsupervised scalable statistical method for identifying influential users in online social networks.

@@ -39,8 +39,8 @@
 #'@export
 #'
 #'@examples
-#' data(sim_data1)
-#' erld <- extreme_rank_length(sim_data1$data)
+#' dt3 <- simulation_model3()
+#' erld <- extreme_rank_length(dt3$data)
 #'
 extreme_rank_length <-
   function(dts,

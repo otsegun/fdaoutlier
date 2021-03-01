@@ -1,8 +1,9 @@
 #' Compute the band depth for a sample of curves/observations.
 #'
-#'This function computes the band depth of López-Pintado and Romo (2009) \href{https://doi.org/10.1198/jasa.2009.0108}{<doi:10.1198/jasa.2009.0108>}.
-#' Bands of 2 functions are always considered using  the fast algorithm of Sun et al. (2012)
-#' \href{https://doi.org/10.1002/sta4.8}{<doi:10.1002/sta4.8>}.
+#'This function computes the band depth of López-Pintado and Romo (2009)
+#'\href{https://doi.org/10.1198/jasa.2009.0108}{<doi:10.1198/jasa.2009.0108>}. Bands
+#'of 2 functions are always considered using  the fast algorithm of Sun et al. (2012)
+#'\href{https://doi.org/10.1002/sta4.8}{<doi:10.1002/sta4.8>}.
 #'
 #' @param dt A matrix or data frame of size \eqn{n} observations/curves by \eqn{p} domain/evaluation points.
 #'
@@ -18,7 +19,8 @@
 #' @export
 #'
 #' @examples
-#' bd2 <- band_depth(sim_data1$data)
+#' dt1 <- simulation_model1()
+#' bd2 <- band_depth(dt = dt1$data)
 #'
 band_depth <- function(dt){
   if (is.data.frame(dt)) {

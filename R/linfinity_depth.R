@@ -18,7 +18,8 @@
 #' @export
 #'
 #' @examples
-#' linf <- linfinity_depth(sim_data1$data)
+#' dt1 <- simulation_model1()
+#' linf <- linfinity_depth(dt1$data)
 #'
 linfinity_depth <- function(dt){
   if (is.data.frame(dt)) {

@@ -40,8 +40,10 @@
 #' @export
 #'
 #' @examples
-#' data(sim_data1)
-#' res <- tvdmss(sim_data1$data)
+#' dt6 <- simulation_model6()
+#' res <- tvdmss(dt6$data)
+#' res$outliers
+#'
 tvdmss <- function(dts,
                     emp_factor_mss = 1.5,
                     emp_factor_tvd = 1.5,

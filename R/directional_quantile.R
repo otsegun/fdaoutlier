@@ -3,8 +3,9 @@
 #' The directional quantile is a measure of outlyingness based on a scaled pointwise deviation from the mean.
 #' These deviations are usually scaled by the deviation of the mean from the 2.5\% upper and lower quantiles
 #' depending on if the (pointwise) observed value of a function is above or below the (pointwise) mean.
-#' Directional quantile was mentioned in Myllymäki et al. (2015)\href{https://doi.org/10.1016/j.spasta.2014.11.004}{<doi:10.1016/j.spasta.2014.11.004>},
-#'  Myllymäki et al. (2017) \href{https://doi.org/10.1111/rssb.12172}{<doi:10.1111/rssb.12172>} and Dai et al. (2020)\href{https://doi.org/10.1016/j.csda.2020.106960}{<doi:10.1016/j.csda.2020.106960>}.
+#' Directional quantile was mentioned in Myllymäki et al. (2015) \href{https://doi.org/10.1016/j.spasta.2014.11.004}{<doi:10.1016/j.spasta.2014.11.004>},
+#' Myllymäki et al. (2017) \href{https://doi.org/10.1111/rssb.12172}{<doi:10.1111/rssb.12172>} and
+#' Dai et al. (2020)\href{https://doi.org/10.1016/j.csda.2020.106960}{<doi:10.1016/j.csda.2020.106960>}.
 #'
 #' @param dt A matrix or dataframe of size \eqn{n} observations/curves by \eqn{p} domain/evaluation
 #'   points.
@@ -33,8 +34,8 @@
 #'  Global envelope tests for spatial processes. \emph{J. R. Stat. Soc. B}, 79:381-404.
 #'
 #' @examples
-#' data(sim_data1)
-#' dq <- directional_quantile(sim_data1$data)
+#' dt1 <- simulation_model1()
+#' dq <- directional_quantile(dt1$data)
 #'
 #' @importFrom stats dist quantile
 directional_quantile <- function(dt, quantiles = c(0.025, 0.975)){

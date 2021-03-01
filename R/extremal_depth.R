@@ -25,8 +25,8 @@
 #' @export
 #'
 #' @examples
-#' data(sim_data1)
-#' ex_depths <- extremal_depth(sim_data1$data)
+#' dt3 <- simulation_model3()
+#' ex_depths <- extremal_depth(dts = dt3$data)
 #' # order functions from deepest to most outlying
 #' order(ex_depths, decreasing = TRUE)
 extremal_depth <- function(dts){

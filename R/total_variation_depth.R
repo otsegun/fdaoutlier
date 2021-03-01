@@ -25,8 +25,8 @@
 #' @export
 #'
 #' @examples
-#' data(sim_data1)
-#' tvd_object <- total_variation_depth(sim_data1$data)
+#' dt6 <- simulation_model6()
+#' tvd_object <- total_variation_depth(dt6$data)
 #' @importFrom graphics boxplot
 total_variation_depth <- function(dts){
   if(is.data.frame(dts)){
