@@ -83,4 +83,4 @@ simdata$true_outliers
 ## Bugs and Feature Requests
 
 Kindly open an issue using [Github
-issues](https://github.com/moviedo5/fdaoutlier/issues).
+issues](https://github.com/otsegun/fdaoutlier/issues).

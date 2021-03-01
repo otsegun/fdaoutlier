@@ -69,4 +69,4 @@ simdata$true_outliers
 8. Sequential transformation (Dai et al., 2020)
 
 ## Bugs and Feature Requests
-Kindly open an issue using [Github issues](https://github.com/moviedo5/fdaoutlier/issues).
+Kindly open an issue using [Github issues](https://github.com/otsegun/fdaoutlier/issues).
