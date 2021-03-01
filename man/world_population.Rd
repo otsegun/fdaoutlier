@@ -17,7 +17,7 @@ world_population
 This is the world population data, revision 2010, by countries used in the paper
 Nagy et al. (2016) \doi{10.1080/10618600.2017.1336445} and Dai et al. (2020)
 \doi{10.1016/j.csda.2020.106960}. It contains population (both sexes) of countries
-as of July 1 in the years 1950 - 2010. The data have been preprocessed as described
+as of July 1 in the years 1950 - 2010. The data have been pre-processed as described
 in Nagy et al. (2016) and hence contains only the 105 countries with population
 in the range of one million and fifteen million on July 1, 1980.
 }

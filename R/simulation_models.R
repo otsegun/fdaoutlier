@@ -112,7 +112,7 @@ plot_dtt <- function(y, grid_points, p, true_outliers, show_legend, plot_title,
 #'  over the interval \eqn{[0, 1]}. Set to \eqn{50} by default.
 #' @param outlier_rate A value between \eqn{[0, 1]} indicating the percentage of outliers.
 #'  A value of \eqn{0.06} indicates about \eqn{6\%} of the observations will be outliers
-#'  depending on whether the paramerter \code{deterministic} is \code{TRUE} or not.
+#'  depending on whether the parameter \code{deterministic} is \code{TRUE} or not.
 #'  Set to \eqn{0.05} by default.
 #' @param mu The mean value of the functions in the main and contamination model.
 #'  Set to \code{4} by default.
@@ -125,7 +125,7 @@ plot_dtt <- function(y, grid_points, p, true_outliers, show_legend, plot_title,
 #' @param cov_alpha A value indicating the coefficient of the exponential function
 #' of the covariance matrix, i.e., the \eqn{\alpha} in the covariance function.
 #'  Set to \eqn{1} by default.
-#' @param cov_beta A value indicating the cofficient of the terms inside the exponential
+#' @param cov_beta A value indicating the coefficient of the terms inside the exponential
 #' function of the covariance matrix, i.e., the \eqn{\beta} in the covariance function.
 #' Set to \eqn{1} by default.
 #' @param cov_nu A value indicating the power to which to raise the terms inside the exponential
@@ -149,7 +149,7 @@ plot_dtt <- function(y, grid_points, p, true_outliers, show_legend, plot_title,
 #'
 #' @return A list containing:
 #' \item{data}{a matrix of size \code{n} by \code{p} containing the simulated data set}
-#' \item{true_outliers}{a vector of integers indicatint the row index of the outliers in the
+#' \item{true_outliers}{a vector of integers indicating the row index of the outliers in the
 #' generated data.}
 #'
 #' @export
@@ -223,7 +223,7 @@ simulation_model1 <- function(n = 100, p = 50, outlier_rate = 0.05,
 #'  over the interval \eqn{[0, 1]}. Set to \eqn{50} by default.
 #' @param outlier_rate A value between \eqn{[0, 1]} indicating the percentage of outliers.
 #'  A value of \eqn{0.06} indicates about \eqn{6\%} of the observations will be outliers
-#'  depending on whether the paramerter \code{deterministic} is \code{TRUE} or not.
+#'  depending on whether the parameter \code{deterministic} is \code{TRUE} or not.
 #'  Set to \eqn{0.05} by default.
 #' @param mu The mean value of the functions. Set to \code{4} by default.
 #' @param q A value indicating the shift of the outliers from the mean function.
@@ -237,7 +237,7 @@ simulation_model1 <- function(n = 100, p = 50, outlier_rate = 0.05,
 #' @param cov_alpha A value indicating the coefficient of the exponential function
 #' of the covariance matrix, i.e., the \eqn{\alpha} in the covariance function.
 #'  Set to \eqn{1} by default.
-#' @param cov_beta A value indicating the cofficient of the terms inside the exponential
+#' @param cov_beta A value indicating the coefficient of the terms inside the exponential
 #' function of the covariance matrix, i.e., the \eqn{\beta} in the covariance function.
 #' Set to \eqn{1} by default.
 #' @param cov_nu A value indicating the power to which to raise the terms inside the exponential
@@ -261,7 +261,7 @@ simulation_model1 <- function(n = 100, p = 50, outlier_rate = 0.05,
 #'
 #' @return A list containing:
 #' \item{data}{a matrix of size \code{n} by \code{p} containing the simulated data set}
-#' \item{true_outliers}{a vector of integers indicatint the row index of the outliers in the
+#' \item{true_outliers}{a vector of integers indicating the row index of the outliers in the
 #' generated data.}
 #'
 #' @export
@@ -336,7 +336,7 @@ simulation_model2 <- function(n = 100, p = 50, outlier_rate = 0.05,
 #'  over the interval \eqn{[0, 1]}. Set to \eqn{50} by default.
 #' @param outlier_rate A value between \eqn{[0, 1]} indicating the percentage of outliers.
 #'  A value of \eqn{0.06} indicates about \eqn{6\%} of the observations will be outliers
-#'  depending on whether the paramerter \code{deterministic} is \code{TRUE} or not.
+#'  depending on whether the parameter \code{deterministic} is \code{TRUE} or not.
 #'  Set to \eqn{0.05} by default.
 #' @param mu The mean value of the functions. Set to \code{4} by default.
 #' @param q A value indicating the shift of the outliers from the mean function.
@@ -349,7 +349,7 @@ simulation_model2 <- function(n = 100, p = 50, outlier_rate = 0.05,
 #' @param cov_alpha A value indicating the coefficient of the exponential function
 #' of the covariance matrix, i.e., the \eqn{\alpha} in the covariance function.
 #'  Set to \eqn{1} by default.
-#' @param cov_beta A value indicating the cofficient of the terms inside the exponential
+#' @param cov_beta A value indicating the coefficient of the terms inside the exponential
 #' function of the covariance matrix, i.e., the \eqn{\beta} in the covariance function.
 #' Set to \eqn{1} by default.
 #' @param cov_nu A value indicating the power to which to raise the terms inside the exponential
@@ -374,7 +374,7 @@ simulation_model2 <- function(n = 100, p = 50, outlier_rate = 0.05,
 #'
 #' @return A list containing:
 #' \item{data}{a matrix of size \code{n} by \code{p} containing the simulated data set}
-#' \item{true_outliers}{a vector of integers indicatint the row index of the outliers in the
+#' \item{true_outliers}{a vector of integers indicating the row index of the outliers in the
 #' generated data.}
 #' @export
 #'
@@ -441,14 +441,14 @@ simulation_model3 <- function(n = 100, p = 50, outlier_rate = 0.05,
 #'  over the interval \eqn{[0, 1]}. Set to \eqn{50} by default.
 #' @param outlier_rate A value between \eqn{[0, 1]} indicating the percentage of outliers.
 #'  A value of \eqn{0.06} indicates about \eqn{6\%} of the observations will be outliers
-#'  depending on whether the paramerter \code{deterministic} is \code{TRUE} or not.
+#'  depending on whether the parameter \code{deterministic} is \code{TRUE} or not.
 #'  Set to \eqn{0.05} by default.
 #' @param mu The mean value of the functions. Set to \code{30} by default.
 #' @param m  the constant \eqn{m} in the main and contamination model. Set to \eqn{3/2} by default.
 #' @param cov_alpha A value indicating the coefficient of the exponential function
 #' of the covariance matrix, i.e., the \eqn{\alpha} in the covariance function.
 #'  Set to \eqn{1} by default.
-#' @param cov_beta A value indicating the cofficient of the terms inside the exponential
+#' @param cov_beta A value indicating the coefficient of the terms inside the exponential
 #' function of the covariance matrix, i.e., the \eqn{\beta} in the covariance function.
 #' Set to \eqn{1} by default.
 #' @param cov_nu A value indicating the power to which to raise the terms inside the exponential
@@ -472,7 +472,7 @@ simulation_model3 <- function(n = 100, p = 50, outlier_rate = 0.05,
 #'
 #' @return A list containing:
 #' \item{data}{a matrix of size \code{n} by \code{p} containing the simulated data set}
-#' \item{true_outliers}{a vector of integers indicatint the row index of the outliers in the
+#' \item{true_outliers}{a vector of integers indicating the row index of the outliers in the
 #' generated data.}
 #' @export
 #'
@@ -537,14 +537,14 @@ simulation_model4 <- function(n = 100, p = 50, outlier_rate = 0.05,
 #'  over the interval \eqn{[0, 1]}. Set to \eqn{50} by default.
 #' @param outlier_rate A value between \eqn{[0, 1]} indicating the percentage of outliers.
 #'  A value of \eqn{0.06} indicates about \eqn{6\%} of the observations will be outliers
-#'  depending on whether the paramerter \code{deterministic} is \code{TRUE} or not.
+#'  depending on whether the parameter \code{deterministic} is \code{TRUE} or not.
 #'  Set to \eqn{0.05} by default.
 #' @param mu The mean value of the functions. Set to \code{4} by default.
 #' @param cov_alpha,cov_alpha2 A value indicating the coefficient of the exponential function
 #' of the covariance matrix, i.e., the \eqn{\alpha} in the covariance function. \code{cov_alpha} is
 #' for the main model while \code{cov_alpha2} is for the covariance function of the contamination model.
 #' \code{cov_alpha} is set to \eqn{1} by default while \code{cov_alpha2} is set to \eqn{5} by default.
-#' @param cov_beta,cov_beta2 A value indicating the cofficient of the terms inside the exponential
+#' @param cov_beta,cov_beta2 A value indicating the coefficient of the terms inside the exponential
 #' function of the covariance matrix, i.e., the \eqn{\beta} in the covariance function. \code{cov_beta}
 #' is for the main model while \code{cov_beta2} is for the covariance function of the contamination model.
 #' \code{cov_beta} is set to \eqn{1} by default while \code{cov_beta2} is set to \eqn{2} by default.
@@ -571,7 +571,7 @@ simulation_model4 <- function(n = 100, p = 50, outlier_rate = 0.05,
 #'
 #' @return A list containing:
 #' \item{data}{a matrix of size \code{n} by \code{p} containing the simulated data set}
-#' \item{true_outliers}{a vector of integers indicatint the row index of the outliers in the
+#' \item{true_outliers}{a vector of integers indicating the row index of the outliers in the
 #' generated data.}
 #'
 #' @export
@@ -645,7 +645,7 @@ simulation_model5 <- function(n = 100, p = 50, outlier_rate = 0.05, mu = 4,
 #'  over the interval \eqn{[0, 1]}. Set to \eqn{50} by default.
 #' @param outlier_rate A value between \eqn{[0, 1]} indicating the percentage of outliers.
 #'  A value of \eqn{0.06} indicates about \eqn{6\%} of the observations will be outliers
-#'  depending on whether the paramerter \code{deterministic} is \code{TRUE} or not.
+#'  depending on whether the parameter \code{deterministic} is \code{TRUE} or not.
 #'  Set to \eqn{0.05} by default.
 #' @param mu The mean value of the functions in the main and contamination model.
 #'  Set to \code{4} by default.
@@ -657,7 +657,7 @@ simulation_model5 <- function(n = 100, p = 50, outlier_rate = 0.05, mu = 4,
 #' @param cov_alpha A value indicating the coefficient of the exponential function
 #' of the covariance matrix, i.e., the \eqn{\alpha} in the covariance function.
 #'  Set to \eqn{1} by default.
-#' @param cov_beta A value indicating the cofficient of the terms inside the exponential
+#' @param cov_beta A value indicating the coefficient of the terms inside the exponential
 #' function of the covariance matrix, i.e., the \eqn{\beta} in the covariance function.
 #' Set to \eqn{1} by default.
 #' @param cov_nu A value indicating the power to which to raise the terms inside the exponential
@@ -687,7 +687,7 @@ simulation_model5 <- function(n = 100, p = 50, outlier_rate = 0.05, mu = 4,
 #'
 #' @return A list containing:
 #' \item{data}{a matrix of size \code{n} by \code{p} containing the simulated data set}
-#' \item{true_outliers}{a vector of integers indicatint the row index of the outliers in the
+#' \item{true_outliers}{a vector of integers indicating the row index of the outliers in the
 #' generated data.}
 #'
 #' @export
@@ -767,7 +767,7 @@ simulation_model6 <- function(n = 100, p = 50, outlier_rate = .1,
 #'  over the interval \eqn{[0, 1]}. Set to \eqn{50} by default.
 #' @param outlier_rate A value between \eqn{[0, 1]} indicating the percentage of outliers.
 #'  A value of \eqn{0.06} indicates about \eqn{6\%} of the observations will be outliers
-#'  depending on whether the paramerter \code{deterministic} is \code{TRUE} or not.
+#'  depending on whether the parameter \code{deterministic} is \code{TRUE} or not.
 #'  Set to \eqn{0.05} by default.
 #' @param mu The mean value of the functions in the main and contamination model.
 #'  Set to \code{4} by default.
@@ -783,7 +783,7 @@ simulation_model6 <- function(n = 100, p = 50, outlier_rate = .1,
 #' @param cov_alpha A value indicating the coefficient of the exponential function
 #' of the covariance matrix, i.e., the \eqn{\alpha} in the covariance function.
 #'  Set to \eqn{1} by default.
-#' @param cov_beta A value indicating the cofficient of the terms inside the exponential
+#' @param cov_beta A value indicating the coefficient of the terms inside the exponential
 #' function of the covariance matrix, i.e., the \eqn{\beta} in the covariance function.
 #' Set to \eqn{1} by default.
 #' @param cov_nu A value indicating the power to which to raise the terms inside the exponential
@@ -807,7 +807,7 @@ simulation_model6 <- function(n = 100, p = 50, outlier_rate = .1,
 #'
 #' @return A list containing:
 #' \item{data}{a matrix of size \code{n} by \code{p} containing the simulated data set}
-#' \item{true_outliers}{a vector of integers indicatint the row index of the outliers in the
+#' \item{true_outliers}{a vector of integers indicating the row index of the outliers in the
 #' generated data.}
 #'
 #' @export
@@ -882,7 +882,7 @@ simulation_model7 <- function(n = 100, p = 50, outlier_rate = 0.05,
 #'  over the interval \eqn{[0, 1]}. Set to \eqn{50} by default.
 #' @param outlier_rate A value between \eqn{[0, 1]} indicating the percentage of outliers.
 #'  A value of \eqn{0.06} indicates about \eqn{6\%} of the observations will be outliers
-#'  depending on whether the paramerter \code{deterministic} is \code{TRUE} or not.
+#'  depending on whether the parameter \code{deterministic} is \code{TRUE} or not.
 #'  Set to \eqn{0.05} by default.
 #' @param pi_coeff The coefficient \eqn{r} in the main and contamination model. Set to
 #' \eqn{15} by default.
@@ -893,7 +893,7 @@ simulation_model7 <- function(n = 100, p = 50, outlier_rate = 0.05,
 #' @param cov_alpha A value indicating the coefficient of the exponential function
 #' of the covariance matrix, i.e., the \eqn{\alpha} in the covariance function.
 #'  Set to \eqn{1} by default.
-#' @param cov_beta A value indicating the cofficient of the terms inside the exponential
+#' @param cov_beta A value indicating the coefficient of the terms inside the exponential
 #' function of the covariance matrix, i.e., the \eqn{\beta} in the covariance function.
 #' Set to \eqn{1} by default.
 #' @param cov_nu A value indicating the power to which to raise the terms inside the exponential
@@ -917,7 +917,7 @@ simulation_model7 <- function(n = 100, p = 50, outlier_rate = 0.05,
 #'
 #' @return A list containing:
 #' \item{data}{a matrix of size \code{n} by \code{p} containing the simulated data set}
-#' \item{true_outliers}{a vector of integers indicatint the row index of the outliers in the
+#' \item{true_outliers}{a vector of integers indicating the row index of the outliers in the
 #' generated data.}
 #'
 #' @export
@@ -1034,7 +1034,7 @@ simulation_model8 <- function(n = 100, p = 50, outlier_rate = 0.05,
 #'  over the interval \eqn{[0, 1]}. Set to \eqn{50} by default.
 #' @param outlier_rate A value between \eqn{[0, 1]} indicating the percentage of outliers.
 #'  A value of \eqn{0.06} indicates about \eqn{6\%} of the observations will be outliers
-#'  depending on whether the paramerter \code{deterministic} is \code{TRUE} or not.
+#'  depending on whether the parameter \code{deterministic} is \code{TRUE} or not.
 #'  Set to \eqn{0.05} by default.
 #' @param kprob The probability \eqn{P(u_i = 1)}. Set to \eqn{0.5} by default.
 #' @param ai A vector of two values containing \eqn{a_{1i}} and \eqn{a_{2i}}
@@ -1046,7 +1046,7 @@ simulation_model8 <- function(n = 100, p = 50, outlier_rate = 0.05,
 #' @param cov_alpha A value indicating the coefficient of the exponential function
 #' of the covariance matrix, i.e., the \eqn{\alpha} in the covariance function.
 #'  Set to \eqn{1} by default.
-#' @param cov_beta A value indicating the cofficient of the terms inside the exponential
+#' @param cov_beta A value indicating the coefficient of the terms inside the exponential
 #' function of the covariance matrix, i.e., the \eqn{\beta} in the covariance function.
 #' Set to \eqn{1} by default.
 #' @param cov_nu A value indicating the power to which to raise the terms inside the exponential
@@ -1070,7 +1070,7 @@ simulation_model8 <- function(n = 100, p = 50, outlier_rate = 0.05,
 #'
 #' @return A list containing:
 #' \item{data}{a matrix of size \code{n} by \code{p} containing the simulated data set}
-#' \item{true_outliers}{a vector of integers indicatint the row index of the outliers in the
+#' \item{true_outliers}{a vector of integers indicating the row index of the outliers in the
 #' generated data.}
 #'
 #' @export

@@ -32,7 +32,7 @@ over the interval \eqn{[0, 1]}. Set to \eqn{50} by default.}
 
 \item{outlier_rate}{A value between \eqn{[0, 1]} indicating the percentage of outliers.
 A value of \eqn{0.06} indicates about \eqn{6\%} of the observations will be outliers
-depending on whether the paramerter \code{deterministic} is \code{TRUE} or not.
+depending on whether the parameter \code{deterministic} is \code{TRUE} or not.
 Set to \eqn{0.05} by default.}
 
 \item{mu}{The mean value of the functions in the main and contamination model.
@@ -50,7 +50,7 @@ Can be used to control the amount of outliers above or below the mean. Set to \e
 of the covariance matrix, i.e., the \eqn{\alpha} in the covariance function.
  Set to \eqn{1} by default.}
 
-\item{cov_beta}{A value indicating the cofficient of the terms inside the exponential
+\item{cov_beta}{A value indicating the coefficient of the terms inside the exponential
 function of the covariance matrix, i.e., the \eqn{\beta} in the covariance function.
 Set to \eqn{1} by default.}
 
@@ -84,7 +84,7 @@ Set to 1.5 by default. Ignored if \code{plot = FALSE}.}
 \value{
 A list containing:
 \item{data}{a matrix of size \code{n} by \code{p} containing the simulated data set}
-\item{true_outliers}{a vector of integers indicatint the row index of the outliers in the
+\item{true_outliers}{a vector of integers indicating the row index of the outliers in the
 generated data.}
 }
 \description{
