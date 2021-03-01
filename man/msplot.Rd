@@ -33,7 +33,7 @@ depth. By default 200 directions are generated.}
 \item{seed}{An integer indicating the seed to set when generating random directions for computing the random projection depth.
 NULL by default in which case no seed is set.}
 
-\item{return_mvdir}{A logical scalar indicating whether to return the mean and variation of directional
+\item{return_mvdir}{A logical value indicating whether to return the mean and variation of directional
 outlyingness (\eqn{MO} and \eqn{VO}). For univariate functional data, \eqn{MO} and \eqn{VO} are vectors.
 For multivariate functional data, \eqn{VO} is a vector while \eqn{MO} is a matrix of size
  \eqn{n x d}.}

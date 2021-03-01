@@ -94,3 +94,37 @@
 #' str(sim_data1)
 #'
 "sim_data1"
+
+
+#' World Population Data by Countries
+#'
+#'
+#' @description This is the world population data, revision 2010, by countries used in the paper
+#' Nagy et al. (2016) \href{https://doi.org/10.1080/10618600.2017.1336445}{<doi:10.1080/10618600.2017.1336445>}
+#' and Dai et al. (2020) \href{https://doi.org/10.1016/j.csda.2020.106960}{<doi:10.1016/j.csda.2020.106960>}.
+#' It contains population (both sexes) of countries as of July 1 in the years 1950 - 2010.
+#' The data have been preprocessed as described in Nagy et al. (2016) and hence contains only
+#' the 105 countries with population in the range of one million and fifteen million on
+#' July 1, 1980.
+#'
+#'
+#' @name world_population
+#'
+#' @docType data
+#'
+#' @format A matrix of size 105 rows by 61 columns.
+#'
+#'
+#' @details
+#' Data included for illustration and testing purposes.
+#'
+#' @source
+#' Data originally available in the \code{depth.fd} package.
+#'
+#'
+#' @keywords datasets
+#' @examples
+#' data(world_population)
+#' str(world_population)
+#'
+"world_population"

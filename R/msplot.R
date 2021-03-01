@@ -17,7 +17,7 @@
 #' @param seed An integer indicating the seed to set when generating random directions for computing the random projection depth.
 #'   NULL by default in which case no seed is set.
 #'
-#' @param return_mvdir A logical scalar indicating whether to return the mean and variation of directional
+#' @param return_mvdir A logical value indicating whether to return the mean and variation of directional
 #'  outlyingness (\eqn{MO} and \eqn{VO}). For univariate functional data, \eqn{MO} and \eqn{VO} are vectors.
 #'  For multivariate functional data, \eqn{VO} is a vector while \eqn{MO} is a matrix of size
 #'   \eqn{n x d}.
@@ -146,7 +146,7 @@ msplot <- function(dts,
          cex.axis = 0.9, col.axis = "gray30")
     axis(2,col = "white", col.ticks = "grey61",  lwd.ticks = .5, tck = -0.025,
          cex.axis = 0.9, col.axis = "gray30")
-    grid(col = "grey75", lwd = .5)
+    grid(col = "grey75", lwd = .3)
     box(col = "grey51")
 
     if(length(outliers_index > 0)){

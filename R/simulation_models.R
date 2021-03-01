@@ -45,14 +45,16 @@ plot_dtt <- function(y, grid_points, p, true_outliers, show_legend, plot_title,
     plot(x = grid_points, type = "n", ylab = ylabel, xlab = xlabel,
          ylim = range(y) + c(-.5*sd(y[p,]), .5*sd(y[p,])),
          col.lab = "gray20", axes = F)
-    matlines(dttout,
-             col = "#D55E00",
-             lty = "solid",
-             lwd = 1.3)
+    grid(col = "grey75", lwd = .3)
     matlines(dttnorm,
              col = "grey61",
              lty = "solid",
              lwd = .4)
+    matlines(dttout,
+             col = "#D55E00",
+             lty = "solid",
+             lwd = 1.3)
+
   } else{
     matplot(y,
             type = "l",
@@ -64,6 +66,7 @@ plot_dtt <- function(y, grid_points, p, true_outliers, show_legend, plot_title,
             xlab = xlabel,
             axes = F,
             col.lab = "gray20")
+    grid(col = "grey75", lwd = .3)
   }
   axis(1, col = "white", col.ticks = "grey61",
        lwd.ticks = .5, tck = -0.025,
@@ -71,7 +74,7 @@ plot_dtt <- function(y, grid_points, p, true_outliers, show_legend, plot_title,
   axis(2,col = "white", col.ticks = "grey61",
        lwd.ticks = .5, tck = -0.025,
        cex.axis = 0.9, col.axis = "gray30")
-  grid(col = "grey75", lwd = .5)
+
   box(col = "grey51")
   if(show_legend){
     legend(legend_pos, legend = c("normal", "outlier"),
