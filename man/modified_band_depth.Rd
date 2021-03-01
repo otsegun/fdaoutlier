@@ -18,7 +18,8 @@ Bands of 2 functions are always used and the fast algorithm of Sun et al. (2012)
 the depth values.
 }
 \examples{
-mbd2 <- modified_band_depth(sim_data1$data)
+dt1 <- simulation_model1()
+mbd2 <- modified_band_depth(dt1$data)
 
 }
 \references{

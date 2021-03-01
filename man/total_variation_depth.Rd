@@ -25,8 +25,8 @@ functional data. The definition of the estimates of TVD and MSS can be found in 
 \href{https://doi.org/10.1080/00401706.2019.1574241}{<doi:10.1080/00401706.2019.1574241>}.
 }
 \examples{
-data(sim_data1)
-tvd_object <- total_variation_depth(sim_data1$data)
+dt6 <- simulation_model6()
+tvd_object <- total_variation_depth(dt6$data)
 }
 \references{
 Huang, H., & Sun, Y. (2019). A decomposition of total variation depth for

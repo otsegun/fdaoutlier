@@ -85,8 +85,8 @@ for computing the directional outlyingness (as suggested by Dai and Genton (2019
 }
 \examples{
 # Univariate magnitude model in Dai and Genton (2018).
-data(sim_data1)
-msplot_object <- msplot(dts = sim_data1$data)
+dt1 <- simulation_model1()
+msplot_object <- msplot(dts = dt1$data)
 msplot_object$outliers_index
 msplot_object$mean_outlyingness
 msplot_object$var_outlyingness

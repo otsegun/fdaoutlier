@@ -38,8 +38,8 @@ an average. See Dai et al. (2020)\href{https://doi.org/10.1016/j.csda.2020.10696
 Myllymäki et al. (2017) \href{https://doi.org/10.1111/rssb.12172}{<doi:10.1111/rssb.12172>} for more details.
 }
 \examples{
-data(sim_data1)
-erld <- extreme_rank_length(sim_data1$data)
+dt3 <- simulation_model3()
+erld <- extreme_rank_length(dt3$data)
 
 }
 \references{

@@ -61,8 +61,10 @@ This method uses a combination of total variation depth (TVD) and modified shape
 }}
 
 \examples{
-data(sim_data1)
-res <- tvdmss(sim_data1$data)
+dt6 <- simulation_model6()
+res <- tvdmss(dt6$data)
+res$outliers
+
 }
 \references{
 Huang, H., & Sun, Y. (2019). A decomposition of total variation depth for

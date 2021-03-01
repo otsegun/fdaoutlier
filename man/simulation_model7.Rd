@@ -103,9 +103,11 @@ with contamination model of the form:
  \deqn{\gamma(s,t) = \alpha\exp{-\beta|t-s|^\nu},}
  \eqn{\theta} is uniformly distributed in an interval \eqn{[a, b]} and
  \eqn{k}, \eqn{r} are constants.
+ Please see the simulation models vignette with
+ \code{vignette("simulation_models", package = "fdaoutlier")} for more details.
 }
 \examples{
-dt <- simulation_model7(n = 50)
+dt <- simulation_model7(n = 50, plot = TRUE)
 dim(dt$data)
 dt$true_outliers
 }

@@ -111,9 +111,11 @@ and covariance function of the form:  \deqn{\gamma(s,t) = \alpha\exp(-\beta|t-s|
 \eqn{u} follows Bernoulli distribution with probability \eqn{P(u = 1) = 0.5};
 \eqn{q}, \eqn{r}, \eqn{z} and \eqn{w} are constants, and \eqn{v} follows
 a Uniform distribution between an interval \eqn{[a, b]} and \eqn{m} is a constant.
+Please see the simulation models vignette with
+ \code{vignette("simulation_models", package = "fdaoutlier")} for more details.
 }
 \examples{
-dt <- simulation_model6(n = 50)
+dt <- simulation_model6(n = 50, plot = TRUE)
 dim(dt$data)
 dt$true_outliers
 }

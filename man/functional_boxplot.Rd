@@ -66,7 +66,8 @@ finding outliers in other functions. Different depth and outlyingness methods ar
 functions. Alternatively, the depth values of the functions can be supplied directly.
 }
 \examples{
-fbplot_obj <- functional_boxplot(sim_data1$data, depth_method = "mbd")
+dt1 <- simulation_model1()
+fbplot_obj <- functional_boxplot(dt1$data, depth_method = "mbd")
 fbplot_obj$outliers
 }
 \references{

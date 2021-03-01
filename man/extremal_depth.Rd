@@ -25,8 +25,8 @@ penalizes functions that are outliers even for a small part of the domain. Propo
 Narisetty and Nair (2016)\href{https://doi.org/10.1080/01621459.2015.1110033}{<doi:10.1080/01621459.2015.1110033>}.
 }
 \examples{
-data(sim_data1)
-ex_depths <- extremal_depth(sim_data1$data)
+dt3 <- simulation_model3()
+ex_depths <- extremal_depth(dts = dt3$data)
 # order functions from deepest to most outlying
 order(ex_depths, decreasing = TRUE)
 }

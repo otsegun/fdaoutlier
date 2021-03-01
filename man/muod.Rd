@@ -32,6 +32,12 @@ It was also mentioned in Vinue and Epiphano (2020) \href{https://doi.org/10.1007
  the magnitude indices are flagged as magnitude outliers. The same holds true for the amplitude and shape indices.
  Thus, the outliers are not only identified but also classified.
 }
+\examples{
+dt1 <- simulation_model1()
+md <- muod(dts = dt1$data)
+str(md$outliers)
+dim(md$indices)
+}
 \references{
 Azcorra, A., Chiroque, L. F., Cuevas, R., Anta, A. F., Laniado, H., Lillo, R. E., Romo, J., & Sguera, C. (2018).
  Unsupervised scalable statistical method for identifying influential users in online social networks.

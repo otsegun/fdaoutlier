@@ -10,10 +10,11 @@ test_that("bd handles strange data", {
 
 
 test_that("bd gives correct result", {
-  bdd <- band_depth(sim_data1$data)
+  dt1 <- simulation_model1(seed = 50)
+  bdd <- band_depth(dt1$data)
   expect_equal(order(bdd)[1:10],
-               c(4, 17, 79, 82, 70, 12, 23, 84, 30, 87))
+               c(20, 43, 53, 70,  9,  6, 14, 36, 93,  8))
   expect_equal(order(bdd)[90:100],
-               c(98, 72, 45, 41, 80, 71, 33, 99, 32, 67, 10))
+               c(17, 54, 15, 34, 83, 74, 25, 24, 23, 47, 90))
 
 })

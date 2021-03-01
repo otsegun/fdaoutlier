@@ -18,7 +18,8 @@ functional data proposed in Long and Huang (2015) \href{https://arxiv.org/abs/15
 used in Dai et al. (2020)\href{https://doi.org/10.1016/j.csda.2020.106960}{<doi:10.1016/j.csda.2020.106960>}.
 }
 \examples{
-linf <- linfinity_depth(sim_data1$data)
+dt1 <- simulation_model1()
+linf <- linfinity_depth(dt1$data)
 
 }
 \references{

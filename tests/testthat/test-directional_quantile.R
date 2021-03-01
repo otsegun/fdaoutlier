@@ -7,17 +7,19 @@ test_that("directional quantile depth handles unconventional data", {
 })
 
 test_that("directional quantile filters quantile probabilites", {
-  expect_error(directional_quantile(dt = sim_data1$data, quantiles = c(-1, .5 )))
-  expect_error(directional_quantile(dt = sim_data1$data, quantiles = c(.025, NA)))
-  expect_error(directional_quantile(dt = sim_data1$data, quantiles = NA))
+  dt1 <- simulation_model1(seed = 50)
+  expect_error(directional_quantile(dt = dt1$data, quantiles = c(-1, .5 )))
+  expect_error(directional_quantile(dt = dt1$data, quantiles = c(.025, NA)))
+  expect_error(directional_quantile(dt = dt1$data, quantiles = NA))
 })
 
 test_that("directional quantile is correct", {
-  dt <- sim_data1$data[1:9, 1:7]
-  dtt <- directional_quantile(dt)
+  dt1 <- simulation_model1(seed = 50)
+  dttt <- dt1$data[1:9, 1:7]
+  dtt <- directional_quantile(dttt)
   # right
-  expect_equal(order(dtt), c(8, 9, 6, 1, 2, 3, 5, 7, 4))
-  expect_equal(dtt, c(0.851392557536830, 0.945160701035512, 1.009503146824852,
-                      1.2432485, 1.011295391788663, 0.580261283157357, 1.054868162713239,
-                      0.113764165115427, 0.335138236482335))
+  expect_equal(order(dtt), c(1, 9, 7, 2, 5, 6, 4, 3, 8))
+  expect_equal(dtt, c(0.273265020112457, 0.506686936102822, 1.099752667970248,
+                      1.039569976781981, 0.750125646435782, 0.760621786914891,
+                      0.484546683430236, 1.120309121534383, 0.411845430081462))
 })

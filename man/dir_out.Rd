@@ -63,8 +63,8 @@ multivariate functional data, the projection depth is always used as suggested b
 }
 \examples{
 # univariate magnitude model in Dai and Genton (2018).
-data(sim_data1)
-dirout_object <- dir_out(dts = sim_data1$data, return_distance = TRUE)
+dt4 <- simulation_model4()
+dirout_object <- dir_out(dts = dt4$data, return_distance = TRUE)
 }
 \references{
 Dai, W., and Genton, M. G. (2018). Multivariate functional data

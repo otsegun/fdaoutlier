@@ -13,10 +13,10 @@ test_that("projection_depth produces correct results", {
   expect_is(test_depth, "numeric")
 
   # correctness
-  #tmp_projection_depth <- "tests/reference_files/ref_mprojection_depth.rda"
-  #expect_known_value(test_depth, tmp_projection_depth, update = T, print = TRUE)
-  expect_known_value(test_depth, "../reference_files/ref_mprojection_depth.rda",
-                     update = F, print = TRUE)
+
+  expect_equal(test_depth, c(0.43706257729447, 0.704065758724527,
+                             0.500000000000000, 0.500000000000000,
+                             0.477294075885465))
 
   # works for a vector
   test_depth2 <- projection_depth(dts = unlist(unname(dts[1, ])),

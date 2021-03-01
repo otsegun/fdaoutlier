@@ -106,9 +106,11 @@ covariance function of the form: \deqn{\gamma(s,t) = \alpha\exp(-\beta|t-s|^\nu)
 data, \eqn{I} is an indicator function, \eqn{T_i} is a uniform random variable between
 an interval \eqn{[a, b] \subset [0,1]}, and \eqn{l} is a constant specifying for how
 much of the domain the outliers are away from the mean function.
+Please see the simulation models vignette with
+ \code{vignette("simulation_models", package = "fdaoutlier")} for more details.
 }
 \examples{
-dtt <- simulation_model2()
+dtt <- simulation_model2(plot = TRUE)
 dtt$true_outliers
 dim(dtt$data)
 }

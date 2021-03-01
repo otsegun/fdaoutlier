@@ -99,9 +99,11 @@ covariance function of the form:
 and \eqn{q} is a constant controlling how far the outliers are from the mean
 function of the data, usually, \eqn{q = 6} or \eqn{q = 8}.
 The domain of the generated functions is over the interval \eqn{[0, 1]}.
+Please see the simulation models vignette with
+ \code{vignette("simulation_models", package = "fdaoutlier")} for more details.
 }
 \examples{
-dt <- simulation_model1(n = 50)
+dt <- simulation_model1(n = 50, plot = TRUE)
 dim(dt$data)
 dt$true_outliers
 }

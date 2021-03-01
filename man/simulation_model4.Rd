@@ -83,9 +83,11 @@ generated data.}
 This models generates outliers defined on the reversed time interval of the main model.
 The main model is of the form: \deqn{X_i(t) = \mu t(1 - t)^m + e_i(t),}
 with contamination model of the form: \deqn{X_i(t) = \mu(1 - t)t^m + e_i(t)}
+Please see the simulation models vignette with
+ \code{vignette("simulation_models", package = "fdaoutlier")} for more details.
 }
 \examples{
-dt <- simulation_model4()
+dt <- simulation_model4(plot = TRUE)
 dt$true_outliers
 dim(dt$data)
 }

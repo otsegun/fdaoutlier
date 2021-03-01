@@ -18,7 +18,7 @@
 #' @export
 #'
 #' @examples
-#' dt1 <- simulation_model()
+#' dt1 <- simulation_model1()
 #' mbd2 <- modified_band_depth(dt1$data)
 #'
 modified_band_depth <- function(dt){

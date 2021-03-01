@@ -95,6 +95,8 @@ with contamination model of the form:
  zero mean and covariance function of the form:
  \deqn{\gamma(s,t) = \alpha\exp{-\beta|t-s|^\nu}}
  and \eqn{k, r, v} are constants.
+Please see the simulation models vignette with
+ \code{vignette("simulation_models", package = "fdaoutlier")} for more details.
 }
 \examples{
 dt <- simulation_model8(plot = TRUE)

@@ -101,9 +101,11 @@ covariance function of the form: \deqn{\gamma(s,t) = \alpha\exp(-\beta|t-s|^\nu)
 \eqn{q} is a constant controlling how far the outliers are from the mass of the
 data, \eqn{I} is an indicator function, and \eqn{T_i} is a uniform random variable between
 an interval \eqn{[a, b] \subset [0,1]}.
+Please see the simulation models vignette with
+ \code{vignette("simulation_models", package = "fdaoutlier")} for more details.
 }
 \examples{
-dt <- simulation_model3()
+dt <- simulation_model3(plot = TRUE)
 dt$true_outliers
 dim(dt$data)
 }

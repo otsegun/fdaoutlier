@@ -110,7 +110,7 @@
 #' dt1 <- simulation_model1()
 #' seqobj <- seq_transform(dt1$data, sequence = "T0", depth_method = "mbd")
 #' seqobj$outliers$T0
-#' functional_boxplot(sim_data1$data, depth_method = "mbd")$outliers
+#' functional_boxplot(dt1$data, depth_method = "mbd")$outliers
 #'
 #' # more sequences
 #' dt4 <- simulation_model4()

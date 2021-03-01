@@ -89,9 +89,11 @@ from that of the main model. The main model is of the form:
 \deqn{X_i(t) = \mu t + \tilde{e}_i(t),} where \eqn{t\in [0,1]}, and \eqn{e_i(t)}
 and \eqn{\tilde{e}_i(t)} are Gaussian processes with zero mean and
 covariance function of the form: \deqn{\gamma(s,t) = \alpha\exp(-\beta|t-s|^\nu)}
+Please see the simulation models vignette with
+ \code{vignette("simulation_models", package = "fdaoutlier")} for more details.
 }
 \examples{
-dt <- simulation_model5()
+dt <- simulation_model5(plot = TRUE)
 dt$true_outliers
 dim(dt$data)
 }

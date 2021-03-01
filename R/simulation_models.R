@@ -104,6 +104,8 @@ plot_dtt <- function(y, grid_points, p, true_outliers, show_legend, plot_title,
 #' and \eqn{q} is a constant controlling how far the outliers are from the mean
 #' function of the data, usually, \eqn{q = 6} or \eqn{q = 8}.
 #' The domain of the generated functions is over the interval \eqn{[0, 1]}.
+#' Please see the simulation models vignette with
+#'  \code{vignette("simulation_models", package = "fdaoutlier")} for more details.
 #'
 #' @param n The number of curves to generate. Set to \eqn{100} by default.
 #' @param p The number of evaluation points of the curves. Curves are usually generated
@@ -213,6 +215,8 @@ simulation_model1 <- function(n = 100, p = 50, outlier_rate = 0.05,
 #' data, \eqn{I} is an indicator function, \eqn{T_i} is a uniform random variable between
 #' an interval \eqn{[a, b] \subset [0,1]}, and \eqn{l} is a constant specifying for how
 #' much of the domain the outliers are away from the mean function.
+#' Please see the simulation models vignette with
+#'  \code{vignette("simulation_models", package = "fdaoutlier")} for more details.
 #'
 #' @param n The number of curves to generate. Set to \eqn{100} by default.
 #' @param p The number of evaluation points of the curves. Curves are usually generated
@@ -263,7 +267,7 @@ simulation_model1 <- function(n = 100, p = 50, outlier_rate = 0.05,
 #' @export
 #'
 #' @examples
-#' dtt <- simulation_model2()
+#' dtt <- simulation_model2(plot = TRUE)
 #' dtt$true_outliers
 #' dim(dtt$data)
 simulation_model2 <- function(n = 100, p = 50, outlier_rate = 0.05,
@@ -324,6 +328,8 @@ simulation_model2 <- function(n = 100, p = 50, outlier_rate = 0.05,
 #' \eqn{q} is a constant controlling how far the outliers are from the mass of the
 #' data, \eqn{I} is an indicator function, and \eqn{T_i} is a uniform random variable between
 #' an interval \eqn{[a, b] \subset [0,1]}.
+#' Please see the simulation models vignette with
+#'  \code{vignette("simulation_models", package = "fdaoutlier")} for more details.
 #'
 #' @param n The number of curves to generate. Set to \eqn{100} by default.
 #' @param p The number of evaluation points of the curves. Curves are usually generated
@@ -373,7 +379,7 @@ simulation_model2 <- function(n = 100, p = 50, outlier_rate = 0.05,
 #' @export
 #'
 #' @examples
-#' dt <- simulation_model3()
+#' dt <- simulation_model3(plot = TRUE)
 #' dt$true_outliers
 #' dim(dt$data)
 simulation_model3 <- function(n = 100, p = 50, outlier_rate = 0.05,
@@ -427,7 +433,8 @@ simulation_model3 <- function(n = 100, p = 50, outlier_rate = 0.05,
 #' This models generates outliers defined on the reversed time interval of the main model.
 #' The main model is of the form: \deqn{X_i(t) = \mu t(1 - t)^m + e_i(t),}
 #' with contamination model of the form: \deqn{X_i(t) = \mu(1 - t)t^m + e_i(t)}
-#'
+#' Please see the simulation models vignette with
+#'  \code{vignette("simulation_models", package = "fdaoutlier")} for more details.
 #'
 #' @param n The number of curves to generate. Set to \eqn{100} by default.
 #' @param p The number of evaluation points of the curves. Curves are usually generated
@@ -470,7 +477,7 @@ simulation_model3 <- function(n = 100, p = 50, outlier_rate = 0.05,
 #' @export
 #'
 #' @examples
-#' dt <- simulation_model4()
+#' dt <- simulation_model4(plot = TRUE)
 #' dt$true_outliers
 #' dim(dt$data)
 simulation_model4 <- function(n = 100, p = 50, outlier_rate = 0.05,
@@ -522,6 +529,8 @@ simulation_model4 <- function(n = 100, p = 50, outlier_rate = 0.05,
 #' \deqn{X_i(t) = \mu t + \tilde{e}_i(t),} where \eqn{t\in [0,1]}, and \eqn{e_i(t)}
 #' and \eqn{\tilde{e}_i(t)} are Gaussian processes with zero mean and
 #' covariance function of the form: \deqn{\gamma(s,t) = \alpha\exp(-\beta|t-s|^\nu)}
+#' Please see the simulation models vignette with
+#'  \code{vignette("simulation_models", package = "fdaoutlier")} for more details.
 #'
 #' @param n The number of curves to generate. Set to \eqn{100} by default.
 #' @param p The number of evaluation points of the curves. Curves are usually generated
@@ -568,7 +577,7 @@ simulation_model4 <- function(n = 100, p = 50, outlier_rate = 0.05,
 #' @export
 #'
 #' @examples
-#' dt <- simulation_model5()
+#' dt <- simulation_model5(plot = TRUE)
 #' dt$true_outliers
 #' dim(dt$data)
 simulation_model5 <- function(n = 100, p = 50, outlier_rate = 0.05, mu = 4,
@@ -628,7 +637,8 @@ simulation_model5 <- function(n = 100, p = 50, outlier_rate = 0.05, mu = 4,
 #' \eqn{u} follows Bernoulli distribution with probability \eqn{P(u = 1) = 0.5};
 #' \eqn{q}, \eqn{r}, \eqn{z} and \eqn{w} are constants, and \eqn{v} follows
 #' a Uniform distribution between an interval \eqn{[a, b]} and \eqn{m} is a constant.
-#'
+#' Please see the simulation models vignette with
+#'  \code{vignette("simulation_models", package = "fdaoutlier")} for more details.
 #'
 #' @param n The number of curves to generate. Set to \eqn{100} by default.
 #' @param p The number of evaluation points of the curves. Curves are usually generated
@@ -682,7 +692,7 @@ simulation_model5 <- function(n = 100, p = 50, outlier_rate = 0.05, mu = 4,
 #'
 #' @export
 #' @examples
-#' dt <- simulation_model6(n = 50)
+#' dt <- simulation_model6(n = 50, plot = TRUE)
 #' dim(dt$data)
 #' dt$true_outliers
 simulation_model6 <- function(n = 100, p = 50, outlier_rate = .1,
@@ -749,7 +759,9 @@ simulation_model6 <- function(n = 100, p = 50, outlier_rate = .1,
 #'  \deqn{\gamma(s,t) = \alpha\exp{-\beta|t-s|^\nu},}
 #'  \eqn{\theta} is uniformly distributed in an interval \eqn{[a, b]} and
 #'  \eqn{k}, \eqn{r} are constants.
-
+#'  Please see the simulation models vignette with
+#'  \code{vignette("simulation_models", package = "fdaoutlier")} for more details.
+#'
 #' @param n The number of curves to generate. Set to \eqn{100} by default.
 #' @param p The number of evaluation points of the curves. Curves are usually generated
 #'  over the interval \eqn{[0, 1]}. Set to \eqn{50} by default.
@@ -800,7 +812,7 @@ simulation_model6 <- function(n = 100, p = 50, outlier_rate = .1,
 #'
 #' @export
 #' @examples
-#' dt <- simulation_model7(n = 50)
+#' dt <- simulation_model7(n = 50, plot = TRUE)
 #' dim(dt$data)
 #' dt$true_outliers
 simulation_model7 <- function(n = 100, p = 50, outlier_rate = 0.05,
@@ -862,8 +874,8 @@ simulation_model7 <- function(n = 100, p = 50, outlier_rate = 0.05,
 #'  zero mean and covariance function of the form:
 #'  \deqn{\gamma(s,t) = \alpha\exp{-\beta|t-s|^\nu}}
 #'  and \eqn{k, r, v} are constants.
-#'
-#'
+#' Please see the simulation models vignette with
+#'  \code{vignette("simulation_models", package = "fdaoutlier")} for more details.
 #'
 #' @param n The number of curves to generate. Set to \eqn{100} by default.
 #' @param p The number of evaluation points of the curves. Curves are usually generated
@@ -1014,8 +1026,9 @@ simulation_model8 <- function(n = 100, p = 50, outlier_rate = 0.05,
 #' in an interval \eqn{[c_1, c_2]}; \eqn{u_i} follows Bernoulli distribution
 #' and \eqn{e_i(t)} is a Gaussian processes with zero mean and covariance
 #' function of the form \deqn{\gamma(s,t) = \alpha\exp{-\beta|t-s|^\nu}}
-
-
+#' Please see the simulation models vignette with
+#'  \code{vignette("simulation_models", package = "fdaoutlier")} for more details.
+#'
 #' @param n The number of curves to generate. Set to \eqn{100} by default.
 #' @param p The number of evaluation points of the curves. Curves are usually generated
 #'  over the interval \eqn{[0, 1]}. Set to \eqn{50} by default.

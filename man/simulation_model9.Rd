@@ -102,6 +102,8 @@ where \eqn{t\in [0,1]}, \eqn{\pi \in [0, 2\pi]}, \eqn{a_{1i}},
 in an interval \eqn{[c_1, c_2]}; \eqn{u_i} follows Bernoulli distribution
 and \eqn{e_i(t)} is a Gaussian processes with zero mean and covariance
 function of the form \deqn{\gamma(s,t) = \alpha\exp{-\beta|t-s|^\nu}}
+Please see the simulation models vignette with
+ \code{vignette("simulation_models", package = "fdaoutlier")} for more details.
 }
 \examples{
 dt <- simulation_model9(plot = TRUE)

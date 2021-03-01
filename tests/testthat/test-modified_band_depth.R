@@ -1,3 +1,4 @@
+dt1 <- simulation_model1(seed = 50)
 test_that("mbd handles strange data", {
   expect_error(modified_band_depth(dt = list()))
   expect_error(modified_band_depth(dt = data.frame()) )
@@ -7,9 +8,9 @@ test_that("mbd handles strange data", {
 
 
 test_that("mbd gives correct result", {
-  mbdd <- modified_band_depth(sim_data1$data)
+  mbdd <- modified_band_depth(dt1$data)
   expect_equal(order(mbdd)[1:10],
-               c(79, 82,  4, 23, 84, 17, 59, 40, 12, 83))
+               c(43, 70, 53, 36, 20, 14, 96,  3, 88, 58))
   expect_equal(order(mbdd)[90:100],
-               c(28, 77, 72, 15, 10, 71, 73, 33, 99, 16, 32))
+               c(80, 23, 87, 59, 11, 34, 54,  1, 25, 83, 47))
 })
