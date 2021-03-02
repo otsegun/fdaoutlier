@@ -17,7 +17,7 @@ There was 1 NOTE (from Rhub Fedora, Window and macOS platforms):
   
 ## Test environments
 * local Ubuntu 20.04.1 LTS 64-bit, R version 3.6.3 -- "Holding the Windsock" (Develpment PC)
-* win-builder (devel and release)
+* win-builder (devel)
 * Fedora Linux, R-devel, clang, gfortran (Rhub)
 * Windows Server 2008 R2 SP1, R-devel, 32/64 bit (Rhub)
 * Ubuntu Linux 16.04 LTS, R-release, GCC (Rhub)
