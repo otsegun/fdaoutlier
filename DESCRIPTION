@@ -15,7 +15,15 @@ Authors@R:
            family = "Fernandez Anta",
            role = c("aut", "fnd"),
            email = "antonio.fernandez@imdea.org"))
-Description: A collection of functions for outlier detection in functional data analysis. Methods implemented include directional outlyingness, MS-plot, total variation depth, and sequential transformations among others. 
+Description: A collection of functions for outlier detection in functional data analysis. 
+  Methods implemented include directional outlyingness by 
+  Dai and Genton (2019) <doi:10.1016/j.csda.2018.03.017>,
+  MS-plot by Dai and Genton (2018) <doi:10.1080/10618600.2018.1473781>,
+  total variation depth and modified shape similarity index by 
+  Huang and Sun (2019) <doi:10.1080/00401706.2019.1574241>, and sequential transformations 
+  Dai et al. (2020) <doi:10.1016/j.csda.2020.106960 among others. Additional outlier detection
+  tools and depths for functional data like functional boxplot, (modified) band depth etc.,
+  are also available. 
 License: GPL-3
 URL: https://github.com/otsegun/fdaoutlier
 BugReports: https://github.com/otsegun/fdaoutlier/issues
