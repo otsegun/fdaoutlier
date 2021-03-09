@@ -1,6 +1,6 @@
 Package: fdaoutlier
 Title: Outlier Detection Tools for Functional Data Analysis
-Version: 0.2.9000
+Version: 0.2.0
 Authors@R: 
     c(person(given = "Oluwasegun Taiwo",
            family = "Ojo",
