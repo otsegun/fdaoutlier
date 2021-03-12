@@ -20,7 +20,11 @@ croux_hesbroeck_asymptotic <- function(n, dimension){
   a2 <- rchisq(10000,dimension, h/n)
   c <- sum(a1 < a2)/(10000*h/n)
   factors <- c * (m - dimension + 1)/(dimension * m)
-  cutoff <- qf(0.993, dimension, m - dimension + 1)
+  if(m >= dimension){
+    cutoff <- qf(0.993, dimension, m - dimension + 1)
+  }else{ #for large dimension and m, we assume that the m_asy is a good estimator 
+    m <- m_asy
+  }
   list(factor1 = factors, factor2 = cutoff)
 }
 
