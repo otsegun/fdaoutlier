@@ -16,6 +16,9 @@ croux_hesbroeck_asymptotic <- function(n, dimension){
   v <- v1/v2
   m_asy <- 2/(c_alpha^2*v)
   m <- m_asy*exp(0.725-0.00663*dimension-0.078*log(n))
+  if (m < dimension){ #if m is >= dimension, then line 18 works, if not change m to m_asy
+    m <- m_asy
+  }
   a1 <- rchisq(10000,dimension + 2)
   a2 <- rchisq(10000,dimension, h/n)
   c <- sum(a1 < a2)/(10000*h/n)

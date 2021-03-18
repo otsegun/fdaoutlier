@@ -1,3 +1,6 @@
+# fdaoutlier 0.2.9000
+* Fix the Croux and Haesbroeck asymtotic approximation when dimension is large.
+
 # fdaoutlier 0.2.0
 * Add msplot plotting function
 * Access outliers in msplot with `msplot_object$outliers` instead of `msplot_outlier$outliers_index`.
