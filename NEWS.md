@@ -1,8 +1,6 @@
-# fdaoutlier 0.2.9100
-* Fix the non-ASCII characters issue contained in spanish weather data.
-
-# fdaoutlier 0.2.9000
+# fdaoutlier 0.2.1
 * Fix the Croux and Haesbroeck asymptotic approximation when dimension is large.
+* Fix the non-ASCII characters issue contained in spanish weather data.
 
 # fdaoutlier 0.2.0
 * Add msplot plotting function
