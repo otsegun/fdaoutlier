@@ -2,7 +2,7 @@
 % Please edit documentation in R/muod.R
 \name{muod}
 \alias{muod}
-\title{Massive Unspervised Outlier Detection (MUOD)}
+\title{Massive Unsupervised Outlier Detection (MUOD)}
 \usage{
 muod(dts, cut_method = c("boxplot", "tangent"))
 }

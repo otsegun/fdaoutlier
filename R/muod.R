@@ -1,4 +1,4 @@
-#' Massive Unspervised Outlier Detection (MUOD)
+#' Massive Unsupervised Outlier Detection (MUOD)
 #'
 #' MUOD finds outliers by computing for each functional data, a magnitude, amplitude
 #'  and shape index. Outliers are then detected in each set of index and outliers
