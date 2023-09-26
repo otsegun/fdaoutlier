@@ -58,9 +58,9 @@ This method uses a combination of total variation depth (TVD) and modified shape
 }
 \section{Functions}{
 \itemize{
-\item \code{tvd_mss}: Deprecated function. Use \code{tvdmss} instead.
-}}
+\item \code{tvd_mss()}: Deprecated function. Use \code{tvdmss} instead.
 
+}}
 \examples{
 dt6 <- simulation_model6()
 res <- tvdmss(dt6$data)

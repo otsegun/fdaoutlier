@@ -35,7 +35,7 @@ Suggests:
     spelling,
     knitr,
     rmarkdown
-RoxygenNote: 7.1.1
+RoxygenNote: 7.2.3
 Imports: 
     MASS
 Depends:
