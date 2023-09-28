@@ -8,4 +8,7 @@
 ^CRAN-RELEASE$
 ^data-raw$
 ^doc$
+^\.github$
+.gitignore
+.Rhistory
 ^Meta$
