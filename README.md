@@ -6,9 +6,6 @@
 Outlier Detection Tools for Functional Data Analysis
 
 <!-- badges: start -->
-
-[![Build
-Status](https://travis-ci.com/otsegun/fdaoutlier.svg?token=is9BrWwNvqBGoneFkbEL&branch=master)](https://travis-ci.com/otsegun/fdaoutlier)
 [![Codecov test
 coverage](https://codecov.io/gh/otsegun/fdaoutlier/branch/master/graph/badge.svg)](https://codecov.io/gh/otsegun/fdaoutlier?branch=master&token=0c40801f-206f-4bb4-9b3b-5f493a3130c9)
 [![Lifecycle:
