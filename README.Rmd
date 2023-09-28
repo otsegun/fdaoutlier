@@ -16,9 +16,7 @@ knitr::opts_chunk$set(
 Outlier Detection Tools for Functional Data Analysis
 
 <!-- badges: start -->
-
-[![Build Status](https://travis-ci.com/otsegun/fdaoutlier.svg?token=is9BrWwNvqBGoneFkbEL&branch=master)](https://travis-ci.com/otsegun/fdaoutlier)
-[![Codecov test coverage](https://codecov.io/gh/otsegun/fdaoutlier/branch/master/graph/badge.svg)](https://codecov.io/gh/otsegun/fdaoutlier?branch=master&token=0c40801f-206f-4bb4-9b3b-5f493a3130c9)
+[![Codecov test coverage](https://codecov.io/gh/otsegun/fdaoutlier/branch/master/graph/badge.svg)](https://app.codecov.io/gh/otsegun/fdaoutlier?branch=master&token=0c40801f-206f-4bb4-9b3b-5f493a3130c9)
 [![Lifecycle: experimental](https://lifecycle.r-lib.org/articles/figures/lifecycle-experimental.svg)](https://lifecycle.r-lib.org/articles/stages.html)
 [![CRAN status](https://www.r-pkg.org/badges/version/fdaoutlier)](https://CRAN.R-project.org/package=fdaoutlier)
 [![CRAN downloads](https://cranlogs.r-pkg.org/badges/grand-total/fdaoutlier)](https://cran.r-project.org/package=fdaoutlier)
